@@ -1,6 +1,5 @@
 import os
 import argparse
-
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -8,6 +7,9 @@ import streamlit as st
 from PIL import Image
 
 BASE_PATH = os.getcwd()
+
+
+print(os.environ)
 
 def rgbstr_to_rgb(rgbstr):
     rgb = [int(color) for color in rgbstr.split(",")]
@@ -23,13 +25,22 @@ def rgb2hex(rgbstr):
     return "#{:02x}{:02x}{:02x}".format(*rgb)
 
 
-def get_all_images(path):
+def get_all_images(path, data_type):
     paths = []
     for (dirpath, _, filenames) in os.walk(path, topdown=False):
         for filename in filenames:
             if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
-                temp = os.path.join(dirpath, filename)
-                paths.append(temp)
+                if data_type == "label" and args.dataset_name.lower() == "cityscape":
+                    if filename.endswith("gtFine_color.png"):
+                        temp = os.path.join(dirpath, filename)
+                        paths.append(temp)
+                elif data_type == "image" and args.dataset_name.lower() == "viper":
+                    if filename.endswith(".jpg"):
+                        temp = os.path.join(dirpath, filename)
+                        paths.append(temp)
+                else:
+                    temp = os.path.join(dirpath, filename)
+                    paths.append(temp)
     paths.sort()
     return paths
 
@@ -59,8 +70,8 @@ def create_data_sidebar(class_color_path,
     label_path = st.sidebar.text_input('Enter path to labels:', value=label_path)
 
     # Get all paths
-    image_paths = get_all_images(image_path)
-    label_paths = get_all_images(label_path)
+    image_paths = get_all_images(image_path, "image")
+    label_paths = get_all_images(label_path, "label")
     st.header("There are {} images and {} labels".format(
         len(image_paths), len(label_paths)))
     if len(image_paths) != len(label_paths):
@@ -133,7 +144,7 @@ def get_files_from_dir(base_dir, extension=None, use_str=None):
     res = []
     for path, name, files in os.walk(base_dir):
         for f in files:
-            if (extension is None or f.endswith(extension)) and (use_str is None or path[-len(use_str):] == use_str): #os.path.join(path, f).split(os.path.sep)[-2] == use_str):
+            if (extension is None or f.endswith(extension)) and (use_str is None or path[-len(use_str):] == use_str):
                 res.append(os.path.join(path, f))
     return res
 
@@ -143,6 +154,8 @@ def main(class_color_path: str,
          label_path: str):
     class_color_dict, paths = create_data_sidebar(class_color_path, image_path, label_path)
     class_checkboxes, slider = create_class_color_checkboxes(class_color_dict)
+    print("paths")
+    print(paths)
     classes_per_image_df = create_images_per_class(paths)
 
     # get all checked boxes
@@ -161,24 +174,23 @@ def main(class_color_path: str,
     )
     create_overlay_image(selected_image, label_list[image_list.index(selected_image)], slider)
 
-#
-# if "_name_" == '_main_':
+
 # use all available space and make image path entirely readable
-#st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 # Set title of app
 st.title('Semantic Segmentation Dataset Viewer')
 # Set title for sidebar
 st.sidebar.title("Settings")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--image_dir", required=False, help="path to image dir, can also be changed in frontend",
-                    default=DEFAULT_IMAGE_PATH)
-parser.add_argument("-l", "--label_dir", required=False, help="path to label dir, can also be changed in frontend",
-                    default=DEFAULT_LABEL_PATH)
-parser.add_argument("-c", "--class_color_path", required=False,
-                    help="path to class color csv, can also be changed in frontend",
-                    default=DEFAULT_CLASS_COLOR_PATH)
+parser.add_argument("-d", "--dataset_name", help="Dataset name")
+parser.add_argument("-i", "--image_dir", help="path to image dir, can also be changed in frontend")
+parser.add_argument("-l", "--label_dir",  help="path to label dir, can also be changed in frontend")
+parser.add_argument("-c", "--class_color_path",
+                    help="path to class color csv, can also be changed in frontend")
 args = parser.parse_args()
+print(args.image_dir)
+print(args.label_dir)
 # run main
 main(class_color_path=args.class_color_path,
      image_path=args.image_dir,
