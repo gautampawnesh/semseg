@@ -5,8 +5,8 @@ import torch
 from mmcv.parallel import collate, scatter
 from mmcv.runner import load_checkpoint
 
-from semseg.mmseg.datasets.pipelines import Compose
-from semseg.mmseg.models import build_segmentor
+from mmseg.datasets.pipelines import Compose
+from mmseg.models import build_segmentor
 
 
 def init_segmentor(config, checkpoint=None, device='cuda:0'):

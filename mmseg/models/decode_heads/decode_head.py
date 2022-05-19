@@ -5,8 +5,8 @@ import torch
 import torch.nn as nn
 from mmcv.runner import BaseModule, auto_fp16, force_fp32
 
-from semseg.mmseg.core import build_pixel_sampler
-from semseg.mmseg.ops import resize
+from mmseg.core import build_pixel_sampler
+from mmseg.ops import resize
 from ..builder import build_loss
 from ..losses import accuracy
 

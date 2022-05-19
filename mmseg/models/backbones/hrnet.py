@@ -6,7 +6,7 @@ from mmcv.cnn import build_conv_layer, build_norm_layer
 from mmcv.runner import BaseModule, ModuleList, Sequential
 from mmcv.utils.parrots_wrapper import _BatchNorm
 
-from semseg.mmseg.ops import Upsample, resize
+from mmseg.ops import Upsample, resize
 from ..builder import BACKBONES
 from .resnet import BasicBlock, Bottleneck
 

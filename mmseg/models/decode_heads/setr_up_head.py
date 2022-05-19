@@ -2,7 +2,7 @@
 import torch.nn as nn
 from mmcv.cnn import ConvModule, build_norm_layer
 
-from semseg.mmseg.ops import Upsample
+from mmseg.ops import Upsample
 from ..builder import HEADS
 from .decode_head import BaseDecodeHead
 

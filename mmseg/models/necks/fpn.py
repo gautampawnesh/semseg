@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from mmcv.cnn import ConvModule
 from mmcv.runner import BaseModule, auto_fp16
 
-from semseg.mmseg.ops import resize
+from mmseg.ops import resize
 from ..builder import NECKS
 
 

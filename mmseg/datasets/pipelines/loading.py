@@ -148,9 +148,6 @@ class LoadAnnotations(object):
             gt_semantic_seg = gt_semantic_seg - 1
             gt_semantic_seg[gt_semantic_seg == 254] = 255
         results['gt_semantic_seg'] = gt_semantic_seg
-        print("#########gt_semantic_seg##################")
-        print(np.unique(gt_semantic_seg))
-        print(gt_semantic_seg.shape)
         results['seg_fields'].append('gt_semantic_seg')
         return results
 

@@ -10,8 +10,8 @@ try:
 except ModuleNotFoundError:
     point_sample = None
 
-from semseg.mmseg.models.builder import HEADS
-from semseg.mmseg.ops import resize
+from mmseg.models.builder import HEADS
+from mmseg.ops import resize
 from ..losses import accuracy
 from .cascade_decode_head import BaseCascadeDecodeHead
 

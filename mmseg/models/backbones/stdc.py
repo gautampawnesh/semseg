@@ -6,7 +6,7 @@ import torch.nn.functional as F
 from mmcv.cnn import ConvModule
 from mmcv.runner.base_module import BaseModule, ModuleList, Sequential
 
-from semseg.mmseg.ops import resize
+from mmseg.ops import resize
 from ..builder import BACKBONES, build_backbone
 from .bisenetv1 import AttentionRefinementModule
 

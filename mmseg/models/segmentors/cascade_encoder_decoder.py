@@ -1,8 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 from torch import nn
 
-from semseg.mmseg.core import add_prefix
-from semseg.mmseg.ops import resize
+from mmseg.core import add_prefix
+from mmseg.ops import resize
 from .. import builder
 from ..builder import SEGMENTORS
 from .encoder_decoder import EncoderDecoder

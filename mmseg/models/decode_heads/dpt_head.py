@@ -6,7 +6,7 @@ import torch.nn as nn
 from mmcv.cnn import ConvModule, Linear, build_activation_layer
 from mmcv.runner import BaseModule
 
-from semseg.mmseg.ops import resize
+from mmseg.ops import resize
 from ..builder import HEADS
 from .decode_head import BaseDecodeHead
 
