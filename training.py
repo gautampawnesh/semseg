@@ -1,5 +1,6 @@
 import torch
 import time
+import copy
 import argparse
 from mmcv.runner import init_dist
 from mmseg.apis import set_random_seed, train_segmentor
@@ -22,11 +23,15 @@ def train(cfg, launcher):
     if cfg.get("seed") is not None:
         meta["seed"] = cfg.get("seed")
         set_random_seed(cfg.get("seed"), deterministic=False)
-
-    # Build the detector
-    model = build_segmentor(cfg.model)
     # Build the dataset
     datasets = [build_dataset(cfg.data.train)]
+    if len(cfg.workflow) == 2:
+        val_dataset = copy.deepcopy(cfg.data.val)
+        val_dataset.pipeline = cfg.data.train.pipeline
+        datasets.append(build_dataset(val_dataset))
+    # Build the detector
+    model = build_segmentor(cfg.model)
+
     # Add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
     train_segmentor(
