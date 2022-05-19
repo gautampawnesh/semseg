@@ -1,19 +1,14 @@
-import mmseg
+import semseg.mmseg
 import torch
 import time
 import torch.multiprocessing as mp
 import os
 import argparse
 from mmcv.runner import init_dist
-from mmseg.apis import set_random_seed, train_segmentor
-from mmseg.datasets import build_dataset
-from mmseg.models import build_segmentor
+from semseg.mmseg.apis import set_random_seed, train_segmentor
+from semseg.mmseg.datasets import build_dataset
+from semseg.mmseg.models import build_segmentor
 from mmcv import Config
-
-
-def init_training(config):
-    # Run training on available GPUs
-    mp.spawn(train, args=(config, "slurm"), nprocs=int(os.environ["SLURM_NPROCS"]), join=True)
 
 
 def train(cfg, launcher):
