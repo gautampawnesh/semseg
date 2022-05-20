@@ -28,14 +28,16 @@ def train(config_file_path: str):
     distributed = False if cfg.get("launcher") is None else True
     if distributed is True:
         init_dist(cfg.get("launcher"), **cfg.get("dist_params", {}))
+
+    timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
     # create work_dir
+    cfg.work_dir = osp.join(cfg.work_dir, "training", timestamp)
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
 
     # dump config
     cfg.dump(osp.join(cfg.work_dir, osp.basename(config_file_path)))
 
     # init the logger before other steps
-    timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
     log_file = osp.join(cfg.work_dir, f'{timestamp}.log')
     logger = get_root_logger(log_file=log_file, log_level=cfg.log_level)
 

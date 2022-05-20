@@ -3,7 +3,7 @@ experiment = dict(
     description="Example ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/results/cityscape_train_deeplabv3plus_19c/training"
+work_dir = "/netscratch/gautam/semseg/results/cityscape_train_deeplabv3plus_19c/"
 # random seed
 seed = 1
 # launcher
@@ -13,7 +13,6 @@ dist_params = dict(backend="nccl")
 load_from = None
 # checkpoint file to resume from
 resume_from = None
-cudnn_benchmark = True
 
 _base_ = [
     '../_base_/models/deeplabv3plus_r50-d8.py',
@@ -72,3 +71,4 @@ log_config = dict(
     ])
 
 log_level = 'INFO'
+cudnn_benchmark = True

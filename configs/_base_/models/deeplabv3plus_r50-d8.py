@@ -1,5 +1,11 @@
 # model settings
-norm_cfg = dict(type='SyncBN', requires_grad=True)
+import torch
+if torch.cuda.device_count() > 1:
+    norm_cfg = dict(type='SyncBN', requires_grad=True)
+else:
+    norm_cfg = dict(type='BN', requires_grad=True)
+
+
 model = dict(
     type='EncoderDecoder',
     #pretrained='open-mmlab://resnet50_v1c',
