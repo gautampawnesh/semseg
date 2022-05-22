@@ -1,0 +1,67 @@
+category;class_id;class_name;color_code
+animal--bird;0;Bird;165,42,42
+animal--ground-animal;1;Ground Animal;0,192,0
+construction--barrier--curb;2;Curb;196,196,196
+construction--barrier--fence;3;Fence;190,153,153
+construction--barrier--guard-rail;4;Guard Rail;180,165,180
+construction--barrier--other-barrier;5;Barrier;90,120,150
+construction--barrier--wall;6;Wall;102,102,156
+construction--flat--bike-lane;7;Bike Lane;128,64,255
+construction--flat--crosswalk-plain;8;Crosswalk - Plain;140,140,200
+construction--flat--curb-cut;9;Curb Cut;170,170,170
+construction--flat--parking;10;Parking;250,170,160
+construction--flat--pedestrian-area;11;Pedestrian Area;96,96,96
+construction--flat--rail-track;12;Rail Track;230,150,140
+construction--flat--road;13;Road;128,64,128
+construction--flat--service-lane;14;Service Lane;110,110,110
+construction--flat--sidewalk;15;Sidewalk;244,35,232
+construction--structure--bridge;16;Bridge;150,100,100
+construction--structure--building;17;Building;70,70,70
+construction--structure--tunnel;18;Tunnel;150,120,90
+human--person;19;Person;220,20,60
+human--rider--bicyclist;20;Bicyclist;255,0,0
+human--rider--motorcyclist;21;Motorcyclist;255,0,100
+human--rider--other-rider;22;Other Rider;255,0,200
+marking--crosswalk-zebra;23;Lane Marking - Crosswalk;200,128,128
+marking--general;24;Lane Marking - General;255,255,255
+nature--mountain;25;Mountain;64,170,64
+nature--sand;26;Sand;230,160,50
+nature--sky;27;Sky;70,130,180
+nature--snow;28;Snow;190,255,255
+nature--terrain;29;Terrain;152,251,152
+nature--vegetation;30;Vegetation;107,142,35
+nature--water;31;Water;0,170,30
+object--banner;32;Banner;255,255,128
+object--bench;33;Bench;250,0,30
+object--bike-rack;34;Bike Rack;100,140,180
+object--billboard;35;Billboard;220,220,220
+object--catch-basin;36;Catch Basin;220,128,128
+object--cctv-camera;37;CCTV Camera;222,40,40
+object--fire-hydrant;38;Fire Hydrant;100,170,30
+object--junction-box;39;Junction Box;40,40,40
+object--mailbox;40;Mailbox;33,33,33
+object--manhole;41;Manhole;100,128,160
+object--phone-booth;42;Phone Booth;142,0,0
+object--pothole;43;Pothole;70,100,150
+object--street-light;44;Street Light;210,170,100
+object--support--pole;45;Pole;153,153,153
+object--support--traffic-sign-frame;46;Traffic Sign Frame;128,128,128
+object--support--utility-pole;47;Utility Pole;0,0,80
+object--traffic-light;48;Traffic Light;250,170,30
+object--traffic-sign--back;49;Traffic Sign (Back);192,192,192
+object--traffic-sign--front;50;Traffic Sign (Front);220,220,0
+object--trash-can;51;Trash Can;140,140,20
+object--vehicle--bicycle;52;Bicycle;119,11,32
+object--vehicle--boat;53;Boat;150,0,255
+object--vehicle--bus;54;Bus;0,60,100
+object--vehicle--car;55;Car;0,0,142
+object--vehicle--caravan;56;Caravan;0,0,90
+object--vehicle--motorcycle;57;Motorcycle;0,0,230
+object--vehicle--on-rails;58;On Rails;0,80,100
+object--vehicle--other-vehicle;59;Other Vehicle;128,64,64
+object--vehicle--trailer;60;Trailer;0,0,110
+object--vehicle--truck;61;Truck;0,0,70
+object--vehicle--wheeled-slow;62;Wheeled Slow;0,0,192
+void--car-mount;63;Car Mount;32,32,32
+void--ego-vehicle;64;Ego Vehicle;120,10,10
+void--unlabeled;65;Unlabeled;0,0,0
