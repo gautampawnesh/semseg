@@ -13,6 +13,8 @@ from mmseg.datasets import build_dataset
 from mmseg.models import build_segmentor
 from mmseg.utils import get_root_logger
 from mmcv import Config
+import src.transforms
+import src.datasets
 
 
 def train(config_file_path: str):

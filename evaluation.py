@@ -2,12 +2,15 @@
 import argparse
 import os
 import os.path as osp
+import numpy as np
 import shutil
 import time
 from time import perf_counter
 import warnings
 import json
-
+import matplotlib.pyplot as plt
+from matplotlib import gridspec
+from PIL import Image
 import mmcv
 import torch
 from mmcv.cnn.utils import revert_sync_batchnorm
@@ -17,6 +20,7 @@ from mmcv.runner import (get_dist_info, init_dist, load_checkpoint,
 from mmcv.utils import DictAction
 
 from mmseg import digit_version
+from mmseg.apis.inference import inference_segmentor
 from mmseg.utils import get_root_logger
 from mmseg.apis import multi_gpu_test, single_gpu_test
 from mmseg.datasets import build_dataloader, build_dataset
@@ -109,20 +113,83 @@ def evaluate(cfg, args, logger):
 
         with open(osp.join(cfg.work_dir, EVALUATION_FILE), "w") as f:
             json.dump(metrics, f, indent=4)
+        # inference
+        image_inference(dataset, model, cfg.work_dir)
 
 
-def image_inference(cfg, dataset, model, out_dir):
+def image_inference(dataset, model, out_dir):
     """Execute Inference on images"""
     inf_output_dir = osp.join(out_dir, INF_FOLDER)
     mmcv.mkdir_or_exist(osp.abspath(inf_output_dir))
     inf_results = inference_results(dataset, model)
+    for each, result in inf_results.items():
+        save_loc = inf_output_dir / f"{each}.png"
+        save_eval_image(result, save_loc, dataset.CLASSES, dataset.PALETTE)
 
 
 def inference_results(dataset, model):
     # random selection
-    dataset.sample_df = ()
-    pass
+    results = dict()
+    dataset.data = (
+        dataset.data.sort_values("image").sample(
+        min(IMG_INFERENCE_NUMBER, len(dataset.data)), random_state=IMG_INFERENCE_SEED,).reset_index(drop=True)
+        )
+    model.eval()
+    model_output = [inference_segmentor(model, img)[0] for img in dataset.data["image"]]
+    for ind, row in enumerate(dataset.data.iterrows()):
+        results[ind] = {
+            "image": row[1]["image"],
+            "label": row[1]["label"],
+            "model_output": model_output[ind]
+        }
+    return results
 
+
+def save_eval_image(result, save_loc, classes, palette):
+    """img+ground truth+prediction and overlay image"""
+    # Todo : Update with better visualization
+    palette = np.array(palette).astype(np.uint8)
+
+    plt.figure(figsize=(24, 12))
+    grid_spec = gridspec.GridSpec(2, 3, width_ratios=[6, 6, 1])
+
+    image = np.array(Image.open(result["image"]))
+    plt.subplot(grid_spec[0, 0])
+    plt.imshow(image)
+    plt.axis("off")
+    plt.title("Input image")
+
+    plt.subplot(grid_spec[1, 0])
+    seg_image = palette[result["model_output"]].astype(np.uint8)
+    plt.imshow(seg_image)
+    plt.axis("off")
+    plt.title("Segmentation map")
+
+    plt.subplot(grid_spec[1, 1])
+    plt.imshow(image)
+    plt.imshow(seg_image, alpha=0.7)
+    plt.axis("off")
+    plt.title("Segmentation overlay")
+
+    if result["label"] is not None:
+        label = np.array(Image.open(result["label"]))
+        plt.subplot(grid_spec[0, 1])
+        plt.imshow(palette[label].astype(np.uint8))
+        plt.axis("off")
+        plt.title("Ground truth label")
+
+    ax = plt.subplot(grid_spec[:, 2])
+    plt.imshow(np.expand_dims(palette, 1))
+
+    ax.yaxis.tick_right()
+    plt.yticks(ticks=range(len(classes)), labels=classes)
+    plt.xticks(ticks=[], labels=[])
+    ax.tick_params(width=0.0)
+    plt.grid("off")
+
+    # Save plot
+    plt.savefig(save_loc, format="png")
+    plt.close()
 
 
 def main():
