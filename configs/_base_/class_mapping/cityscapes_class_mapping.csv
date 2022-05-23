@@ -1,0 +1,36 @@
+dataset_class_id;dataset_class_name;dataset_label_id;universal_class_id;universal_class_name;note
+0;unlabeled;0;0;ignore;
+1; Ego vehicle;1;9;Ego vehicle;
+2;Rectification border;2;0;ignore;TBD
+3;Out of roi;3;0;ignore;TBD
+4;static;4;62;static;
+5;dynamic;5;63;Dynamic;Wheeled slow ?
+6;ground;6;64;ground;
+7;road;7;14;road;
+8;sidewalk;8;15;sidewalk;
+9;parking;9;16;parking;
+10;Rail track;10;17;rail-track;
+11;Building;11;28;building;
+12;wall;12;30;wall;
+13;Fence;13;29;Fence;
+14;Guard rail;14;33;Guard rail;
+15;bridge;15;31;Bridge;
+16;Tunnel;16;32;Tunnel;
+17;pole;17;39;pole;
+18;Pole group;18;40;Utility pole;
+19;Traffic light;19;42;Traffic light;
+20;Traffic sign;20;41;Traffic sign;
+21;Vegetation;21;35;Vegetation;
+22;Terrain;22;36;Terrain;
+23;sky;23;37;Sky;
+24;person;24;57;person;
+25;rider;25;60;other-rider;TBD
+26;car;26;1;Car;
+27;truck;27;4;truck;
+28;bus;28;3;Bus;
+29;Caravan;29;6;caravan;
+30;Trailer;30;7;trailer;
+31;train;31;5;Train;
+32;motorcycle;32;8;motorcycle;
+33;bicycle;33;2;bicycle;
+34;Licence plate;-1;0;ignore;

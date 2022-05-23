@@ -54,7 +54,8 @@ class BaseDataset(CustomDataset):
                  class_color_mode="RGB",
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
-                 dataset_name="base"):
+                 dataset_name="base",
+                 is_color_to_uni_class_mapping=True):
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
         self.img_suffix = img_suffix
@@ -67,6 +68,7 @@ class BaseDataset(CustomDataset):
         self.reduce_zero_label = reduce_zero_label
         self.label_map = {}
         self.dataset_name = dataset_name
+        self.is_color_to_uni_class_mapping = is_color_to_uni_class_mapping
         # join paths if data_root is specified
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
@@ -78,15 +80,21 @@ class BaseDataset(CustomDataset):
 
         self.universal_class_colors_path = Path(universal_class_colors_path) if universal_class_colors_path else None
         self.dataset_class_mapping_path = Path(dataset_class_mapping) if dataset_class_mapping else None
-        assert self.universal_class_colors_path is None, "Universal class colors path is missing"
-        assert self.dataset_class_mapping_path is None, "Datase class colors path is missing"
+        assert self.universal_class_colors_path is not None, "Universal class colors path is missing"
+        assert self.dataset_class_mapping_path is not None, "Dataset class colors path is missing"
         self.load_annotations = LoadAnnotations()
         self.map_annotations = MapAnnotations()
         # define cls.CLASSES and cls.PALETTE
         self.set_universal_classes_and_palette()
 
-        self.cls_mapping = self.dataset_colors_to_universal_label_mapping()
+        if self.is_color_to_uni_class_mapping:
+            self.cls_mapping = self.dataset_colors_to_universal_label_mapping()
+        else:
+            self.cls_mapping = self.dataset_ids_to_universal_label_mapping()  ## should be implemented by subclasses
         self.data = self.data_df()
+
+    def dataset_ids_to_universal_label_mapping(self):
+        raise NotImplementedError
 
     def set_universal_classes_and_palette(self):
         """
@@ -126,8 +134,8 @@ class BaseDataset(CustomDataset):
         logger.info(f"{self.dataset_name} Images: {images[:5]} \n | Labels: {labels[:5]} ")
         logger.info(f"Images len: {len(images)}, Labels: {len(labels)}")
         logger.info("CHECKPOINT: Labels might be missing for certain images !!!!!!!!!!")
-        data_df = pd.DataFrame.from_dict({"images": images, "label": labels})
-        return data_df.sort_values("images")
+        data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
+        return data_df.sort_values("image")
 
     def pre_pipeline(self, ind):
         """returns sample wo processing"""

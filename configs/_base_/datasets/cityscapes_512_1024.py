@@ -1,5 +1,5 @@
 # dataset settings
-dataset_type = 'CityscapesDataset'
+dataset_type = 'UniversalCityscapesDataset'
 data_root = '/ds-av/public_datasets/cityscapes/raw'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -7,7 +7,8 @@ crop_size = (512, 1024)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
-    dict(type='Resize', img_scale=[(1920, 1208), (960, 604), (1440, 906), (2400, 1510)], ratio_range=(0.5, 2.0)),
+    dict(type='MapAnnotations'),
+    dict(type='Resize', img_scale=(1920, 1208), ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PhotoMetricDistortion'),
@@ -38,12 +39,16 @@ data = dict(
         img_dir='leftImg8bit/train',
         ann_dir='gtFine/train',
         seg_map_suffix='_gtFine_labelIds.png',
+        universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
+        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
         data_root=data_root,
         img_dir='leftImg8bit/val',
         ann_dir='gtFine/val',
+        universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
+        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         seg_map_suffix='_gtFine_labelIds.png',
         pipeline=test_pipeline),
     test=dict(
@@ -51,5 +56,7 @@ data = dict(
         data_root=data_root,
         img_dir='leftImg8bit/val',
         ann_dir='gtFine/val',
+        universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
+        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         seg_map_suffix='_gtFine_labelIds.png',
         pipeline=test_pipeline))

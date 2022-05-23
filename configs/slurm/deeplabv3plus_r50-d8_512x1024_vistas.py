@@ -3,7 +3,7 @@ experiment = dict(
     description="MV classes mapped to universal classes with flat model ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/results/vistas_train_deeplabv3plus_65c/"
+work_dir = "/netscratch/gautam/exp_results/vistas_train_deeplabv3plus_65c/"
 # random seed
 seed = 1
 # launcher
@@ -19,8 +19,8 @@ _base_ = [
     '../_base_/datasets/vistas_512_1024.py',
 ]
 ignore_index = 255
-data = dict(samples_per_gpu=8,
-            workers_per_gpu=2,
+data = dict(samples_per_gpu=4,
+            workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
             val=dict(ignore_index=ignore_index))
@@ -48,11 +48,11 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=100)
+    max_epochs=10)
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
-    interval=5,
+    interval=1,
     max_keep_ckpts=5,
     create_symlink=False
 )
@@ -65,7 +65,7 @@ evaluation = dict(
 
 
 log_config = dict(
-    interval=50,
+    interval=25,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(type='TensorboardLoggerHook')

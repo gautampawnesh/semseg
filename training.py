@@ -69,9 +69,7 @@ def train(config_file_path: str):
         # checkpoints as meta data
         cfg.checkpoint_config.meta = dict(
             mmseg_version=f'{__version__}+{get_git_hash()[:7]}',
-            config=cfg.pretty_text,
-            CLASSES=datasets[0].CLASSES,
-            PALETTE=datasets[0].PALETTE)
+            config=cfg.pretty_text)
 
     # Add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES

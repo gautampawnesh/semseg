@@ -1,9 +1,9 @@
 experiment = dict(
-    name="Cityscape Training",
-    description="Example ",
+    name="Cityscapes Training",
+    description="Cityscapes classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/results/cityscape_train_deeplabv3plus_19c/"
+work_dir = "/netscratch/gautam/exp_results/cityscape_train_deeplabv3plus_66c/"
 # random seed
 seed = 1
 # launcher
@@ -18,16 +18,17 @@ _base_ = [
     '../_base_/models/deeplabv3plus_r50-d8.py',
     '../_base_/datasets/cityscapes_512_1024.py',
 ]
-ignore_index = 255
-data = dict(samples_per_gpu=8,
-            workers_per_gpu=2,
+ignore_index = 0
+
+data = dict(samples_per_gpu=4,
+            workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index),
-    auxiliary_head=dict(ignore_index=ignore_index),
+    decode_head=dict(ignore_index=ignore_index, num_classes=66),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=66),
 )
 workflow = [("train", 1), ("val", 1)]
 
@@ -47,11 +48,11 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=100)
+    max_epochs=10)
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
-    interval=5,
+    interval=1,
     max_keep_ckpts=5,
     create_symlink=False
 )
@@ -64,7 +65,7 @@ evaluation = dict(
 
 
 log_config = dict(
-    interval=50,
+    interval=25,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(type='TensorboardLoggerHook')

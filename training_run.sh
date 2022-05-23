@@ -14,5 +14,5 @@
 #pip install mmcv-full==1.5.0
 #pip uninstall -y mmsegmentation==0.24.1
 #pip install cityscapesScripts==2.2.0
-
-python training.py -c /netscratch/gautam/semseg/configs/slurm/deeplabv3plus_r50-d8_512x1024_40k_cityscapes.py
+#pip install seaborn
+python training.py -c /netscratch/gautam/semseg/configs/slurm/deeplabv3plus_r50-d8_512x1024_vistas.py

@@ -1,16 +1,17 @@
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
+import pandas as pd
 
 
 @DATASETS.register_module()
-class VistasDataset(BaseDataset):
+class UniversalCityscapesDataset(BaseDataset):
 
     def __init__(self,
                  pipeline,
                  img_dir,
-                 img_suffix=".jpg",
+                 img_suffix="_leftImg8bit.png",
                  ann_dir=None,
-                 seg_map_suffix='.png',
+                 seg_map_suffix='_gtFine_labelIds.png',
                  split=None,
                  data_root=None,
                  test_mode=None,
@@ -23,10 +24,9 @@ class VistasDataset(BaseDataset):
                  class_color_mode="RGB",
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
-                 dataset_name="vistas",
-                 is_color_to_uni_class_mapping=True
-                 ):
-        super(VistasDataset, self).__init__(
+                 dataset_name="cityscapes",
+                 is_color_to_uni_class_mapping=False):
+        super(UniversalCityscapesDataset, self).__init__(
             pipeline,
             img_dir,
             img_suffix=img_suffix,
@@ -46,3 +46,11 @@ class VistasDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
+
+    def dataset_ids_to_universal_label_mapping(self):
+        dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
+        label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
+        label_ids = [tuple(id) for id in label_ids]
+        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        mapping = dict(zip(label_ids, uni_cls_ids))
+        return mapping
