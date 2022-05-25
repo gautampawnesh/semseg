@@ -130,6 +130,8 @@ class BaseDataset(CustomDataset):
         """data df with image path and annotations"""
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         labels = list(Path(self.ann_dir).glob(f"**/*{self.seg_map_suffix}"))
+        images = sorted(images)
+        labels = sorted(labels)
         logger.info("CHECKPOINT: Is images and labels indexes are correct ??")
         logger.info(f"{self.dataset_name} Images: {images[:5]} \n | Labels: {labels[:5]} ")
         logger.info(f"Images len: {len(images)}, Labels: {len(labels)}")
@@ -171,8 +173,8 @@ class BaseDataset(CustomDataset):
                  logger=None,
                  gt_seg_maps=None,
                  **kwargs):
-        evaluation_results = CustomDataset.evaluate(self, results, logger, gt_seg_maps, **kwargs)
-        logger.info(evaluation_results)
+        evaluation_results = CustomDataset.evaluate(self, results, metric='mIoU', logger=logger, gt_seg_maps=gt_seg_maps, **kwargs)
+        #logger.info(evaluation_results)
         return evaluation_results
 
     def __getitem__(self, index):

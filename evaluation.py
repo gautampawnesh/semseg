@@ -26,11 +26,14 @@ from mmseg.apis import multi_gpu_test, single_gpu_test
 from mmseg.datasets import build_dataloader, build_dataset
 from mmseg.models import build_segmentor
 from mmseg.utils import setup_multi_processes
+import src.transforms
+import src.datasets
 
 IMG_INFERENCE_SEED = 1  # random seed to select test images for inference
 IMG_INFERENCE_NUMBER = 20  # number of images used for inference
 EVALUATION_FILE = "evaluation.json"
 INF_FOLDER = "visualizations"
+
 
 
 def parse_args():
@@ -74,6 +77,7 @@ def evaluate(cfg, args, logger):
     # build the model and load checkpoint
     cfg.model.train_cfg = None
     model = build_segmentor(cfg.model, test_cfg=cfg.get('test_cfg'))
+    model.cfg = cfg
     fp16_cfg = cfg.get('fp16', None)
     if fp16_cfg is not None:
         wrap_fp16_model(model)
@@ -91,17 +95,17 @@ def evaluate(cfg, args, logger):
 
     dataset_len = len(dataset)
     if not distributed:
-        model = MMDataParallel(model, device_ids=cfg.gpu_ids)
+        mmdata_model = MMDataParallel(model, device_ids=cfg.gpu_ids[0])
         start_time = perf_counter()
-        results = single_gpu_test(model, data_loader, pre_eval=True)
+        results = single_gpu_test(mmdata_model, data_loader, pre_eval=True)
         duration = (perf_counter() - start_time) / dataset_len
     else:
-        model = MMDistributedDataParallel(
+        dist_model = MMDistributedDataParallel(
             model.cuda(),
             device_ids=[torch.cuda.current_device()],
             broadcast_buffers=False)
         start_time = perf_counter()
-        results = multi_gpu_test(model, data_loader, pre_eval=True, gpu_collect=True)
+        results = multi_gpu_test(dist_model, data_loader, pre_eval=True, gpu_collect=True)
         duration = (perf_counter() - start_time) / dataset_len
 
     rank, world_size = get_dist_info()
@@ -123,7 +127,7 @@ def image_inference(dataset, model, out_dir):
     mmcv.mkdir_or_exist(osp.abspath(inf_output_dir))
     inf_results = inference_results(dataset, model)
     for each, result in inf_results.items():
-        save_loc = inf_output_dir / f"{each}.png"
+        save_loc = inf_output_dir + "/" + f"{each}.png"
         save_eval_image(result, save_loc, dataset.CLASSES, dataset.PALETTE)
 
 
@@ -148,6 +152,7 @@ def inference_results(dataset, model):
 def save_eval_image(result, save_loc, classes, palette):
     """img+ground truth+prediction and overlay image"""
     # Todo : Update with better visualization
+    # Todo: update palette for ground truth
     palette = np.array(palette).astype(np.uint8)
 
     plt.figure(figsize=(24, 12))
@@ -173,6 +178,7 @@ def save_eval_image(result, save_loc, classes, palette):
 
     if result["label"] is not None:
         label = np.array(Image.open(result["label"]))
+        #label = np.array(result["gt_semantic_seg"])
         plt.subplot(grid_spec[0, 1])
         plt.imshow(palette[label].astype(np.uint8))
         plt.axis("off")

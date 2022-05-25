@@ -6,15 +6,13 @@ experiment = dict(
 work_dir = "/netscratch/gautam/exp_results/cityscape_train_deeplabv3plus_66c/"
 # random seed
 seed = 1
-# launcher
-launcher = "slurm"
-dist_params = dict(backend="nccl")
 # checkpoint file to load weights from
 load_from = None
 # checkpoint file to resume from
 resume_from = None
 
 _base_ = [
+    '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r50-d8.py',
     '../_base_/datasets/cityscapes_512_1024.py',
 ]
@@ -30,7 +28,6 @@ model = dict(
     decode_head=dict(ignore_index=ignore_index, num_classes=66),
     auxiliary_head=dict(ignore_index=ignore_index, num_classes=66),
 )
-workflow = [("train", 1), ("val", 1)]
 
 # optimizer
 optimizer = dict(
@@ -56,20 +53,5 @@ checkpoint_config = dict(
     max_keep_ckpts=5,
     create_symlink=False
 )
-evaluation = dict(
-    interval=1000,
-    metric='mIoU',
-    gpu_collect=True,
-    pre_eval=True,
-    save_best="mIoU")
-
-
-log_config = dict(
-    interval=25,
-    hooks=[
-        dict(type='TextLoggerHook'),
-        dict(type='TensorboardLoggerHook')
-    ])
 
 log_level = 'INFO'
-cudnn_benchmark = True

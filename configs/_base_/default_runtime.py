@@ -1,13 +1,18 @@
-# yapf:disable
+
+# validation setup
+evaluation = dict(interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best='mIoU')
+workflow = [("train", 1)]
+# launcher
+launcher = "slurm"
+# distributed params
+dist_params = dict(backend="nccl")
+
+# Logging configuration
 log_config = dict(
-    interval=50,
+    interval=25,
     hooks=[
-        dict(type='TextLoggerHook', by_epoch=False),
-        # dict(type='TensorboardLoggerHook')
-    ])
-# yapf:enable
-dist_params = dict(backend='nccl')
-log_level = 'INFO'
-load_from = None
-resume_from = None
+        dict(type="TextLoggerHook"),
+        dict(type="TensorboardLoggerHook")
+    ],
+)
 cudnn_benchmark = True

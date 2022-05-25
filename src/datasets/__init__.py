@@ -1,1 +1,1 @@
-from src.datasets import vistas
+from src.datasets import vistas, cityscapes

@@ -1,5 +1,6 @@
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
+import pandas as pd
 
 
 @DATASETS.register_module()
@@ -24,7 +25,7 @@ class VistasDataset(BaseDataset):
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
                  dataset_name="vistas",
-                 is_color_to_uni_class_mapping=True
+                 is_color_to_uni_class_mapping=False
                  ):
         super(VistasDataset, self).__init__(
             pipeline,
@@ -46,3 +47,11 @@ class VistasDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
+
+    def dataset_ids_to_universal_label_mapping(self):
+        dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
+        label_ids = dataset_cls_mapping_df["dataset_class_id"].tolist()
+        label_ids = [(id,) for id in label_ids]
+        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        mapping = dict(zip(label_ids, uni_cls_ids))
+        return mapping
