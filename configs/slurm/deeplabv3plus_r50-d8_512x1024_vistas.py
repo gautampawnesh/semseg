@@ -17,7 +17,7 @@ _base_ = [
     '../_base_/models/deeplabv3plus_r50-d8.py',
     '../_base_/datasets/vistas_512_1024.py',
 ]
-ignore_index = 255
+ignore_index = 0
 data = dict(samples_per_gpu=4,
             workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
@@ -45,7 +45,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=20)
+    max_epochs=100)
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,

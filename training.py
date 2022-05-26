@@ -33,7 +33,10 @@ def train(config_file_path: str):
 
     timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
     # create work_dir
-    cfg.work_dir = osp.join(cfg.work_dir, "training", timestamp)
+    if cfg.resume_from is None:
+        cfg.work_dir = osp.join(cfg.work_dir, "training", timestamp)
+    else:
+        cfg.work_dir = osp.dirname(cfg.resume_from)
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
 
     # dump config
