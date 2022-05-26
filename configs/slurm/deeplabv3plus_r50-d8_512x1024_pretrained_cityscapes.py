@@ -26,8 +26,8 @@ data = dict(samples_per_gpu=4,
 
 model = dict(
     backbone=dict(init_cfg=dict(type="Pretrained", checkpoint="open-mmlab://resnet50_v1c")),
-    decode_head=dict(ignore_index=ignore_index, num_classes=66),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=66),
+    decode_head=dict(ignore_index=ignore_index, num_classes=67),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
 )
 
 # optimizer

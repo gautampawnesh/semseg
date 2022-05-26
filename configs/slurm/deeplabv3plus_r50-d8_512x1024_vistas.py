@@ -25,8 +25,8 @@ data = dict(samples_per_gpu=4,
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index, num_classes=66),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=66),
+    decode_head=dict(ignore_index=ignore_index, num_classes=67),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
 )
 
 # optimizer

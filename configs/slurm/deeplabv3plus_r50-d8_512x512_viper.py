@@ -14,7 +14,7 @@ resume_from = None
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/viper_512_1024.py',
+    '../_base_/datasets/viper_512_512.py',
 ]
 ignore_index = 255
 
@@ -25,8 +25,8 @@ data = dict(samples_per_gpu=4,
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index, num_classes=66),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=66),
+    decode_head=dict(ignore_index=ignore_index, num_classes=67),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
 )
 
 # optimizer
