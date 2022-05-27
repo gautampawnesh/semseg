@@ -8,6 +8,7 @@ from src.transforms.annotations import MapAnnotations
 from pathlib import Path
 import logging
 import os.path as osp
+from PIL import Image, UnidentifiedImageError
 
 logger = logging.getLogger(__name__)
 
@@ -126,12 +127,42 @@ class BaseDataset(CustomDataset):
         logger.info(f"Mapped to universal class ids: {mapping}")
         return mapping
 
+    def images_labels_validation(self, images, labels):
+        """
+        validate the order of images and labels;
+        remove invalid images.
+        Args:
+             images: sorted list of images
+             labels: sorted list of labels
+        """
+        valid_images, valid_labels = [], []
+        for img_path, label_path in zip(images, labels):
+            # VIPER dataset has some empty images
+            if img_path.stat().st_size != 0 and label_path.stat().st_size != 0:
+                valid_images.append(img_path)
+                valid_labels.append(label_path)
+            # Costly operations :(
+            # try:
+            #     img_arr = np.array(Image.open(img_path))
+            #     label_arr = np.array(Image.open(label_path))
+            #     if img_arr.shape[:2] == label_arr.shape[:2]:
+            #         raise ValueError
+            # except UnidentifiedImageError:
+            #     logger.warning(f"Invalid image or label: {img_path}, {label_path}")
+            # except ValueError as e:
+            #     logger.warning(f"image and label mismatch: {img_path}, {label_path}")
+            # else:
+            #     valid_images.append(img_path)
+            #     valid_labels.append(label_path)
+        return valid_images, valid_labels
+
     def data_df(self):
         """data df with image path and annotations"""
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         labels = list(Path(self.ann_dir).glob(f"**/*{self.seg_map_suffix}"))
         images = sorted(images)
         labels = sorted(labels)
+        images, labels = self.images_labels_validation(images, labels)
         logger.info("CHECKPOINT: Is images and labels indexes are correct ??")
         logger.info(f"{self.dataset_name} Images: {images[:5]} \n | Labels: {labels[:5]} ")
         logger.info(f"Images len: {len(images)}, Labels: {len(labels)}")
@@ -182,6 +213,6 @@ class BaseDataset(CustomDataset):
         results = self.pre_pipeline(index)
         return self.pipeline(results)
 
-    def __len__(self) -> int:
+    def __len__(self):
         """length of the dataset."""
         return len(self.data)

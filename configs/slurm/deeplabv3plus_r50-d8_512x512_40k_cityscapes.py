@@ -1,12 +1,11 @@
 experiment = dict(
-    name="Mapillary vistas Training",
-    description="MV classes mapped to universal classes with flat model ",
+    name="Cityscapes Training",
+    description="Cityscapes classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/vistas_train_deeplabv3plus_65c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_deeplabv3plus_67c/"
 # random seed
 seed = 1
-
 # checkpoint file to load weights from
 load_from = None
 # checkpoint file to resume from
@@ -15,9 +14,10 @@ resume_from = None
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/vistas_512_1024.py',
+    '../_base_/datasets/cityscapes_512_512.py',
 ]
-ignore_index = 0
+ignore_index = 255
+
 data = dict(samples_per_gpu=4,
             workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),

@@ -1,11 +1,12 @@
 experiment = dict(
-    name="Cityscapes Training with pretrained backbone",
-    description="Cityscapes classes mapped to universal classes with flat model  ",
+    name="Mapillary vistas Training",
+    description="MV classes mapped to universal classes with flat model : 512x512 ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_pretrained_deeplabv3plus_66c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/vistas_train_deeplabv3plus_65c/"
 # random seed
 seed = 1
+
 # checkpoint file to load weights from
 load_from = None
 # checkpoint file to resume from
@@ -14,10 +15,9 @@ resume_from = None
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/cityscapes_512_1024.py',
+    '../_base_/datasets/vistas_512_512.py',
 ]
-ignore_index = 255
-
+ignore_index = 0
 data = dict(samples_per_gpu=4,
             workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
@@ -25,7 +25,6 @@ data = dict(samples_per_gpu=4,
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    backbone=dict(init_cfg=dict(type="Pretrained", checkpoint="open-mmlab://resnet50_v1c")),
     decode_head=dict(ignore_index=ignore_index, num_classes=67),
     auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
 )

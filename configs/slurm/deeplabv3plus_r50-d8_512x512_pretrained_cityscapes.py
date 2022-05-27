@@ -1,20 +1,20 @@
 experiment = dict(
-    name="Cityscapes Training",
+    name="Cityscapes Training with pretrained backbone",
     description="Cityscapes classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_deeplabv3plus_66c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_pretrained_deeplabv3plus_66c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
 load_from = None
 # checkpoint file to resume from
-resume_from = "/netscratch/gautam/semseg/exp_results/cityscapes_deeplabv3plus_66c/training/20220525_220121/epoch_200.pth"
+resume_from = None
 
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/cityscapes_512_1024.py',
+    '../_base_/datasets/cityscapes_512_512.py',
 ]
 ignore_index = 255
 
@@ -25,6 +25,7 @@ data = dict(samples_per_gpu=4,
             val=dict(ignore_index=ignore_index))
 
 model = dict(
+    backbone=dict(init_cfg=dict(type="Pretrained", checkpoint="open-mmlab://resnet50_v1c")),
     decode_head=dict(ignore_index=ignore_index, num_classes=67),
     auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
 )
@@ -45,7 +46,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=300)
+    max_epochs=100)
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
