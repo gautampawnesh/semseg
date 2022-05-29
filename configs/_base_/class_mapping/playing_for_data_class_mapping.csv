@@ -1,0 +1,36 @@
+dataset_label_id;dataset_class_name;universal_class_id;universal_class_name;note
+0;unlabeled;0;ignore;
+1;Ego vehicle;9;ego_vehicle;
+2;Rectification border;0;ignore;TBD
+3;Out of roi;0;Ignore;TBD
+4;static;62;static;
+5;dynamic;63;dynamic;
+6;ground;64;ground;
+7;road;14;road;
+8;sidewalk;15;sidewalk;
+9;parking;16;parking;
+10;rail_track;17;rail_track;
+11;building;28;building;
+12;wall;30;wall;
+13;fence;29;fence;
+14;guard_rail;33;guard_rail;
+15;bridge;31;bridge;
+16;tunnel;32;Tunnel;
+17;pole;39;pole;
+18;polegroup;40;utilitypole;
+19;traffic_light;42;traffic_light;
+20;traffic_sign;41;traffic_sign;
+21;vegetation;35;vegetation;
+22;terrain;36;terrain;
+23;sky;37;sky;
+24;person;57;person;
+25;rider;60;other_rider;TBD
+26;car;1;car;
+27;truck;4;truck;
+28;bus;3;bus;
+29;caravan;6;caravan;
+30;trailer;7;trailer;
+31;train;5;train;
+32;motorcycle;8;motorcycle;
+33;bicycle;2;bicycle;
+34;license_plate;0;ignore;

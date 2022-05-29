@@ -1,4 +1,4 @@
-# gt has Label Ids: https://github.com/mcordts/cityscapesScripts/blob/master/cityscapesscripts/helpers/labels.py
+# LabelId: https://github.com/AutoNUE/public-code/blob/master/helpers/anue_labels.py
 
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
@@ -6,29 +6,29 @@ import pandas as pd
 
 
 @DATASETS.register_module()
-class UniversalCityscapesDataset(BaseDataset):
+class UniversalIddDataset(BaseDataset):
 
     def __init__(self,
                  pipeline,
                  img_dir,
                  img_suffix="_leftImg8bit.png",
                  ann_dir=None,
-                 seg_map_suffix='_gtFine_labelIds.png',
+                 seg_map_suffix='_gtFine_labelids.png',
                  split=None,
                  data_root=None,
                  test_mode=None,
-                 ignore_index=255,
+                 ignore_index=0,
                  reduce_zero_label=False,
                  classes=None,
                  palette=None,
                  gt_seg_map_loader_cfg=None,
                  file_client_args=dict(backend="disk"),
-                 class_color_mode="RGB",
+                 class_color_mode=None,
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
-                 dataset_name="cityscapes",
+                 dataset_name="idd",
                  is_color_to_uni_class_mapping=False):
-        super(UniversalCityscapesDataset, self).__init__(
+        super(UniversalIddDataset, self).__init__(
             pipeline,
             img_dir,
             img_suffix=img_suffix,

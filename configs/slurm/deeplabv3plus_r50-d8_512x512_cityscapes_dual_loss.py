@@ -1,9 +1,9 @@
 experiment = dict(
-    name="Cityscapes Training",
+    name="Cityscapes Training with dual loss",
     description="Cityscapes classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_deeplabv3plus_adamw_67c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_deeplabv3plus_67c_dual_loss/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -25,8 +25,16 @@ data = dict(samples_per_gpu=4,
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index, num_classes=67),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
+    decode_head=dict(ignore_index=ignore_index, num_classes=67,
+                     loss_decode=[
+                        dict(type="LovaszLoss", reduction="none", loss_weight=1.0),
+                        dict(type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)
+                     ]),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=67,
+                        loss_decode=[
+                            dict(type="LovaszLoss", reduction="none", loss_weight=0.4),
+                            dict(type='CrossEntropyLoss', use_sigmoid=False, loss_weight=0.4)
+                        ]),
 )
 
 # optimizer
@@ -55,3 +63,4 @@ checkpoint_config = dict(
 )
 
 log_level = 'INFO'
+evaluation = dict(interval=20, metric="mIoU", gpu_collect=True, pre_eval=True, save_best='mIoU')

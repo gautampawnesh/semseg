@@ -1,9 +1,9 @@
 experiment = dict(
-    name="Cityscapes Training",
-    description="Cityscapes classes mapped to universal classes with flat model  ",
+    name="Cityscapes+viper+vistas+idd+bdd10k Training",
+    description="Cityscapes, vistas, idd, bdd10k and VIPER classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_deeplabv3plus_adamw_67c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/cityscapes_viper_idd_bdd_vistas_deeplabv3plus_66c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -14,15 +14,12 @@ resume_from = None
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/cityscapes_512_512.py',
+    '../_base_/datasets/cityscapes_viper_vistas_512_512.py',
 ]
-ignore_index = 255
+ignore_index = 0
 
 data = dict(samples_per_gpu=4,
-            workers_per_gpu=8,
-            test=dict(ignore_index=ignore_index),
-            train=dict(ignore_index=ignore_index),
-            val=dict(ignore_index=ignore_index))
+            workers_per_gpu=8)
 
 model = dict(
     decode_head=dict(ignore_index=ignore_index, num_classes=67),
@@ -36,16 +33,19 @@ optimizer = dict(
     momentum=0.9,
     weight_decay=0.0005)
 optimizer_config = dict()
+
 # learning policy
 lr_config = dict(
     policy='poly',
     power=0.9,
     min_lr=1e-4,
     by_epoch=True)
+
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=100)
+    max_epochs=5)
+
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
@@ -53,5 +53,7 @@ checkpoint_config = dict(
     max_keep_ckpts=5,
     create_symlink=False
 )
+
+evaluation = dict(interval=5, metric="mIoU", gpu_collect=True, pre_eval=True)
 
 log_level = 'INFO'

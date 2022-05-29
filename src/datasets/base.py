@@ -4,6 +4,7 @@ import seaborn
 from mmseg.datasets.custom import CustomDataset
 from mmseg.datasets.pipelines.compose import Compose
 from mmseg.datasets.pipelines.loading import LoadAnnotations
+from mmseg.core import eval_metrics, intersect_and_union, pre_eval_to_metrics
 from src.transforms.annotations import MapAnnotations
 from pathlib import Path
 import logging
@@ -77,7 +78,9 @@ class BaseDataset(CustomDataset):
             if not (self.ann_dir is None or osp.isabs(self.ann_dir)):
                 self.ann_dir = osp.join(self.data_root, self.ann_dir)
             if not (self.split is None or osp.isabs(self.split)):
-                self.split = osp.join(self.data_root, self.split)
+                # self.split = osp.join(self.data_root, self.split)
+                # Todo: playing for data doesnt have split folder. and split files are at diff location
+                self.split = self.split
 
         self.universal_class_colors_path = Path(universal_class_colors_path) if universal_class_colors_path else None
         self.dataset_class_mapping_path = Path(dataset_class_mapping) if dataset_class_mapping else None
@@ -127,20 +130,35 @@ class BaseDataset(CustomDataset):
         logger.info(f"Mapped to universal class ids: {mapping}")
         return mapping
 
-    def images_labels_validation(self, images, labels):
+    def images_labels_validation(self, images):
         """
-        validate the order of images and labels;
-        remove invalid images.
         Args:
-             images: sorted list of images
-             labels: sorted list of labels
+             images: list of images
         """
+        # workaround for invalid images Todo
+        pre_defined_invalid_images = [
+            Path('/ds-av/public_datasets/playing_for_data/raw/images/15188.png')
+        ]
         valid_images, valid_labels = [], []
-        for img_path, label_path in zip(images, labels):
+        for img_path in images:
+            if img_path in pre_defined_invalid_images:
+                continue
+            label_path = Path(str(img_path).replace(
+                self.img_dir, self.ann_dir).replace(self.img_suffix, self.seg_map_suffix))
             # VIPER dataset has some empty images
             if img_path.stat().st_size != 0 and label_path.stat().st_size != 0:
+                # Todo: playing for data has white images
                 valid_images.append(img_path)
                 valid_labels.append(label_path)
+                # try:
+                #     if osp.basename(img_path).replace(self.img_suffix, self.seg_map_suffix) == osp.basename(label_path):
+                #         valid_images.append(img_path)
+                #         valid_labels.append(label_path)
+                #     else:
+                #         raise ValueError
+                # except Exception as err:
+                #     err.args += (img_path, label_path)
+                #     raise
             # Costly operations :(
             # try:
             #     img_arr = np.array(Image.open(img_path))
@@ -159,10 +177,10 @@ class BaseDataset(CustomDataset):
     def data_df(self):
         """data df with image path and annotations"""
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        labels = list(Path(self.ann_dir).glob(f"**/*{self.seg_map_suffix}"))
-        images = sorted(images)
-        labels = sorted(labels)
-        images, labels = self.images_labels_validation(images, labels)
+        #labels = list(Path(self.ann_dir).glob(f"**/*{self.seg_map_suffix}"))
+        # images = sorted(images)
+        # labels = sorted(labels)
+        images, labels = self.images_labels_validation(images)
         logger.info("CHECKPOINT: Is images and labels indexes are correct ??")
         logger.info(f"{self.dataset_name} Images: {images[:5]} \n | Labels: {labels[:5]} ")
         logger.info(f"Images len: {len(images)}, Labels: {len(labels)}")
@@ -197,6 +215,51 @@ class BaseDataset(CustomDataset):
             )
         for ind in range(len(self)):
             yield self.get_gt_seg_map_by_idx(ind)
+
+    def pre_eval(self, preds, indices):
+        """Collect eval result from each iteration.
+
+        Args:
+            preds (list[torch.Tensor] | torch.Tensor): the segmentation logit
+                after argmax, shape (N, H, W).
+            indices (list[int] | int): the prediction related ground truth
+                indices.
+
+        Returns:
+            list[torch.Tensor]: (area_intersect, area_union, area_prediction,
+                area_ground_truth).
+        """
+        # In order to compat with batch inference
+        if not isinstance(indices, list):
+            indices = [indices]
+        if not isinstance(preds, list):
+            preds = [preds]
+
+        pre_eval_results = []
+
+        for pred, index in zip(preds, indices):
+            try:
+                seg_map = self.get_gt_seg_map_by_idx(index)
+                if pred.shape != seg_map.shape:
+                    raise
+            except Exception as e:
+                e.args += (seg_map.shape, pred.shape, self.data.iloc[index]["image"], self.data.iloc[index]["label"])
+                raise
+            pre_eval_results.append(
+                intersect_and_union(
+                    pred,
+                    seg_map,
+                    len(self.CLASSES),
+                    self.ignore_index,
+                    # as the labels has been converted when dataset initialized
+                    # in `get_palette_for_custom_classes ` this `label_map`
+                    # should be `dict()`, see
+                    # https://github.com/open-mmlab/mmsegmentation/issues/1415
+                    # for more ditails
+                    label_map=dict(),
+                    reduce_zero_label=self.reduce_zero_label))
+
+        return pre_eval_results
 
     def evaluate(self,
                  results,

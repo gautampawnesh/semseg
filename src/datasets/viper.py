@@ -1,3 +1,5 @@
+# gt has label ids : https://github.com/srrichter/viper/blob/master/classes.csv
+
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
 import pandas as pd

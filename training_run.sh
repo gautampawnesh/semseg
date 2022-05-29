@@ -1,5 +1,5 @@
 # srun -K --partition=A100 --nodes=1 --ntasks=2 --cpus-per-task=10 --gpus-per-task=1 --container-image=/netscratch/gautam/mmlab_dlcc_semseg_20.0_1-py3.sqsh --container-workdir="`pwd`" --container-mounts="`pwd`":"`pwd`",/ds-av:/ds-av:ro --mem-per-cpu=6G sh training_run.sh
-# srun -K --partition=A100 --nodes=1 --ntasks=4 --cpus-per-task=10 --gpus-per-task=1 --container-image=/netscratch/gautam/mmlab_22.01_1.sqsh --container-workdir="`pwd`" --container-mounts="`pwd`":"`pwd`",/ds-av:/ds-av:ro --mem-per-cpu=6G sh training_run.sh
+# srun -K --partition=A100 --nodes=1 --ntasks=4 --cpus-per-task=10 --gpus-per-task=1 --container-image=/netscratch/gautam/mmlab_22.01_1.sqsh --container-workdir="`pwd`" --container-mounts="`pwd`":"`pwd`",/ds-av:/ds-av:ro,/netscratch:/netscratch --mem-per-cpu=6G sh training_run.sh
 
 #git clone https://github.com/open-mmlab/mmcv.git
 #cd mmcv

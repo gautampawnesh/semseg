@@ -1,4 +1,4 @@
-# gt has Label Ids: https://github.com/mcordts/cityscapesScripts/blob/master/cityscapesscripts/helpers/labels.py
+# TrainIds mapping are taken from: https://github.com/bdd100k/bdd100k/blob/master/bdd100k/label/label.py
 
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
@@ -6,14 +6,14 @@ import pandas as pd
 
 
 @DATASETS.register_module()
-class UniversalCityscapesDataset(BaseDataset):
+class UniversalBdd10kDataset(BaseDataset):
 
     def __init__(self,
                  pipeline,
                  img_dir,
-                 img_suffix="_leftImg8bit.png",
+                 img_suffix=".jpg",
                  ann_dir=None,
-                 seg_map_suffix='_gtFine_labelIds.png',
+                 seg_map_suffix='.png',
                  split=None,
                  data_root=None,
                  test_mode=None,
@@ -23,12 +23,12 @@ class UniversalCityscapesDataset(BaseDataset):
                  palette=None,
                  gt_seg_map_loader_cfg=None,
                  file_client_args=dict(backend="disk"),
-                 class_color_mode="RGB",
+                 class_color_mode=None,
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
-                 dataset_name="cityscapes",
+                 dataset_name="bdd10k",
                  is_color_to_uni_class_mapping=False):
-        super(UniversalCityscapesDataset, self).__init__(
+        super(UniversalBdd10kDataset, self).__init__(
             pipeline,
             img_dir,
             img_suffix=img_suffix,
@@ -51,7 +51,7 @@ class UniversalCityscapesDataset(BaseDataset):
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
-        label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
+        label_ids = dataset_cls_mapping_df["dataset_train_id"].tolist()
         label_ids = [(id,) for id in label_ids]
         uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
         mapping = dict(zip(label_ids, uni_cls_ids))
