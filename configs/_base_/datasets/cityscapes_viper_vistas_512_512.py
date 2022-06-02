@@ -41,6 +41,7 @@ cityscape_train = dict(
     seg_map_suffix='_gtFine_labelIds.png',
     universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
     dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
+    dataset_name="cityscapes",
     pipeline=train_pipeline
 )
 
@@ -52,6 +53,7 @@ cityscape_val = dict(
     universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
     dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
     seg_map_suffix='_gtFine_labelIds.png',
+    dataset_name="cityscapes",
     pipeline=test_pipeline
 )
 cityscape_test = dict(
@@ -62,6 +64,7 @@ cityscape_test = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         seg_map_suffix='_gtFine_labelIds.png',
+        dataset_name="cityscapes",
         pipeline=test_pipeline
 )
 
@@ -93,8 +96,8 @@ viper_val = dict(
 viper_test = dict(
     type="UniversalViperDataset",
     data_root="/ds-av/public_datasets/viper/raw",
-    img_dir='val/img/024',
-    ann_dir='val/cls/024',
+    img_dir='val/img',
+    ann_dir='val/cls',
     seg_map_suffix='.png',
     img_suffix=".jpg",
     universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
@@ -226,9 +229,11 @@ data = dict(
     ),
     val=dict(
         type="CustomConcatDataset",
-        datasets=[cityscape_val, viper_val, bdd10k_val, idd_val, playing_for_data_val, vistas_val]
+        datasets=[cityscape_val, vistas_val]
     ),
-    test=dict(
-        type="CustomConcatDataset",
-        datasets=[cityscape_test, viper_test, bdd10k_test, idd_test, playing_for_data_val, vistas_test]
-    ))
+    test=viper_test
+    # test=dict(
+    #     type="CustomConcatDataset",
+    #     datasets=[cityscape_test]#, viper_test, bdd10k_test, idd_test, vistas_test]
+    # )
+)

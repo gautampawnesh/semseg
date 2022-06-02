@@ -109,7 +109,7 @@ class BaseDataset(CustomDataset):
         self.CLASSES = universal_color_df["class_name"][universal_color_df["class_name"].notnull()].tolist()
         logger.info(f"Universal classes list: {self.CLASSES}")
 
-        self.PALETTE = ((np.array(seaborn.color_palette("tab20", len(self.CLASSES)))*255).astype(np.uint8).tolist())
+        self.PALETTE = ((np.array(seaborn.color_palette("Set1", len(self.CLASSES)))*255).astype(np.uint8).tolist())
         self.num_classes = len(self.CLASSES)
 
     def dataset_colors_to_universal_label_mapping(self):
@@ -137,7 +137,8 @@ class BaseDataset(CustomDataset):
         """
         # workaround for invalid images Todo
         pre_defined_invalid_images = [
-            Path('/ds-av/public_datasets/playing_for_data/raw/images/15188.png')
+            Path('/ds-av/public_datasets/playing_for_data/raw/images/15188.png'),
+            Path('/ds-av/public_datasets/playing_for_data/raw/images/17705.png')
         ]
         valid_images, valid_labels = [], []
         for img_path in images:
@@ -267,7 +268,8 @@ class BaseDataset(CustomDataset):
                  logger=None,
                  gt_seg_maps=None,
                  **kwargs):
-        evaluation_results = CustomDataset.evaluate(self, results, metric='mIoU', logger=logger, gt_seg_maps=gt_seg_maps, **kwargs)
+        evaluation_results = CustomDataset.evaluate(self, results, metric='mIoU',
+                                                    logger=logger, gt_seg_maps=gt_seg_maps, **kwargs)
         #logger.info(evaluation_results)
         return evaluation_results
 
