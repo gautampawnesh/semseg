@@ -24,7 +24,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 22;Terrain;152,251,152;22;36;Terrain;36;Terrain;
 23;sky;70,130,180;23;37;Sky;37,43;Sky,streetlight;
 24;person;220,20,60;24;57;person;57;person;
-25;rider;255,0,0;25;60;other-rider;58,59,60;Motorcyclist,bicyclist,other_rider;TBD
+25;rider;255,0,0;25;59;Bicyclist;58,59,60;Motorcyclist,bicyclist,other_rider;TBD
 26;car;0,0,142;26;1;Car;1;Car;
 27;truck;0,0,70;27;4;truck;4;truck;
 28;bus;0,60,100;28;3;Bus;3;Bus;
