@@ -160,27 +160,12 @@ class BaseDataset(CustomDataset):
                 # except Exception as err:
                 #     err.args += (img_path, label_path)
                 #     raise
-            # Costly operations :(
-            # try:
-            #     img_arr = np.array(Image.open(img_path))
-            #     label_arr = np.array(Image.open(label_path))
-            #     if img_arr.shape[:2] == label_arr.shape[:2]:
-            #         raise ValueError
-            # except UnidentifiedImageError:
-            #     logger.warning(f"Invalid image or label: {img_path}, {label_path}")
-            # except ValueError as e:
-            #     logger.warning(f"image and label mismatch: {img_path}, {label_path}")
-            # else:
-            #     valid_images.append(img_path)
-            #     valid_labels.append(label_path)
+
         return valid_images, valid_labels
 
     def data_df(self):
         """data df with image path and annotations"""
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        #labels = list(Path(self.ann_dir).glob(f"**/*{self.seg_map_suffix}"))
-        # images = sorted(images)
-        # labels = sorted(labels)
         images, labels = self.images_labels_validation(images)
         logger.info("CHECKPOINT: Is images and labels indexes are correct ??")
         logger.info(f"{self.dataset_name} Images: {images[:5]} \n | Labels: {labels[:5]} ")

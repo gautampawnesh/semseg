@@ -1,6 +1,6 @@
 experiment = dict(
     name="Cityscapes Training",
-    description="Cityscapes classes mapped to universal classes with flat model  ",
+    description="Baseline 1: Cityscapes classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
 work_dir = "/netscratch/gautam/semseg/baseline1/cityscapes_deeplabv3plus_181c/"
@@ -13,7 +13,7 @@ resume_from = None
 
 _base_ = [
     '../_base_/default_runtime.py',
-    '../_base_/models/deeplabv3plus_r50-d8.py',
+    '../_base_/models/deeplabv3plus_r101-d8.py',
     '../_base_/datasets/cityscapes_512_512.py',
 ]
 ignore_index = 0
@@ -25,8 +25,8 @@ data = dict(samples_per_gpu=8,
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index, num_classes=181),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=181),
+    decode_head=dict(ignore_index=ignore_index, num_classes=187),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=187),
 )
 
 # optimizer

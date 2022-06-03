@@ -1,13 +1,12 @@
-# gt has label ids : https://github.com/srrichter/viper/blob/master/classes.csv
-
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
 import pandas as pd
 from pathlib import Path
-
+import json
+import os.path as osp
 
 @DATASETS.register_module()
-class UniversalViperDataset(BaseDataset):
+class UniversalWilddashDataset(BaseDataset):
 
     def __init__(self,
                  pipeline,
@@ -18,7 +17,7 @@ class UniversalViperDataset(BaseDataset):
                  split=None,
                  data_root=None,
                  test_mode=None,
-                 ignore_index=255,
+                 ignore_index=0,
                  reduce_zero_label=False,
                  classes=None,
                  palette=None,
@@ -27,10 +26,10 @@ class UniversalViperDataset(BaseDataset):
                  class_color_mode=None,
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
-                 dataset_name="viper",
+                 dataset_name="wilddash",
                  is_color_to_uni_class_mapping=False,
-                 num_val_samples=None):
-        super(UniversalViperDataset, self).__init__(
+                 num_samples=None):
+        super(UniversalWilddashDataset, self).__init__(
             pipeline,
             img_dir,
             img_suffix=img_suffix,
@@ -50,15 +49,7 @@ class UniversalViperDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
-        self.num_val_samples = num_val_samples
-
-    def dataset_ids_to_universal_label_mapping(self):
-        dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
-        label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
-        label_ids = [(id,) for id in label_ids]
-        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
-        mapping = dict(zip(label_ids, uni_cls_ids))
-        return mapping
+        self.num_samples = num_samples
 
     def data_df(self):
         """fetch data from the disk"""
@@ -67,6 +58,8 @@ class UniversalViperDataset(BaseDataset):
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        if self.test_mode and self.num_val_samples:
-            return data_df.sort_values("images").sample(n=self.num_val_samples)
-        return data_df.sort_values("image")
+        # total wilddash samples 4256
+        if self.test_mode:
+            # using 700 samples for validation
+            return data_df.sort_values("images")[3556:]
+        return data_df.sort_values("image")[:3556]

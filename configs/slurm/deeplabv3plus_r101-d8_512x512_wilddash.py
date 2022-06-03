@@ -1,9 +1,9 @@
 experiment = dict(
-    name="VIPER Training",
-    description="VIPER classes mapped to universal classes with flat model  ",
+    name="Wilddash Training",
+    description="Baseline 1: wilddash classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/viper_deeplabv3plus_66c/"
+work_dir = "/netscratch/gautam/semseg/baseline1/wilddash_deeplabv3plus_187c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -13,20 +13,20 @@ resume_from = None
 
 _base_ = [
     '../_base_/default_runtime.py',
-    '../_base_/models/deeplabv3plus_r50-d8.py',
-    '../_base_/datasets/viper_512_512.py',
+    '../_base_/models/deeplabv3plus_r101-d8.py',
+    '../_base_/datasets/wilddash_512_512.py',
 ]
-ignore_index = 255
+ignore_index = 0
 
-data = dict(samples_per_gpu=4,
+data = dict(samples_per_gpu=8,
             workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
             val=dict(ignore_index=ignore_index))
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index, num_classes=67),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=67),
+    decode_head=dict(ignore_index=ignore_index, num_classes=187),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=187),
 )
 
 # optimizer
@@ -45,7 +45,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=100)
+    max_epochs=200)
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
