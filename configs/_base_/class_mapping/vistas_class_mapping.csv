@@ -1,67 +1,67 @@
-dataset_class_id;dataset_class_name;dataset_color_code;universal_class_id;universal_class_name
-0;Bird;165,42,42;0;ignore
-1;Ground Animal;0,192,0;61;animal
-2;Curb;196,196,196;22;curb
-3;Fence;190,153,153;29;fence
-4;Guard Rail;180,165,180;33;guard_rail
-5;Barrier;90,120,150;34;barrier
-6;Wall;102,102,156;30;wall
-7;Bike Lane;128,64,255;20;bike_lane
-8;Crosswalk - Plain;140,140,200;19;crosswalk_plain
-9;Curb Cut;170,170,170;22;curb
-10;Parking;250,170,160;16;parking
-11;Pedestrian Area;96,96,96;18;pedestrian_area
-12;Rail Track;230,150,140;17;rail_track
-13;Road;128,64,128;14;road
-14;Service Lane;110,110,110;21;service_lane
-15;Sidewalk;244,35,232;15;sidewalk
-16;Bridge;150,100,100;31;bridge
-17;Building;70,70,70;28;building
-18;Tunnel;150,120,90;32;tunnel
-19;Person;220,20,60;57;person
-20;Bicyclist;255,0,0;59;bicyclist
-21;Motorcyclist;255,0,100;58;motorcyclist
-22;Other Rider;255,0,200;60;other_rider
-23;Lane Marking - Crosswalk;200,128,128;24;zebra_marking
-24;Lane Marking - General;255,255,255;23;general_marking
-25;Mountain;64,170,64;38;mountain
-26;Sand;230,160,50;27;sand
-27;Sky;70,130,180;37;sky
-28;Snow;190,255,255;25;snow
-29;Terrain;152,251,152;36;terrain
-30;Vegetation;107,142,35;35;vegetation
-31;Water;0,170,30;26;water
-32;Banner;255,255,128;46;banner
-33;Bench;250,0,30;52;bench
-34;Bike Rack;100,140,180;65;bike_rack
-35;Billboard;220,220,220;44;billboard
-36;Catch Basin;220,128,128;48;catch_basin
-37;CCTV Camera;222,40,40;50;cctv_camera
-38;Fire Hydrant;100,170,30;51;fire_hydrant
-39;Junction Box;40,40,40;49;junction_box
-40;Mailbox;33,33,33;53;mailbox
-41;Manhole;100,128,160;45;manhole
-42;Phone Booth;142,0,0;55;phone_booth
-43;Pothole;70,100,150;54;pothole
-44;Street Light;210,170,100;43;street_light
-45;Pole;153,153,153;39;pole
-46;Traffic Sign Frame;128,128,128;56;traffic_sign_frame
-47;Utility Pole;0,0,80;40;utility_pole
-48;Traffic Light;250,170,30;42;traffic_light
-49;Traffic Sign (Back);192,192,192;0;Ignore
-50;Traffic Sign (Front);220,220,0;41;traffic_sign
-51;Trash Can;140,140,20;47;trash_can
-52;Bicycle;119,11,32;2;bicycle
-53;Boat;150,0,255;11;boat
-54;Bus;0,60,100;3;bus
-55;Car;0,0,142;1;car
-56;Caravan;0,0,90;6;caravan
-57;Motorcycle;0,0,230;8;motorcycle
-58;On Rails;0,80,100;5;train
-59;Other Vehicle;128,64,64;13;other-vehicle
-60;Trailer;0,0,110;7;trailer
-61;Truck;0,0,70;4;truck
-62;Wheeled Slow;0,0,192;10;wheeled_slow
-63;Car Mount;32,32,32;0;ignore
-64;Ego Vehicle;120,10,10;9;ego_vehicle
-65;Unlabeled;0,0,0;0;ignore
+dataset_class_id;dataset_class_name;dataset_color_code;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;Note
+0;Bird;165,42,42;0;ignore;0;ignore;
+1;Ground Animal;0,192,0;61;animal;61;animal;
+2;Curb;196,196,196;22;curb;22;curb;
+3;Fence;190,153,153;29;fence;29;fence;
+4;Guard Rail;180,165,180;33;guard_rail;33;guard_rail;
+5;Barrier;90,120,150;34;barrier;34;barrier;
+6;Wall;102,102,156;30;wall;30;wall;
+7;Bike Lane;128,64,255;20;bike_lane;20;bike_lane;
+8;Crosswalk - Plain;140,140,200;19;crosswalk_plain;19;crosswalk_plain;
+9;Curb Cut;170,170,170;22;curb;;;
+10;Parking;250,170,160;16;parking;16;parking;
+11;Pedestrian Area;96,96,96;18;pedestrian_area;18;pedestrian_area;
+12;Rail Track;230,150,140;17;rail_track;17;rail_track;
+13;Road;128,64,128;14;road;14;road;
+14;Service Lane;110,110,110;21;service_lane;21;service_lane;
+15;Sidewalk;244,35,232;15;sidewalk;15;sidewalk;
+16;Bridge;150,100,100;31;bridge;31;bridge;
+17;Building;70,70,70;28;building;28;building;
+18;Tunnel;150,120,90;32;tunnel;32;tunnel;
+19;Person;220,20,60;57;person;57;person;
+20;Bicyclist;255,0,0;59;bicyclist;59;bicyclist;
+21;Motorcyclist;255,0,100;58;motorcyclist;58;motorcyclist;
+22;Other Rider;255,0,200;60;other_rider;60;other_rider;
+23;Lane Marking - Crosswalk;200,128,128;24;zebra_marking;24;zebra_marking;
+24;Lane Marking - General;255,255,255;23;general_marking;23;general_marking;
+25;Mountain;64,170,64;38;mountain;38;mountain;
+26;Sand;230,160,50;27;sand;27;sand;
+27;Sky;70,130,180;37;sky;37;sky;
+28;Snow;190,255,255;25;snow;25;snow;
+29;Terrain;152,251,152;36;terrain;36;terrain;
+30;Vegetation;107,142,35;35;vegetation;35, 119,181;Vegetation, palm,plant;
+31;Water;0,170,30;26;water;26,79,161,145,109;Water, sea, lake, pool, river;
+32;Banner;255,255,128;46;banner;46;banner;
+33;Bench;250,0,30;52;bench;52;bench;
+34;Bike Rack;100,140,180;65;bike_rack;65;bike_rack;
+35;Billboard;220,220,220;44;billboard;44;billboard;
+36;Catch Basin;220,128,128;48;catch_basin;48;catch_basin;
+37;CCTV Camera;222,40,40;50;cctv_camera;50;cctv_camera;
+38;Fire Hydrant;100,170,30;51;fire_hydrant;51;fire_hydrant;
+39;Junction Box;40,40,40;49;junction_box;49;junction_box;
+40;Mailbox;33,33,33;53;mailbox;53;mailbox;
+41;Manhole;100,128,160;45;manhole;45;manhole;
+42;Phone Booth;142,0,0;55;phone_booth;55;phone_booth;
+43;Pothole;70,100,150;54;pothole;54;pothole;
+44;Street Light;210,170,100;43;street_light;43;street_light;
+45;Pole;153,153,153;39;pole;39;pole;
+46;Traffic Sign Frame;128,128,128;56;traffic_sign_frame;56;traffic_sign_frame;
+47;Utility Pole;0,0,80;40;utility_pole;40;utility_pole;
+48;Traffic Light;250,170,30;42;traffic_light;42;traffic_light;
+49;Traffic Sign (Back);192,192,192;0;Ignore;;;TBD
+50;Traffic Sign (Front);220,220,0;41;traffic_sign;41;traffic_sign;
+51;Trash Can;140,140,20;47;trash_can;47;trash_can;
+52;Bicycle;119,11,32;2;bicycle;2;bicycle;
+53;Boat;150,0,255;11;boat;11;boat;
+54;Bus;0,60,100;3;bus;3;bus;
+55;Car;0,0,142;1;car;1,186;Car, van;
+56;Caravan;0,0,90;6;caravan;6;caravan;
+57;Motorcycle;0,0,230;8;motorcycle;8;motorcycle;
+58;On Rails;0,80,100;5;train;5;train;
+59;Other Vehicle;128,64,64;13;other-vehicle;13;other-vehicle;
+60;Trailer;0,0,110;7;trailer;7;trailer;
+61;Truck;0,0,70;4;truck;4;truck;
+62;Wheeled Slow;0,0,192;10;wheeled_slow;10;wheeled_slow;
+63;Car Mount;32,32,32;0;ignore;;;
+64;Ego Vehicle;120,10,10;9;ego_vehicle;9;ego_vehicle;
+65;Unlabeled;0,0,0;0;ignore;;;
