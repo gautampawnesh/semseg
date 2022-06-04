@@ -1,6 +1,7 @@
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
 import pandas as pd
+from pathlib import Path
 
 
 @DATASETS.register_module()
@@ -25,8 +26,10 @@ class VistasDataset(BaseDataset):
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
                  dataset_name="vistas",
-                 is_color_to_uni_class_mapping=False
+                 is_color_to_uni_class_mapping=False,
+                 num_val_samples=None
                  ):
+        self.num_val_samples = num_val_samples
         super(VistasDataset, self).__init__(
             pipeline,
             img_dir,
@@ -55,3 +58,14 @@ class VistasDataset(BaseDataset):
         uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
         mapping = dict(zip(label_ids, uni_cls_ids))
         return mapping
+
+    def data_df(self):
+        """fetch data from the disk"""
+        if self.split:
+            raise NotImplementedError
+        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        images, labels = self.images_labels_validation(images)
+        data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
+        if self.test_mode and self.num_val_samples:
+            return data_df.sort_values("image").sample(n=self.num_val_samples)
+        return data_df.sort_values("image")
