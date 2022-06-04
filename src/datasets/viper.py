@@ -30,6 +30,7 @@ class UniversalViperDataset(BaseDataset):
                  dataset_name="viper",
                  is_color_to_uni_class_mapping=False,
                  num_val_samples=None):
+        self.num_val_samples = num_val_samples
         super(UniversalViperDataset, self).__init__(
             pipeline,
             img_dir,
@@ -50,7 +51,6 @@ class UniversalViperDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
-        self.num_val_samples = num_val_samples
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
@@ -68,5 +68,5 @@ class UniversalViperDataset(BaseDataset):
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
         if self.test_mode and self.num_val_samples:
-            return data_df.sort_values("images").sample(n=self.num_val_samples)
+            return data_df.sort_values("image").sample(n=self.num_val_samples)
         return data_df.sort_values("image")
