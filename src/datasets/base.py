@@ -1,15 +1,18 @@
 import pandas as pd
 import numpy as np
 import seaborn
+import mmcv
 from mmseg.datasets.custom import CustomDataset
 from mmseg.datasets.pipelines.compose import Compose
 from mmseg.datasets.pipelines.loading import LoadAnnotations
-from mmseg.core import eval_metrics, intersect_and_union, pre_eval_to_metrics
 from src.transforms.annotations import MapAnnotations
 from pathlib import Path
 import logging
 import os.path as osp
-from PIL import Image, UnidentifiedImageError
+from collections import OrderedDict
+from mmcv.utils import print_log
+from prettytable import PrettyTable
+from mmseg.core import pre_eval_to_metrics, intersect_and_union
 
 logger = logging.getLogger(__name__)
 
@@ -94,8 +97,36 @@ class BaseDataset(CustomDataset):
         if self.is_color_to_uni_class_mapping:
             self.cls_mapping = self.dataset_colors_to_universal_label_mapping()
         else:
-            self.cls_mapping = self.dataset_ids_to_universal_label_mapping()  ## should be implemented by subclasses
+            self.cls_mapping = self.dataset_ids_to_universal_label_mapping()
+        self.DATASET_CLASSES, self.DATASET_PALETTE = self.set_dataset_classes_and_palette()
+        self.pred_backward_mapping = self.set_pred_backward_class_mapping()
         self.data = self.data_df()
+
+    def set_dataset_classes_and_palette(self):
+        """
+        dataset original classes and palette,
+        These are used for evaluation and visualization of dataset data
+        :return:
+        """
+        class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
+        dataset_classes = tuple(class_mapping_df["dataset_class_name"].tolist())
+        dataset_palette = [list(map(int, str(color).split(","))) for color in class_mapping_df["dataset_color_code"]]
+        return dataset_classes, dataset_palette
+
+    def set_pred_backward_class_mapping(self):
+        """
+        set mapping for predictions from Unified (universal) classes to dataset specific classes.
+        :return:
+        """
+        pred_class_mapping = dict()
+        class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
+        dataset_label_ids = class_mapping_df["dataset_label_id"].tolist()
+        universal_data_ids = class_mapping_df["universal_to_dataset"].tolist()
+        for uni_ids, cls_id in zip(universal_data_ids, dataset_label_ids):
+            if pd.isna(uni_ids):
+                continue
+            pred_class_mapping[tuple(map(int, uni_ids.split(",")))] = int(cls_id)
+        return pred_class_mapping
 
     def dataset_ids_to_universal_label_mapping(self):
         raise NotImplementedError
@@ -121,13 +152,9 @@ class BaseDataset(CustomDataset):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         color_tuples = [list(map(int, str(color).split(","))) for color in dataset_cls_mapping_df["dataset_color_code"]]
         # Todo: if colors are in bgr convert to rgb
-        logger.info("CHECKPOINT: Color code format !!!! should be RGB")
         color_tuples = [tuple(color) for color in color_tuples]
-        logger.info(f"Dataset color tuples: {color_tuples}")
         uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
-        logger.info(f"Dataset color_codes len: {len(color_tuples)}, uni_cls_ids len: {len(uni_cls_ids)}")
         mapping = dict(zip(color_tuples, uni_cls_ids))
-        logger.info(f"Mapped to universal class ids: {mapping}")
         return mapping
 
     def images_labels_validation(self, images):
@@ -189,7 +216,8 @@ class BaseDataset(CustomDataset):
     def get_gt_seg_map_by_idx(self, index):
         results = self.pre_pipeline(index)
         results = self.load_annotations(results)
-        results = self.map_annotations(results)
+        if not self.test_mode:
+            results = self.map_annotations(results)
         return results["gt_semantic_seg"]
 
     def get_gt_seg_maps(self, efficient_test=None):
@@ -202,8 +230,32 @@ class BaseDataset(CustomDataset):
         for ind in range(len(self)):
             yield self.get_gt_seg_map_by_idx(ind)
 
+    def pred_backward_class_mapping(self, preds):
+        """
+        Args:
+            preds (list[torch.Tensor] | torch.Tensor): the segmentation logit
+                after argmax, shape (N, H, W).
+        :param preds:
+        :return:
+        """
+        # Todo: convert to tensor
+        preds_mapped = []
+        for pred in preds:
+            pred_mapped = np.zeros(pred.shape[0:2])
+            if len(pred.shape) == 2:
+                pred = np.expand_dim(pred, axis=2)
+            for uni_ids, cls_id in self.pred_backward_mapping.items():
+                for uni_id in uni_ids:
+                    pred_mapped += (np.all(pred == uni_id, axis=2))*cls_id
+            preds_mapped.append(pred_mapped)
+        return preds_mapped
+
     def pre_eval(self, preds, indices):
-        """Collect eval result from each iteration.
+        """
+        Dataset specific evaluation, ground truth and prediction are converted to dataset specific classes means
+        It maps universal classes to dataset classes (backward mapping)
+
+        Collect eval result from each iteration.
 
         Args:
             preds (list[torch.Tensor] | torch.Tensor): the segmentation logit
@@ -220,22 +272,19 @@ class BaseDataset(CustomDataset):
             indices = [indices]
         if not isinstance(preds, list):
             preds = [preds]
+        # universal classes to dataset classes mapping
+        preds = self.pred_backward_class_mapping(preds)
 
         pre_eval_results = []
 
         for pred, index in zip(preds, indices):
-            try:
-                seg_map = self.get_gt_seg_map_by_idx(index)
-                if pred.shape != seg_map.shape:
-                    raise
-            except Exception as e:
-                e.args += (seg_map.shape, pred.shape, self.data.iloc[index]["image"], self.data.iloc[index]["label"])
-                raise
+            # In test mode, seg_map will receive dataset specific labels
+            seg_map = self.get_gt_seg_map_by_idx(index)
             pre_eval_results.append(
                 intersect_and_union(
                     pred,
                     seg_map,
-                    len(self.CLASSES),
+                    len(self.DATASET_CLASSES),
                     self.ignore_index,
                     # as the labels has been converted when dataset initialized
                     # in `get_palette_for_custom_classes ` this `label_map`
@@ -250,13 +299,94 @@ class BaseDataset(CustomDataset):
     def evaluate(self,
                  results,
                  metric='mIoU',
-                 logger=None,
+                 logger=logger,
                  gt_seg_maps=None,
                  **kwargs):
-        evaluation_results = CustomDataset.evaluate(self, results, metric='mIoU',
-                                                    logger=logger, gt_seg_maps=gt_seg_maps, **kwargs)
-        #logger.info(evaluation_results)
-        return evaluation_results
+        """Evaluate the dataset.
+
+        Args:
+            results (list[tuple[torch.Tensor]] | list[str]): per image pre_eval
+                 results or predict segmentation map for computing evaluation
+                 metric.
+            metric (str | list[str]): Metrics to be evaluated. 'mIoU',
+                'mDice' and 'mFscore' are supported.
+            logger (logging.Logger | None | str): Logger used for printing
+                related information during evaluation. Default: None.
+            gt_seg_maps (generator[ndarray]): Custom gt seg maps as input,
+                used in ConcatDataset
+
+        Returns:
+            dict[str, float]: Default metrics.
+        """
+        if isinstance(metric, str):
+            metric = [metric]
+        allowed_metrics = ['mIoU', 'mDice', 'mFscore']
+        if not set(metric).issubset(set(allowed_metrics)):
+            raise KeyError('metric {} is not supported'.format(metric))
+
+        eval_results = {}
+        # test a list of files
+        if mmcv.is_list_of(results, np.ndarray) or mmcv.is_list_of(
+                results, str):
+            raise NotImplementedError
+        # test a list of pre_eval_results
+        else:
+            ret_metrics = pre_eval_to_metrics(results, metric)
+
+        # Because dataset.CLASSES is required for per-eval.
+        if self.DATASET_CLASSES is None:
+            raise NotImplementedError
+            #class_names = tuple(range(num_classes))
+        else:
+            class_names = self.DATASET_CLASSES
+
+        # summary table
+        ret_metrics_summary = OrderedDict({
+            ret_metric: np.round(np.nanmean(ret_metric_value) * 100, 2)
+            for ret_metric, ret_metric_value in ret_metrics.items()
+        })
+
+        # each class table
+        ret_metrics.pop('aAcc', None)
+        ret_metrics_class = OrderedDict({
+            ret_metric: np.round(ret_metric_value * 100, 2)
+            for ret_metric, ret_metric_value in ret_metrics.items()
+        })
+        ret_metrics_class.update({'Class': class_names})
+        ret_metrics_class.move_to_end('Class', last=False)
+
+        # for logger
+        class_table_data = PrettyTable()
+        for key, val in ret_metrics_class.items():
+            class_table_data.add_column(key, val)
+
+        summary_table_data = PrettyTable()
+        for key, val in ret_metrics_summary.items():
+            if key == 'aAcc':
+                summary_table_data.add_column(key, [val])
+            else:
+                summary_table_data.add_column('m' + key, [val])
+
+        print_log('per class results:', logger)
+        print_log('\n' + class_table_data.get_string(), logger=logger)
+        print_log('Summary:', logger)
+        print_log('\n' + summary_table_data.get_string(), logger=logger)
+
+        # each metric dict
+        for key, value in ret_metrics_summary.items():
+            if key == 'aAcc':
+                eval_results[key] = value / 100.0
+            else:
+                eval_results['m' + key] = value / 100.0
+
+        ret_metrics_class.pop('Class', None)
+        for key, value in ret_metrics_class.items():
+            eval_results.update({
+                key + '.' + str(name): value[idx] / 100.0
+                for idx, name in enumerate(class_names)
+            })
+
+        return eval_results
 
     def __getitem__(self, index):
 

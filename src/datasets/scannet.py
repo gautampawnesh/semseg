@@ -4,6 +4,8 @@ import pandas as pd
 from pathlib import Path
 import json
 import os.path as osp
+from mmseg.core import intersect_and_union
+
 
 @DATASETS.register_module()
 class UniversalScannetDataset(BaseDataset):
@@ -65,3 +67,54 @@ class UniversalScannetDataset(BaseDataset):
             return data_df if self.samples is None else data_df.sample(n=self.num_samples)
         else:
             raise NotImplementedError
+
+    def scanet_gt_backward_mapping(self, seg_map):
+        raise NotImplementedError
+
+    def pre_eval(self, preds, indices):
+        """
+        Dataset specific evaluation, ground truth and prediction are converted to dataset specific classes means
+        It maps universal classes to dataset classes (backward mapping)
+
+        Collect eval result from each iteration.
+
+        Args:
+            preds (list[torch.Tensor] | torch.Tensor): the segmentation logit
+                after argmax, shape (N, H, W).
+            indices (list[int] | int): the prediction related ground truth
+                indices.
+
+        Returns:
+            list[torch.Tensor]: (area_intersect, area_union, area_prediction,
+                area_ground_truth).
+        """
+        # In order to compat with batch inference
+        if not isinstance(indices, list):
+            indices = [indices]
+        if not isinstance(preds, list):
+            preds = [preds]
+        # universal classes to dataset classes mapping
+        preds = self.pred_backward_class_mapping(preds)
+
+        pre_eval_results = []
+
+        for pred, index in zip(preds, indices):
+            # In test mode, seg_map will receive dataset specific labels
+            seg_map = self.get_gt_seg_map_by_idx(index)
+            # Convert scannet gt color codes into label ids
+            seg_map = self.scanet_gt_backward_mapping(seg_map)
+            pre_eval_results.append(
+                intersect_and_union(
+                    pred,
+                    seg_map,
+                    len(self.DATASET_CLASSES),
+                    self.ignore_index,
+                    # as the labels has been converted when dataset initialized
+                    # in `get_palette_for_custom_classes ` this `label_map`
+                    # should be `dict()`, see
+                    # https://github.com/open-mmlab/mmsegmentation/issues/1415
+                    # for more ditails
+                    label_map=dict(),
+                    reduce_zero_label=self.reduce_zero_label))
+
+        return pre_eval_results

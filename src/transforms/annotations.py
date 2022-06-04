@@ -12,6 +12,7 @@ class MapAnnotations(object):
     """Map annotations to integer class ID."""
 
     def __call__(self, results):
+        # Todo: Convert to torch
         dataset_uni_cls_mapping = results.get("mapping")
         gt_semantic_seg = results.get("gt_semantic_seg")
         gt_semantic_seg_mapped = np.zeros(gt_semantic_seg.shape[0:2], dtype=np.uint8)

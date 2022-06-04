@@ -1,9 +1,5 @@
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
-import pandas as pd
-from pathlib import Path
-import json
-import os.path as osp
 
 @DATASETS.register_module()
 class UniversalAdeDataset(BaseDataset):

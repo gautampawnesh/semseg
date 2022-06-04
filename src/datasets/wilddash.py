@@ -63,3 +63,11 @@ class UniversalWilddashDataset(BaseDataset):
             # using 700 samples for validation
             return data_df.sort_values("images")[3556:]
         return data_df.sort_values("image")[:3556]
+
+    def dataset_ids_to_universal_label_mapping(self):
+        dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
+        label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
+        label_ids = [(id,) for id in label_ids]
+        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        mapping = dict(zip(label_ids, uni_cls_ids))
+        return mapping
