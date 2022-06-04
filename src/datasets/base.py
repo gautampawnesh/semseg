@@ -243,7 +243,7 @@ class BaseDataset(CustomDataset):
         for pred in preds:
             pred_mapped = np.zeros(pred.shape[0:2])
             if len(pred.shape) == 2:
-                pred = np.expand_dim(pred, axis=2)
+                pred = np.expand_dims(pred, axis=2)
             for uni_ids, cls_id in self.pred_backward_mapping.items():
                 for uni_id in uni_ids:
                     pred_mapped += (np.all(pred == uni_id, axis=2))*cls_id
