@@ -107,9 +107,11 @@ class BaseDataset(CustomDataset):
         dataset original classes and palette,
         These are used for evaluation and visualization of dataset data
         :return:
+            dataset_classes: ('unlabeled', .. 'car')
+            dataset_palette: [[0,0,0], ..... [0,60,100]]
         """
         class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
-        dataset_classes = tuple(class_mapping_df["dataset_class_name"].tolist())
+        dataset_classes = tuple(map(lambda name: name.strip().lower().replace(" ", "_"), class_mapping_df["dataset_class_name"].tolist()))
         dataset_palette = [list(map(int, str(color).split(","))) for color in class_mapping_df["dataset_color_code"]]
         return dataset_classes, dataset_palette
 
@@ -126,6 +128,12 @@ class BaseDataset(CustomDataset):
             if pd.isna(uni_ids):
                 continue
             pred_class_mapping[tuple(map(int, uni_ids.split(",")))] = int(cls_id)
+        # try:
+        #     print("dsf")
+        #     raise
+        # except Exception as err:
+        #     err.args += (pred_class_mapping, )
+        #     raise
         return pred_class_mapping
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -218,6 +226,13 @@ class BaseDataset(CustomDataset):
         results = self.load_annotations(results)
         if not self.test_mode:
             results = self.map_annotations(results)
+        # else:
+        #     try:
+        #         print("safa")
+        #         raise
+        #     except Exception as e:
+        #         e.args += (self.test_mode, np.unique(results["gt_semantic_seg"]))
+        #         raise
         return results["gt_semantic_seg"]
 
     def get_gt_seg_maps(self, efficient_test=None):
@@ -236,7 +251,7 @@ class BaseDataset(CustomDataset):
             preds (list[torch.Tensor] | torch.Tensor): the segmentation logit
                 after argmax, shape (N, H, W).
         :param preds:
-        :return:
+        :return: list of np. array
         """
         # Todo: convert to tensor
         preds_mapped = []
@@ -248,6 +263,12 @@ class BaseDataset(CustomDataset):
                 for uni_id in uni_ids:
                     pred_mapped += (np.all(pred == uni_id, axis=2))*cls_id
             preds_mapped.append(pred_mapped)
+            # try:
+            #     print("pred backward class mapping")
+            #     raise
+            # except Exception as e:
+            #     e.args += (np.unique(pred), "mapped", np.unique(pred_mapped), "shape", pred.shape, pred_mapped.shape)
+            #     raise
         return preds_mapped
 
     def pre_eval(self, preds, indices):
