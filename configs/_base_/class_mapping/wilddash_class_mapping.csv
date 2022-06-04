@@ -1,11 +1,11 @@
 dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;note
 0;unlabeled;0,0,0;0;0;Ignore;0;Ignore;
 1;ego;0,20,50;1;9;ego_vehicle;9;ego_vehicle;
-2;Rectification border;20,20,20;2;0;ignore;0;ignore;
-3;Out of roi;0,0,0;3;0;ignore;0;ignore;
-4;dynamic;111,74,0;4;63;dynamic;63;dynamic;
+2;Rectification border;20,20,20;2;0;ignore;;;
+3;Out of roi;0,0,0;3;0;ignore;;;
+4;dynamic;111,74,0;4;63;dynamic;63,10;Dynamic,wheeledslow;
 5;ground;81,0,81;5;64;ground;64,82;Ground, field;
-6;road;128,64,128;6;14;road;14, 19, 20, 21, 23,24,45,48,54,103;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway;
+6;road;128,64,128;6;14;road;14, 19, 20, 21, 23,24,45,48,54,103,18,184;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway;
 7;sidewalk;244,35,232;7;15;sidewalk;14,22;Sidewalk,curb;
 8;Parking;250,170,160;8;16;parking;16;parking;
 9;Rail track;230,150,140;9;17;rail_track;17;rail_track;
@@ -22,8 +22,8 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 20;terrain;152,251,152;22;36;terrain;36;terrain;
 21;sky;70,130,180;23;37;sky;37;sky;
 22;person;220,20,60;24;57;person;57;person;
-23;rider;255,0,0;25;58;motorcyclist;58,59;Motorcyclist, bicyclist;
-24;car;0,0,142;26;1;car;1;car;
+23;rider;255,0,0;25;58;motorcyclist;58,59,60;Motorcyclist, bicyclist,other_rider;
+24;car;0,0,142;26;1;car;1;Car;
 25;truck;0,0,70;27;4;truck;4;truck;
 26;bus;0,60,100;28;3;bus;3;bus;
 27;Caravan;0,0,90;29;6;caravan;6;caravan;
@@ -33,6 +33,6 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 31;Bicycle;119,11,32;33;2;bicycle;2;bicycle;
 32;pickup-truck;40,0,100;34;185;pickup_truck;185;pickup_truck;
 33;van;0,40,120;35;186;van;186;van;
-34;billboard;174,64,67;36;44;billboard;44,75;billboard,picture;
+34;billboard;174,64,67;36;44;billboard;44,75,46;Billboard,picture,banner;
 35;Street light;210,170,100;37;43;Street light;43;Street light;
 36;road_marking;196,176,128;38;184;road_marking;184,23,24,19;road_marking, general, zebra, crosswalk;

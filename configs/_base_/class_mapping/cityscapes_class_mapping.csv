@@ -3,10 +3,10 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 1; Ego vehicle;0,0,0;1;9;Ego vehicle;9;ego_vehicel;
 2;Rectification border;0,0,0;2;0;ignore;;;TBD
 3;Out of roi;0,0,0;3;0;ignore;;;TBD
-4;static;0,0,0;4;62;static;34,47,49,50,51,52,53,55,62,65;Barrier,trashcan,junction_box,cctv,fire_hydrant,bench,mailbox,phonebooth,static,bikerack;
+4;static;0,0,0;4;62;static;34,47,49,50,51,52,53,55,62,65,86;Barrier,trashcan,junction_box,cctv,fire_hydrant,bench,mailbox,phonebooth,static,bikerack,rock;
 5;dynamic;111,74,0;5;63;Dynamic;10,61,63;Wheeled slow, animal, dynamic;Wheeled slow ?
 6;ground;81,0,81;6;64;ground;18,64,82;pedestrian_area,ground,field;
-7;road;128,64,128;7;14;road;14,19,20,21,23,24,45,48,54,103;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway;
+7;road;128,64,128;7;14;road;14,19,20,21,23,24,45,48,54,103,18,184;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway;
 8;sidewalk;244,35,232;8;15;sidewalk;15,22;Sidewalk,curb_curbcut;
 9;parking;250,170,160;9;16;parking;16;Parking;
 10;Rail track;230,150,140;10;17;rail-track;17;Rail track;
@@ -25,7 +25,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 23;sky;70,130,180;23;37;Sky;37,43;Sky,streetlight;
 24;person;220,20,60;24;57;person;57;person;
 25;rider;255,0,0;25;58;Bicyclist;58,59,60;Motorcyclist,bicyclist,other_rider;
-26;car;0,0,142;26;1;Car;1;Car;
+26;car;0,0,142;26;1;Car;1,186,185;Car,van,pickup_truck;
 27;truck;0,0,70;27;4;truck;4;truck;
 28;bus;0,60,100;28;3;Bus;3;Bus;
 29;Caravan;0,0,90;29;6;caravan;6;caravan;

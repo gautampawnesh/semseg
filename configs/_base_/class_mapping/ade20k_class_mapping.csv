@@ -20,7 +20,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 18;plant-flora-plant-life;204,255,4;18;181;Plant;181;Plant;TBD
 19;curtain-drape-drapery-;255,51,7;19;73;Curtain;73,182;Curtain,shower_curtain;
 20;chair;204,70,3;20;74;chair;74;chair;
-21;car-auto-automobile-machine-;0,102,200;21;1;Car;1;Car;
+21;car-auto-automobile-machine-;0,102,200;21;1;Car;1,185;Car,pickup_truck;
 22;water;61,230,250;22;26;Water;26;Water;
 23;painting-picture;255,6,51;23;75;Picture;75;Picture;
 24;sofa-couch-lounge;11,102,255;24;76;sofa;76;sofa;
