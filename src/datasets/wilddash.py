@@ -29,6 +29,7 @@ class UniversalWilddashDataset(BaseDataset):
                  dataset_name="wilddash",
                  is_color_to_uni_class_mapping=False,
                  num_samples=None):
+        self.num_samples = num_samples
         super(UniversalWilddashDataset, self).__init__(
             pipeline,
             img_dir,
@@ -49,7 +50,6 @@ class UniversalWilddashDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
-        self.num_samples = num_samples
 
     def data_df(self):
         """fetch data from the disk"""
@@ -61,7 +61,7 @@ class UniversalWilddashDataset(BaseDataset):
         # total wilddash samples 4256
         if self.test_mode:
             # using 700 samples for validation
-            return data_df.sort_values("images")[3556:]
+            return data_df.sort_values("image")[3556:]
         return data_df.sort_values("image")[:3556]
 
     def dataset_ids_to_universal_label_mapping(self):
