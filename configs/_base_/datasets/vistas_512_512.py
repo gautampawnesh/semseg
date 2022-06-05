@@ -54,6 +54,7 @@ data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
+        num_val_samples=1000,
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,

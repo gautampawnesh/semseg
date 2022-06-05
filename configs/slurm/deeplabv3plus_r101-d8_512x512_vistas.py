@@ -3,7 +3,7 @@ experiment = dict(
     description="Baseline 1: MV classes mapped to universal classes with flat model : 512x512 ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/baseline1/vistas_train_deeplabv3plus_187c/"
+work_dir = "/netscratch/gautam/semseg/baseline_flat/vistas_train_deeplabv3plus_187c/"
 # random seed
 seed = 1
 
@@ -18,7 +18,7 @@ _base_ = [
     '../_base_/datasets/vistas_512_512.py',
 ]
 ignore_index = 0
-data = dict(samples_per_gpu=8,
+data = dict(samples_per_gpu=4,
             workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
@@ -46,6 +46,7 @@ lr_config = dict(
 runner = dict(
     type='EpochBasedRunner',
     max_epochs=100)
+
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
