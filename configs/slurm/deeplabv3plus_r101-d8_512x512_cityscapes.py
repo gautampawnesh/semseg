@@ -3,7 +3,7 @@ experiment = dict(
     description="Baseline 1: Cityscapes classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/baseline1/cityscapes_deeplabv3plus_181c/"
+work_dir = "/netscratch/gautam/semseg/baseline_flat/cityscapes_deeplabv3plus_181c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -18,7 +18,7 @@ _base_ = [
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=8,
+data = dict(samples_per_gpu=4,
             workers_per_gpu=8,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
