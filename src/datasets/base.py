@@ -11,6 +11,7 @@ import logging
 import os.path as osp
 from collections import OrderedDict
 from mmcv.utils import print_log
+from collections import Counter
 from prettytable import PrettyTable
 from mmseg.core import pre_eval_to_metrics, intersect_and_union
 
@@ -93,12 +94,12 @@ class BaseDataset(CustomDataset):
         self.map_annotations = MapAnnotations()
         # define cls.CLASSES and cls.PALETTE
         self.set_universal_classes_and_palette()
-
+        self.DATASET_CLASSES, self.DATASET_PALETTE, self.DATASET_LABEL_IDS = self.set_dataset_classes_and_palette()
         if self.is_color_to_uni_class_mapping:
             self.cls_mapping = self.dataset_colors_to_universal_label_mapping()
         else:
             self.cls_mapping = self.dataset_ids_to_universal_label_mapping()
-        self.DATASET_CLASSES, self.DATASET_PALETTE = self.set_dataset_classes_and_palette()
+
         self.pred_backward_mapping = self.set_pred_backward_class_mapping()
         self.data = self.data_df()
 
@@ -113,7 +114,8 @@ class BaseDataset(CustomDataset):
         class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         dataset_classes = tuple(map(lambda name: name.strip().lower().replace(" ", "_"), class_mapping_df["dataset_class_name"].tolist()))
         dataset_palette = [list(map(int, str(color).split(","))) for color in class_mapping_df["dataset_color_code"]]
-        return dataset_classes, dataset_palette
+        dataset_label_ids = class_mapping_df["dataset_label_id"]
+        return dataset_classes, dataset_palette, dataset_label_ids
 
     def set_pred_backward_class_mapping(self):
         """
@@ -128,6 +130,16 @@ class BaseDataset(CustomDataset):
             if pd.isna(uni_ids):
                 continue
             pred_class_mapping[tuple(map(int, uni_ids.split(",")))] = int(cls_id)
+        # verify universal to dataset mapping
+        map_keys = list(pred_class_mapping.keys())
+        map_keys_counter = dict(Counter([each_key for key in map_keys for each_key in key]))
+        is_map_keys = set(list(map_keys_counter.values()))
+        try:
+            if len(is_map_keys) > 1:
+                raise ValueError("Duplicate class mapping from universal to dataset.")
+        except Exception as e:
+            e.args += (map_keys_counter,)
+            raise
         # try:
         #     print("dsf")
         #     raise
@@ -159,8 +171,10 @@ class BaseDataset(CustomDataset):
 
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         color_tuples = [list(map(int, str(color).split(","))) for color in dataset_cls_mapping_df["dataset_color_code"]]
-        # Todo: if colors are in bgr convert to rgb
+        # color tuples or label ids
         color_tuples = [tuple(color) for color in color_tuples]
+        if not len(set(color_tuples)) == len(color_tuples):
+            raise ValueError("Duplicate class mapping: ")
         uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
         mapping = dict(zip(color_tuples, uni_cls_ids))
         return mapping
@@ -202,10 +216,6 @@ class BaseDataset(CustomDataset):
         """data df with image path and annotations"""
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         images, labels = self.images_labels_validation(images)
-        logger.info("CHECKPOINT: Is images and labels indexes are correct ??")
-        logger.info(f"{self.dataset_name} Images: {images[:5]} \n | Labels: {labels[:5]} ")
-        logger.info(f"Images len: {len(images)}, Labels: {len(labels)}")
-        logger.info("CHECKPOINT: Labels might be missing for certain images !!!!!!!!!!")
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
         return data_df.sort_values("image")
 
@@ -255,13 +265,14 @@ class BaseDataset(CustomDataset):
         """
         # Todo: convert to tensor
         preds_mapped = []
+
         for pred in preds:
-            pred_mapped = np.zeros(pred.shape[0:2])
+            pred_mapped = np.zeros(pred.shape[0:2], dtype=np.uint8)
             if len(pred.shape) == 2:
                 pred = np.expand_dims(pred, axis=2)
             for uni_ids, cls_id in self.pred_backward_mapping.items():
                 for uni_id in uni_ids:
-                    pred_mapped += (np.all(pred == uni_id, axis=2))*cls_id
+                    pred_mapped += (np.all(pred == uni_id, axis=2).astype(dtype=np.uint8))*cls_id
             preds_mapped.append(pred_mapped)
             # try:
             #     print("pred backward class mapping")
@@ -269,6 +280,17 @@ class BaseDataset(CustomDataset):
             # except Exception as e:
             #     e.args += (np.unique(pred), "mapped", np.unique(pred_mapped), "shape", pred.shape, pred_mapped.shape)
             #     raise
+        try:
+            # print("verifies universal to dataset mapping")
+
+            if not set(np.unique(preds_mapped[0]).tolist()).issubset(set(list(self.pred_backward_mapping.values()))):
+                raise ValueError("mapped prediction has out of index dataset class.")
+
+        except Exception as e:
+            e.args += (len(preds), preds[0].shape, np.unique(preds[0]), self.pred_backward_mapping,
+                       np.unique(preds_mapped[0]),
+                       list(self.pred_backward_mapping.values()))
+            raise
         return preds_mapped
 
     def pre_eval(self, preds, indices):

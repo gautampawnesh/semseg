@@ -16,7 +16,7 @@ dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;univer
 12;billboard;150,20,20;44;Billboard;44,46;Billboard,banner;
 13;trafficlight;250,170,30;42;Traffic light;42;Traffic light;
 14;trafficsign;220,220,0;41;traffic_sign;41;traffic_sign;
-15;mobilebarrier;180,180,100;46;barrier;46;barrier;
+15;mobilebarrier;180,180,100;34;barrier;34;barrier;
 16;firehydrant;173,153,153;51;fire_hydrant;51;fire_hydrant;
 17;chair;168,153,153;74;Chair;74,83,112;Chair,arm,swivel;
 18;trash;81,0,21;0;ignore;;;

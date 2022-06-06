@@ -5,8 +5,8 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 3;Out of roi;0,0,0;3;0;ignore;;;TBD
 4;static;0,0,0;4;62;static;34,47,49,50,51,52,53,55,62,65,86;Barrier,trashcan,junction_box,cctv,fire_hydrant,bench,mailbox,phonebooth,static,bikerack,rock;
 5;dynamic;111,74,0;5;63;Dynamic;10,61,63;Wheeled slow, animal, dynamic;Wheeled slow ?
-6;ground;81,0,81;6;64;ground;18,64,82;pedestrian_area,ground,field;
-7;road;128,64,128;7;14;road;14,19,20,21,23,24,45,48,54,103,18,184;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway;
+6;ground;81,0,81;6;64;ground;64,82;ground,field;
+7;road;128,64,128;7;14;road;14,19,20,21,23,24,45,48,54,103,184,18;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway,pedestrian_area;
 8;sidewalk;244,35,232;8;15;sidewalk;15,22;Sidewalk,curb_curbcut;
 9;parking;250,170,160;9;16;parking;16;Parking;
 10;Rail track;230,150,140;10;17;rail-track;17;Rail track;
