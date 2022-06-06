@@ -1,5 +1,6 @@
 # Code is adapted from https://github.com/open-mmlab/mmsegmentation
 import argparse
+import csv
 import os
 import os.path as osp
 import numpy as np
@@ -33,7 +34,7 @@ import pandas as pd
 CFG_DICT = None
 IMG_INFERENCE_SEED = 1  # random seed to select test images for inference
 IMG_INFERENCE_NUMBER = 20  # number of images used for inference
-EVALUATION_FILE = "evaluation.json"
+EVALUATION_FILE = "evaluation.csv"
 INF_FOLDER = "visualizations"
 
 
@@ -122,7 +123,8 @@ def evaluate(cfg, args, logger):
         mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
         # create evaluation json file for dataset
         with open(osp.join(cfg.work_dir, EVALUATION_FILE), "w") as f:
-            json.dump(metrics, f, indent=4)
+            w = csv.writer(f)
+            w.writerows(metrics.items())
         # run image inference for given dataset
         image_inference(dataset, model, cfg.work_dir)
 
