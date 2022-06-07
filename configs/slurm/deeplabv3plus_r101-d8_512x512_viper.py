@@ -7,7 +7,7 @@ work_dir = "/netscratch/gautam/semseg/baseline_flat/viper_deeplabv3plus_187c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-load_from = None
+load_from = "/netscratch/gautam/semseg/baseline_flat/viper_deeplabv3plus_187c/training/20220605_052057/best_mIoU_epoch_100.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -32,7 +32,7 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.01,
+    lr=2.569e-04,
     momentum=0.9,
     weight_decay=0.0005)
 optimizer_config = dict()
@@ -40,7 +40,7 @@ optimizer_config = dict()
 lr_config = dict(
     policy='poly',
     power=0.9,
-    min_lr=1e-4,
+    min_lr=0.0,
     by_epoch=True)
 # runtime settings
 runner = dict(
