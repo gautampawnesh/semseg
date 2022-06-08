@@ -186,3 +186,6 @@ Other-objects;183;Otherfurniture
 flat;184;all_road_marking
 vehicle;185;pickup_truck
 vehicle;186;Van
+Background;187;Tree
+Construction;188;Infra
+Objects;189;traffic_sign_back

@@ -4,7 +4,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 2;building-edifice;180,120,120;2;28;building;28;Building;
 3;sky;6,230,230;3;37;sky;37;sky;
 4;floor-flooring;80,50,50;4;66;Floor;66;Floor;
-5;tree;4,200,3;5;35;Vegetation;35;Vegetation;
+5;tree;4,200,3;5;187;Tree;187;Tree;
 6;ceiling;120,120,80;6;67;Ceiling;67;Ceiling;
 7;road-route;140,140,140;7;14;Road;14,16,17,19,20,21,23,24,45,48,54,184;Parking-bikelane-servicelane-marking-zebra-railtrack-crosswalkplain;
 8;bed;204,5,255;8;68;Bed;68;Bed;

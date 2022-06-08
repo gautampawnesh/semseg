@@ -64,8 +64,10 @@ class VistasDataset(BaseDataset):
         if self.split:
             raise NotImplementedError
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        if self.test_mode and self.num_val_samples:
+            import random
+            random.seed(1)
+            images = random.sample(images, self.num_val_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        if self.test_mode and self.num_val_samples:
-            return data_df.sort_values("image").sample(n=self.num_val_samples)
         return data_df.sort_values("image")

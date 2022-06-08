@@ -1,3 +1,5 @@
+import torch
+
 from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
 import pandas as pd
@@ -15,7 +17,7 @@ class UniversalScannetDataset(BaseDataset):
                  img_dir,
                  img_suffix=".jpg",
                  ann_dir=None,
-                 seg_map_suffix='.png',
+                 seg_map_suffix='_labelId.png',
                  split=None,
                  data_root=None,
                  test_mode=None,
@@ -25,12 +27,13 @@ class UniversalScannetDataset(BaseDataset):
                  palette=None,
                  gt_seg_map_loader_cfg=None,
                  file_client_args=dict(backend="disk"),
-                 class_color_mode="RGB",
+                 class_color_mode=None,
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
                  dataset_name="scannet",
                  is_color_to_uni_class_mapping=True,
                  num_samples=None):
+        self.num_samples = num_samples
         super(UniversalScannetDataset, self).__init__(
             pipeline,
             img_dir,
@@ -51,7 +54,14 @@ class UniversalScannetDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
-        self.num_samples = num_samples
+
+    def dataset_ids_to_universal_label_mapping(self):
+        dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
+        label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
+        label_ids = [(id,) for id in label_ids]
+        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        mapping = dict(zip(label_ids, uni_cls_ids))
+        return mapping
 
     def data_df(self):
         """fetch data from the disk"""
@@ -60,16 +70,15 @@ class UniversalScannetDataset(BaseDataset):
             with open(self.split, "r") as fp:
                 data = json.load(fp)
             for each_img, each_ann in zip(data["images"], data["annotations"]):
+                ann_file = each_img['file_name'].replace("frame/color", "annotation/segmentation")
+                ann_file = ann_file.replace(self.img_suffix, self.seg_map_suffix)
                 images.append(Path(osp.join(self.img_dir, each_img['file_name'])))
-                labels.append(Path(osp.join(self.ann_dir, each_ann['file_name'])))
+                labels.append(Path(osp.join(self.ann_dir, ann_file)))
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
-            return data_df if self.samples is None else data_df.sample(n=self.num_samples)
+            return data_df if self.num_samples is None else data_df.sample(n=self.num_samples)
         else:
             raise NotImplementedError
-
-    def scanet_gt_backward_mapping(self, seg_map):
-        raise NotImplementedError
 
     def pre_eval(self, preds, indices):
         """
@@ -101,8 +110,13 @@ class UniversalScannetDataset(BaseDataset):
         for pred, index in zip(preds, indices):
             # In test mode, seg_map will receive dataset specific labels
             seg_map = self.get_gt_seg_map_by_idx(index)
-            # Convert scannet gt color codes into label ids
-            seg_map = self.scanet_gt_backward_mapping(seg_map)
+            # Todo: Remove this
+            import cv2
+            try:
+                seg_map = cv2.resize(seg_map, dsize=(pred.shape[1], pred.shape[0]), interpolation=cv2.INTER_NEAREST)
+            except Exception as e:
+                e.args += (torch.from_numpy(seg_map).shape, pred.shape)
+                raise
             pre_eval_results.append(
                 intersect_and_union(
                     pred,

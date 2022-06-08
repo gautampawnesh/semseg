@@ -2,16 +2,16 @@ dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;univer
 0;unlabeled;0,0,0;0;ignore;0;ignore;
 1;ambiguous;111,74,0;0;ignore;;;
 2;sky;70,130,180;37;sky;37;sky;
-3;road;128,64,128;14;road;14,19,20,21,23,24,45,48,54,103,18,184;"road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runwa
+3;road;128,64,128;14;road;14,19,20,21,23,24,45,48,54,103,18,184,26,16;"road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway,water,parking
 ";
 4;sidewalk;244,35,232;15;Sidewalk;15,22;Sidewalk,curbstone;
 5;railtrack;230,150,140;17;rail_track;17;rail_track;
-6;terrain;152,251,152;36;Terrain;36;Terrain;
-7;tree;87,182,35;119;Palm-tree;119;Palm-tree;
-8;vegetation;35,142,35;35;Vegetation;35,38,181;Vegetation,mountain,plant;
-9;building;70,70,70;28;building;28,156,93,69,78,71,102,97;"Building,step-stair,pillar,window,house,door,skyscraper
+6;terrain;152,251,152;36;Terrain;36,38;Terrain,mountain;
+7;tree;87,182,35;187;tree;187,119;tree,Palm-tree;
+8;vegetation;35,142,35;35;Vegetation;35,181;Vegetation,plant;
+9;building;70,70,70;28;building;28,156,69,78,71,102,97,30;"Building,step-stair,window,house,door,skyscraper,wall
 ";
-10;infrastructure;153,153,153;28;Building;100; Grandstand;
+10;infrastructure;153,153,153;188;Infrastructure;188,100,31,93,32,33,40,39,43; infra,Grandstand,bridge,column,tunnel,guard_rail,utility_pole,pole,street_light;
 11;fence;190,153,153;29;Fence;29;Fence;
 12;billboard;150,20,20;44;Billboard;44,46;Billboard,banner;
 13;trafficlight;250,170,30;42;Traffic light;42;Traffic light;
@@ -21,12 +21,12 @@ dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;univer
 17;chair;168,153,153;74;Chair;74,83,112;Chair,arm,swivel;
 18;trash;81,0,21;0;ignore;;;
 19;trashcan;81,0,81;47;trash;47;trash;
-20;person;220,20,60;57;person;57;person;
+20;person;220,20,60;57;person;57,58,59,60;Person, motorcyclist, bicyclist,other_rider;
 21;animal;255,0,0;61;animal;61;animal;
 22;bicycle;119,11,32;2;Bicycle;2;Bicycle;
 23;motorcycle;0,0,230;8;motorcycle;8;motorcycle;
-24;car;0,0,142;1;car;1,185;Car,pickuptruck;
-25;van;0,80,100;186;Van;186;Van;
+24;car;0,0,142;1;car;1,185,9;Car,pickuptruck,ego_car;
+25;van;0,80,100;186;Van;186,6;Van,caravan;
 26;bus;0,60,100;3;bus;3;bus;
 27;truck;0,0,70;4;truck;4;truck;
 28;trailer;0,0,90;7;trailer;7;trailer;

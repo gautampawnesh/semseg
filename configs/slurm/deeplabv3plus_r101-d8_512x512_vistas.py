@@ -8,7 +8,7 @@ work_dir = "/netscratch/gautam/semseg/baseline_flat/vistas_train_deeplabv3plus_1
 seed = 1
 
 # checkpoint file to load weights from
-load_from = None
+load_from = "/netscratch/gautam/semseg/baseline_flat/vistas_train_deeplabv3plus_187c/training/20220605_012148/best_mIoU_epoch_100.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -32,7 +32,7 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.01,
+    lr=2.569e-04,
     momentum=0.9,
     weight_decay=0.0005)
 optimizer_config = dict()
@@ -45,7 +45,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=100)
+    max_epochs=100) # 200
 
 # checkpoints settings
 checkpoint_config = dict(
@@ -54,5 +54,5 @@ checkpoint_config = dict(
     max_keep_ckpts=5,
     create_symlink=False
 )
-
+evaluation = dict(_delete_=True, start=50, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
 log_level = 'INFO'

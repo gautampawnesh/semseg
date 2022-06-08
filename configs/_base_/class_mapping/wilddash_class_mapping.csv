@@ -3,10 +3,10 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 1;ego;0,20,50;1;9;ego_vehicle;9;ego_vehicle;
 2;Rectification border;20,20,20;2;0;ignore;;;
 3;Out of roi;0,0,0;3;0;ignore;;;
-4;Static;0,0,0;4;62;Static;34,47,49,50,51,52,53,55,62,65,86;Barrier,trashcan,junction_box,cctv,fire_hydrant,bench,mailbox,phonebooth,static,bikerack,rock;
+4;Static;0,0,0;4;62;Static;62;Static;
 5;dynamic;111,74,0;5;63;dynamic;63,10;Dynamic,wheeledslow;
 6;ground;81,0,81;6;64;ground;64,82;Ground, field;
-7;road;128,64,128;7;14;road;14, 19, 20, 21,45,48,54,103,18;Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway;
+7;road;128,64,128;7;14;road;14, 19, 20, 21,45,48,54,103,18,132;Road,crosswalk_plain,bike_lane,service_lane,manhole,catchbasin,pothole,runway,dirt_track;
 8;sidewalk;244,35,232;8;15;sidewalk;15,22;Sidewalk,curb;
 9;Parking;250,170,160;9;16;parking;16;parking;
 10;Rail track;230,150,140;10;17;rail_track;17;rail_track;

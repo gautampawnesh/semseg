@@ -1,5 +1,5 @@
 dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;Note
-0;Bird;0;165,42,42;0;ignore;0;ignore;
+0;Unlabeled;65;0,0,0;0;ignore;;;
 1;Ground Animal;1;0,192,0;61;animal;61;animal;
 2;Curb;2;196,196,196;22;curb;22;curb;
 3;Fence;3;190,153,153;29;fence;29;fence;
@@ -48,7 +48,7 @@ dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universa
 46;Traffic Sign Frame;46;128,128,128;56;traffic_sign_frame;56;traffic_sign_frame;
 47;Utility Pole;47;0,0,80;40;utility_pole;40,128;utility_pole,tower;
 48;Traffic Light;48;250,170,30;42;traffic_light;42;traffic_light;
-49;Traffic Sign (Back);49;192,192,192;0;Ignore;;;TBD
+49;Traffic Sign (Back);49;192,192,192;189;traffic_sign_back;189;traffic_sign_back;TBD
 50;Traffic Sign (Front);50;220,220,0;41;traffic_sign;41;traffic_sign;
 51;Trash Can;51;140,140,20;47;trash_can;47;trash_can;
 52;Bicycle;52;119,11,32;2;bicycle;2;bicycle;
@@ -64,4 +64,4 @@ dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universa
 62;Wheeled Slow;62;0,0,192;10;wheeled_slow;10;wheeled_slow;
 63;Car Mount;63;32,32,32;0;ignore;;;
 64;Ego Vehicle;64;120,10,10;9;ego_vehicle;9;ego_vehicle;
-65;Unlabeled;65;0,0,0;0;ignore;;;
+65;Bird;0;165,42,42;0;ignore;;;

@@ -73,4 +73,5 @@ data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
         ignore_index=0,  # gt are Label ids
+        num_val_samples=1000,
         pipeline=test_pipeline))

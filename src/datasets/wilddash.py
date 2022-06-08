@@ -56,13 +56,13 @@ class UniversalWilddashDataset(BaseDataset):
         if self.split:
             raise NotImplementedError
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        if self.test_mode:
+            images = images[3556:]
+        else:
+            images = images[:3556]
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        # total wilddash samples 4256
-        if self.test_mode:
-            # using 700 samples for validation
-            return data_df.sort_values("image")[3556:]
-        return data_df.sort_values("image")[:3556]
+        return data_df.sort_values("image")
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")

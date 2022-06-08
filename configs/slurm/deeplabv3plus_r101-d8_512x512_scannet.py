@@ -3,7 +3,7 @@ experiment = dict(
     description="Scannet classes mapped to universal classes with flat model  ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/baseline1/scannet_deeplabv3plus_187c/"
+work_dir = "/netscratch/gautam/semseg/baseline_flat/scannet_deeplabv3plus_187c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -18,8 +18,8 @@ _base_ = [
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=8,
-            workers_per_gpu=8,
+data = dict(samples_per_gpu=4,
+            workers_per_gpu=6,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
             val=dict(ignore_index=ignore_index))
@@ -45,7 +45,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=200)
+    max_epochs=100)
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
