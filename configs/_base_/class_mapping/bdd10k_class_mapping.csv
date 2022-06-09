@@ -11,7 +11,7 @@ dataset_train_id;dataset_class_name;universal_class_id;universal_class_name;note
 9;terrain;36;Terrain;
 10;Sky;37;Sky;
 11;Person;57;Person;
-12;rider;58;Bicyclist;TBD
+12;rider;58;Motorcyclist;TBD
 13;Car;1;car;
 14;truck;4;truck;
 15;Bus;3;bus;

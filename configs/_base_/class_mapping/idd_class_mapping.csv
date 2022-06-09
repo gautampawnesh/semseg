@@ -7,7 +7,7 @@ dataset_label_id;dataset_class_name;universal_class_id;universal_class_name;note
 5;Non-drivable_fallback;0;Ignore;TBD
 6;person;57;person;
 7;animal;61;animal;
-8;rider;60;rider;
+8;rider;58;Motorcyclist;
 9;Motorcycle;8;motorcycle;
 10;bicycle;2;bicycle;
 11;autorickshaw;13;other-vehicles;TBD

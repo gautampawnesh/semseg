@@ -29,7 +29,7 @@ dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universa
 27;Sky;27;70,130,180;37;sky;37;sky;
 28;Snow;28;190,255,255;25;snow;25;snow;
 29;Terrain;29;152,251,152;36;terrain;36;terrain;
-30;Vegetation;30;107,142,35;35;vegetation;35, 119,181;Vegetation, palm,plant;
+30;Vegetation;30;107,142,35;35;vegetation;35, 119,181,187;Vegetation, palm,plant,tree;
 31;Water;31;0,170,30;26;water;26,79,161,145,109;Water, sea, lake, pool, river;
 32;Banner;32;255,255,128;46;banner;46;banner;
 33;Bench;33;250,0,30;52;bench;52;bench;

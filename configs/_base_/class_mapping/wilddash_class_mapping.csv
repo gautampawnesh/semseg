@@ -19,7 +19,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 17;pole;153,153,153;17;39;pole;39,40,128;Pole, utility, tower;
 18;Traffic light;250,170,30;19;42;traffic_light;42;traffic_light;
 19;traffic_sign;220,220,0;20;41;traffic_sign;41;traffic_sign;
-20;vegetation;107,142,35;21;35;vegetation;35,119,181;Vegetation,palm-tree,plant;
+20;vegetation;107,142,35;21;35;vegetation;35,119,181,187;Vegetation,palm-tree,plant,tree;
 21;terrain;152,251,152;22;36;terrain;36;terrain;
 22;sky;70,130,180;23;37;sky;37;sky;
 23;person;220,20,60;24;57;person;57;person;

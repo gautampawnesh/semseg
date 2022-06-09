@@ -10,14 +10,14 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 8;sidewalk;244,35,232;8;15;sidewalk;15,22;Sidewalk,curb_curbcut;
 9;parking;250,170,160;9;16;parking;16;Parking;
 10;Rail track;230,150,140;10;17;rail-track;17;Rail track;
-11;Building;70,70,70;11;28;building;28,44,46,156,93,69,78,71,102,100,97,188;Building,billboard,banner,..,infra;
+11;Building;70,70,70;11;28;building;28,156,93,69,78,71,102,100,97;Building,step_stair,column,window,house,door,stairs,skyscrapper;
 12;wall;102,102,156;12;30;wall;30;wall;
 13;Fence;190,153,153;13;29;Fence;29;fence;
 14;Guard rail;180,165,180;14;33;Guard rail;33;guard_rail;
 15;bridge;150,100,100;15;31;Bridge;31;Bridge;
 16;Tunnel;150,120,90;16;32;Tunnel;32;Tunnel;
 17;pole;153,153,153;17;39;pole;39;pole;
-18;Pole group;153,153,153;18;40;Utility pole;40,56;Utility pole,traffic_sign_frame;
+18;Pole group;153,153,153;18;40;Utility pole;40;Utility pole;
 19;Traffic light;250,170,30;19;42;Traffic light;42;Traffic light;
 20;Traffic sign;220,220,0;20;41;Traffic sign;41;Traffic sign;
 21;Vegetation;107,142,35;21;35;Vegetation;35,119,181,187;Vegetation,palm-tree,plant,tree;

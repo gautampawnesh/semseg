@@ -9,8 +9,7 @@ dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;univer
 6;terrain;152,251,152;36;Terrain;36,38;Terrain,mountain;
 7;tree;87,182,35;187;tree;187,119;tree,Palm-tree;
 8;vegetation;35,142,35;35;Vegetation;35,181;Vegetation,plant;
-9;building;70,70,70;28;building;28,156,69,78,71,102,97,30;"Building,step-stair,window,house,door,skyscraper,wall
-";
+9;building;70,70,70;28;building;28,156,69,78,71,102,97,30;Building,step-stair,window,house,door,skyscraper,wall;
 10;infrastructure;153,153,153;188;Infrastructure;188,100,31,93,32,33,40,39,43; infra,Grandstand,bridge,column,tunnel,guard_rail,utility_pole,pole,street_light;
 11;fence;190,153,153;29;Fence;29;Fence;
 12;billboard;150,20,20;44;Billboard;44,46;Billboard,banner;

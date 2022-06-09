@@ -24,7 +24,7 @@ dataset_label_id;dataset_class_name;universal_class_id;universal_class_name;note
 22;terrain;36;terrain;
 23;sky;37;sky;
 24;person;57;person;
-25;rider;59;Motorcyclist;TBD
+25;rider;58;Motorcyclist;TBD
 26;car;1;car;
 27;truck;4;truck;
 28;bus;3;bus;
