@@ -1,5 +1,5 @@
 dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;note;Unnamed: 9
-0;ignore;0,0,0;0;0;Ignore;0;Ignore;;
+0;ignore;0,0,0;0;0;Ignore;;;;
 1;wall;174,199,232;1;29;Wall;29;Wall;;
 2;floor;152,223,138;2;62;Floor;62;Floor;;
 3;cabinet;31,119,180;3;66;cabinet;66;cabinet;;

@@ -1,5 +1,5 @@
 dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;note
-0;unlabeled;0,0,0;0;0;Ignore;0;Ignore;
+0;unlabeled;0,0,0;0;0;Ignore;;;
 1;ego;0,20,50;1;9;ego_vehicle;9;ego_vehicle;
 2;Rectification border;20,20,20;2;0;ignore;;;
 3;Out of roi;0,0,0;3;0;ignore;;;

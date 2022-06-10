@@ -1,5 +1,5 @@
 dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;Note
-0;Unlabeled;65;0,0,0;0;ignore;0;Ignore;
+0;Unlabeled;65;0,0,0;0;ignore;;;
 1;Ground Animal;1;0,192,0;60;animal;60;animal;
 2;Curb;2;196,196,196;21;curb;21;curb;
 3;Fence;3;190,153,153;28;fence;28;fence;

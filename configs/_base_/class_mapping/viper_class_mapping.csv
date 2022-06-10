@@ -1,5 +1,5 @@
 dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;universal_class_name;universal_to_dataset;universal_to_dataset_class_name;note
-0;unlabeled;0,0,0;0;ignore;0;ignore;
+0;unlabeled;0,0,0;0;ignore;;;
 1;ambiguous;111,74,0;0;ignore;;;
 2;sky;70,130,180;36;sky;36;sky;
 3;road;128,64,128;13;road;13,18,19,20,22,23,44,47,53,99,17,180,25,15;"road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway,water,parking
@@ -31,4 +31,4 @@ dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;univer
 28;trailer;0,0,90;7;trailer;;;
 29;train;0,80,100;5;train;;;
 30;plane;0,100,100;186;plane;;;
-31;boat;50,0,90;11;boat;11;boat;
+31;boat;50,0,90;11;boat;;;
