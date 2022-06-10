@@ -47,7 +47,7 @@ class CustomConcatDataset(ConcatDataset):
 
         if self.separate_eval:
             dataset_idx = -1
-            total_eval_results = dict()
+            total_eval_results = {"mIoU": 0.0}
             for size, dataset in zip(self.cumulative_sizes, self.datasets):
                 start_idx = 0 if dataset_idx == -1 else \
                     self.cumulative_sizes[dataset_idx]
@@ -63,6 +63,9 @@ class CustomConcatDataset(ConcatDataset):
                     results_per_dataset, logger=logger, **kwargs)
                 dataset_idx += 1
                 for k, v in eval_results_per_dataset.items():
+                    # consolidated mIoU of all dataset.
+                    if k == "mIoU":
+                        total_eval_results["mIoU"] += v
                     total_eval_results.update({f'{dataset_idx}_{k}': v})
 
             return total_eval_results

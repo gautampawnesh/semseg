@@ -30,6 +30,8 @@ class VistasDataset(BaseDataset):
                  num_val_samples=None
                  ):
         self.num_val_samples = num_val_samples
+        # mark all non eval classes to 0 based on gt label id
+        self.gt_non_eval_classes = []
         super(VistasDataset, self).__init__(
             pipeline,
             img_dir,

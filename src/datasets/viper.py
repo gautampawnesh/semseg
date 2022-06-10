@@ -31,6 +31,8 @@ class UniversalViperDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_val_samples=None):
         self.num_val_samples = num_val_samples
+        # mark all non eval classes to 0 based on gt label id
+        self.gt_non_eval_classes = [1, 5, 21, 22, 28, 29, 30, 31]
         super(UniversalViperDataset, self).__init__(
             pipeline,
             img_dir,
@@ -65,7 +67,7 @@ class UniversalViperDataset(BaseDataset):
         if self.split:
             raise NotImplementedError
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        if self.test_mode and self.num_val_samples:
+        if self.num_val_samples:
             import random
             random.seed(1)
             images = random.sample(images, self.num_val_samples)

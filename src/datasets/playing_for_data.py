@@ -55,3 +55,9 @@ class UniversalPlayingForDataDataset(BaseDataset):
         uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
         mapping = dict(zip(label_ids, uni_cls_ids))
         return mapping
+
+    def set_dataset_classes_and_palette(self):
+        return [], [], []
+
+    def set_pred_backward_class_mapping(self):
+        return {}

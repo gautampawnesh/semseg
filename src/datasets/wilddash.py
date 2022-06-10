@@ -30,6 +30,8 @@ class UniversalWilddashDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None):
         self.num_samples = num_samples
+        # mark all non eval classes to 0 based on gt label id
+        self.gt_non_eval_classes = [2, 3, 4, 5, 6, 9, 10, 15, 16, 29, 30, 31]
         super(UniversalWilddashDataset, self).__init__(
             pipeline,
             img_dir,

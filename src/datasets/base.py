@@ -122,10 +122,11 @@ class BaseDataset(CustomDataset):
         set mapping for predictions from Unified (universal) classes to dataset specific classes.
         :return:
         """
-        pred_class_mapping = dict()
+        pred_class_mapping = {(0,): 0}
         class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         dataset_label_ids = class_mapping_df["dataset_label_id"].tolist()
         universal_data_ids = class_mapping_df["universal_to_dataset"].tolist()
+        assert len(dataset_label_ids) == len(universal_data_ids)
         for uni_ids, cls_id in zip(universal_data_ids, dataset_label_ids):
             if pd.isna(uni_ids):
                 continue
@@ -140,12 +141,6 @@ class BaseDataset(CustomDataset):
         except Exception as e:
             e.args += (map_keys_counter,)
             raise
-        # try:
-        #     print("dsf")
-        #     raise
-        # except Exception as err:
-        #     err.args += (pred_class_mapping, )
-        #     raise
         return pred_class_mapping
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -200,15 +195,6 @@ class BaseDataset(CustomDataset):
                 # Todo: playing for data has white images
                 valid_images.append(img_path)
                 valid_labels.append(label_path)
-                # try:
-                #     if osp.basename(img_path).replace(self.img_suffix, self.seg_map_suffix) == osp.basename(label_path):
-                #         valid_images.append(img_path)
-                #         valid_labels.append(label_path)
-                #     else:
-                #         raise ValueError
-                # except Exception as err:
-                #     err.args += (img_path, label_path)
-                #     raise
 
         return valid_images, valid_labels
 
@@ -236,13 +222,6 @@ class BaseDataset(CustomDataset):
         results = self.load_annotations(results)
         if not self.test_mode:
             results = self.map_annotations(results)
-        # else:
-        #     try:
-        #         print("safa")
-        #         raise
-        #     except Exception as e:
-        #         e.args += (self.test_mode, np.unique(results["gt_semantic_seg"]))
-        #         raise
         return results["gt_semantic_seg"]
 
     def get_gt_seg_maps(self, efficient_test=None):
@@ -274,16 +253,10 @@ class BaseDataset(CustomDataset):
                 for uni_id in uni_ids:
                     pred_mapped += (np.all(pred == uni_id, axis=2).astype(dtype=np.uint8))*cls_id
             preds_mapped.append(pred_mapped)
-            # try:
-            #     print("pred backward class mapping")
-            #     raise
-            # except Exception as e:
-            #     e.args += (np.unique(pred), "mapped", np.unique(pred_mapped), "shape", pred.shape, pred_mapped.shape)
-            #     raise
         try:
             # print("verifies universal to dataset mapping")
 
-            if not set(np.unique(preds_mapped[0]).tolist()).issubset(set(list(self.pred_backward_mapping.values()))):
+            if not set(np.unique(preds_mapped[0]).tolist()).issubset(set([0] + list(self.pred_backward_mapping.values()))):
                 raise ValueError("mapped prediction has out of index dataset class.")
 
         except Exception as e:
@@ -292,6 +265,19 @@ class BaseDataset(CustomDataset):
                        list(self.pred_backward_mapping.values()))
             raise
         return preds_mapped
+
+    def gt_backward_class_mapping(self, gt):
+        """
+        mark non evaluation ground truth classes to 0
+        :return: list of np. array
+        """
+        gt_map = np.zeros(gt.shape[0:2], dtype=np.uint8)
+        if len(gt.shape) == 2:
+            gt = np.expand_dims(gt, axis=2)
+        for label_id in self.gt_non_eval_classes:
+            gt_map += (np.all(gt == label_id, axis=2).astype(dtype=np.uint8))*0
+
+        return gt_map
 
     def pre_eval(self, preds, indices):
         """
@@ -323,6 +309,8 @@ class BaseDataset(CustomDataset):
         for pred, index in zip(preds, indices):
             # In test mode, seg_map will receive dataset specific labels
             seg_map = self.get_gt_seg_map_by_idx(index)
+            # maps the non eval classes to zero
+            seg_map = self.gt_backward_class_mapping(seg_map)
             pre_eval_results.append(
                 intersect_and_union(
                     pred,

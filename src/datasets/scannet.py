@@ -34,6 +34,8 @@ class UniversalScannetDataset(BaseDataset):
                  is_color_to_uni_class_mapping=True,
                  num_samples=None):
         self.num_samples = num_samples
+        # mark all non eval classes to 0 based on gt label id
+        self.gt_non_eval_classes = []
         super(UniversalScannetDataset, self).__init__(
             pipeline,
             img_dir,

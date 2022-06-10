@@ -27,6 +27,8 @@ class UniversalAdeDataset(BaseDataset):
                  dataset_name="ade",
                  is_color_to_uni_class_mapping=False,
                  num_samples=None):
+        # mark all non eval classes to 0 based on gt label id
+        self.gt_non_eval_classes = []
         super(UniversalAdeDataset, self).__init__(
             pipeline,
             img_dir,

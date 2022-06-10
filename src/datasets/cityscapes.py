@@ -28,6 +28,8 @@ class UniversalCityscapesDataset(BaseDataset):
                  dataset_class_mapping=None,
                  dataset_name="cityscapes",
                  is_color_to_uni_class_mapping=False):
+        # mark all non eval classes to 0 based on gt label id
+        self.gt_non_eval_classes = [1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]
         super(UniversalCityscapesDataset, self).__init__(
             pipeline,
             img_dir,
