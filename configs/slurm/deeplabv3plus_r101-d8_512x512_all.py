@@ -1,35 +1,37 @@
 experiment = dict(
-    name="Cityscapes+viper+vistas+wilddash+ade Training",
-    description="Cityscapes+viper+vistas+wilddash+ade classes mapped to universal classes with flat model  ",
+    name="All 9 Training",
+    description=" All 9 dataset classes mapped to universal classes with flat model  \ "
+                "training 1: 1-10 : 2.31 \ "
+                " training : 10-50 : ",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/all_five_deeplabv3plus_187c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-load_from = None
+load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220610_201643/epoch_10.pth"
 # checkpoint file to resume from
 resume_from = None
 
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/deeplabv3plus_r101-d8.py',
-    '../_base_/datasets/cityscapes_viper_vistas_ade_wilddash_512_512.py',
+    '../_base_/datasets/all_512_512.py',
 ]
 ignore_index = 0
 
 data = dict(samples_per_gpu=4,
-            workers_per_gpu=8)
+            workers_per_gpu=6)
 
 model = dict(
-    decode_head=dict(ignore_index=ignore_index, num_classes=190),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=190),
+    decode_head=dict(ignore_index=ignore_index, num_classes=189),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=189),
 )
 
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.0005,
+    lr=1.259e-03,
     momentum=0.9,
     weight_decay=0.0005)
 optimizer_config = dict()
@@ -44,16 +46,16 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=25)
+    max_epochs=50)
 
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
-    interval=5,
+    interval=1,
     max_keep_ckpts=5,
     create_symlink=False
 )
 
-evaluation = dict(_delete_=True, start=20, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="0_mIoU")
+evaluation = dict(_delete_=True, start=1, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
 
 log_level = 'INFO'
