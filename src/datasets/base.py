@@ -271,12 +271,14 @@ class BaseDataset(CustomDataset):
         mark non evaluation ground truth classes to 0
         :return: list of np. array
         """
-        gt_map = np.zeros(gt.shape[0:2], dtype=np.uint8)
-        if len(gt.shape) == 2:
-            gt = np.expand_dims(gt, axis=2)
-        for label_id in self.gt_non_eval_classes:
-            gt_map += (np.all(gt == label_id, axis=2).astype(dtype=np.uint8))*0
+        try:
+            gt_map = gt.copy()
+            for label_id in self.gt_non_eval_classes:
+                gt_map = np.where(gt_map == label_id, 0, gt_map)
 
+        except Exception as e:
+            e.args += (np.unique(gt_map), gt_map.shape, np.unique(gt), gt.shape, self.dataset_name, self.gt_non_eval_classes)
+            raise
         return gt_map
 
     def pre_eval(self, preds, indices):
