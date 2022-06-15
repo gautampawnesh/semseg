@@ -3,12 +3,23 @@ dataset_type = 'UniversalCityscapesDataset'
 data_root = '/ds-av/public_datasets/cityscapes/raw'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (512, 512)
+
+crop_size = (512, 1024)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(type='MapAnnotations'),
-    dict(type='Resize', img_scale=(1920, 1208), ratio_range=(0.5, 2.0)),
+    # dict(type='Resize', img_scale=[(1920, 1208), (768, 768), (1024, 1024), (512, 1024), (2400, 1510), (960, 604)],
+    #      ratio_range=None, multiscale_mode="value"),
+    dict(type='Resize', img_scale=[
+        (1920, 1208),
+        (1024, 1024),
+        (2400, 1510),
+        (1680, 1057),
+        (2400, 1510),
+        (2880, 1812),
+        (3360, 2114)],
+         ratio_range=None, multiscale_mode="value"),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PhotoMetricDistortion'),
