@@ -8,7 +8,7 @@ dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universa
 6;Wall;6;102,102,156;29;wall;29;wall;
 7;Bike Lane;7;128,64,255;19;bike_lane;19;bike_lane;
 8;Crosswalk - Plain;8;140,140,200;18;crosswalk_plain;18;crosswalk_plain;
-9;Curb Cut;9;170,170,170;21;curb;;;
+9;Curb Cut;9;170,170,170;190;curb_cut;190;curb_cut;
 10;Parking;10;250,170,160;15;parking;15;parking;
 11;Pedestrian Area;11;96,96,96;17;pedestrian_area;17;pedestrian_area;
 12;Rail Track;12;230,150,140;16;rail_track;16;rail_track;
@@ -64,4 +64,4 @@ dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;universa
 62;Wheeled Slow;62;0,0,192;10;wheeled_slow;10;wheeled_slow;
 63;Car Mount;63;32,32,32;0;ignore;;;
 64;Ego Vehicle;64;120,10,10;9;ego_vehicle;9;ego_vehicle;
-65;Bird;0;165,42,42;0;ignore;;;
+65;Bird;0;165,42,42;189;bird;189;bird;

@@ -188,3 +188,5 @@ Objects;185;traffic_sign_back
 Vehicle;186;Plane
 earth-ground;187;Earth-ground
 Soil-ground;188;Soil-ground
+vru;189;bird
+flat;190;curb_cut

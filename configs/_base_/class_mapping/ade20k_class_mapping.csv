@@ -11,7 +11,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 9;windowpane-window;230,230,230;9;65;window;65;window;
 10;grass;4,250,7;10;35;terrain;35;terrain;TBD
 11;cabinet;224,5,255;11;66;Cabinet;66;Cabinet;
-12;sidewalk-pavement;235,255,7;12;14;Sidewalk;14,21;Sidewalk,curb;
+12;sidewalk-pavement;235,255,7;12;14;Sidewalk;14,21,190;Sidewalk,curb,curbcut;
 13;person-;150,5,61;13;56;Person;56;Person;
 14;earth-ground;120,120,70;14;187;ground;187;ground;
 15;door-double-door;8,255,51;15;67;Door;67;Door;

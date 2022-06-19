@@ -2,9 +2,8 @@ dataset_label_id;dataset_class_name;dataset_color_code;universal_class_id;univer
 0;unlabeled;0,0,0;0;ignore;;;
 1;ambiguous;111,74,0;0;ignore;;;
 2;sky;70,130,180;36;sky;36;sky;
-3;road;128,64,128;13;road;13,18,19,20,22,23,44,47,53,99,17,180,25,15;"road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway,water,parking
-";
-4;sidewalk;244,35,232;14;Sidewalk;14,21;Sidewalk,curbstone;
+3;road;128,64,128;13;road;13,18,19,20,22,23,44,47,53,99,17,180,25,15;"road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra,manhole,catchbasin,pothole,runway,water,parking";
+4;sidewalk;244,35,232;14;Sidewalk;14,21,190;Sidewalk,curbstone,curbcut;
 5;railtrack;230,150,140;16;rail_track;;;
 6;terrain;152,251,152;35;Terrain;35,37;Terrain,mountain;
 7;tree;87,182,35;183;tree;183,115;tree,Palm-tree;

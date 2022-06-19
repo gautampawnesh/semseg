@@ -7,7 +7,7 @@ dataset_class_id;dataset_class_name;dataset_color_code;dataset_label_id;universa
 5;dynamic;111,74,0;5;0;dynamic;;;
 6;ground;81,0,81;6;0;ground;;;
 7;road;128,64,128;7;13;road;13,18,19,20,44,47,53,99,17,128;Road,crosswalk_plain,bike_lane,service_lane,manhole,catchbasin,pothole,runway,dirt_track;
-8;sidewalk;244,35,232;8;14;sidewalk;14,21;Sidewalk,curb;
+8;sidewalk;244,35,232;8;14;sidewalk;14,21,190;Sidewalk,curb,curbcut;
 9;Parking;250,170,160;9;15;parking;;;
 10;Rail track;230,150,140;10;16;rail_track;;;
 11;building;70,70,70;11;27;building;27,152,89,65,74,67,98,96,93;Building,step-stair,pillar,window,house,door,grandstand,skyscraper;
