@@ -1,4 +1,6 @@
 import logging
+import random
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -66,6 +68,10 @@ class HierarchicalSegmentor(EncoderDecoder):
         )
 
         # Todo: verify class_hierarchy_heads order of heads and its classes are preserved.
+        if list(self.levels_class_mapping.keys()) != self.heads_hierarchy_flat:
+            raise ValueError("Incorrect order of classifier in configuration.")
+            # key = random.choice(list(self.levels_class_mapping.keys()))
+            # if list(self.levels_class_mapping[key]) !=
 
     def _init_decode_head(self, decode_head):
         """Initialize ``decode_head``"""

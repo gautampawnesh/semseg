@@ -29,13 +29,14 @@ from mmseg.models import build_segmentor
 from mmseg.utils import setup_multi_processes
 import src.transforms
 import src.datasets
+import src.models
 import pandas as pd
 
 CFG_DICT = None
-IMG_INFERENCE_SEED = 1  # random seed to select test images for inference
+IMG_INFERENCE_SEED = 2  # random seed to select test images for inference
 IMG_INFERENCE_NUMBER = 50  # number of images used for inference
 EVALUATION_FILE = "evaluation.csv"
-INF_FOLDER = "visualizations"
+INF_FOLDER = "pred_labels"
 
 
 
@@ -118,11 +119,11 @@ def evaluate(cfg, args, logger):
         metrics["average_inference_duration"] = duration * world_size
         metrics["num_images"] = dataset_len
         logger.info(metrics)
-        # creating folder of individual dataset benchmark
-        cfg.work_dir = osp.join(cfg.work_dir, dataset_name)
-        mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
+        # # creating folder of individual dataset benchmark
+        # cfg.work_dir = osp.join(cfg.work_dir, dataset_name)
+        # mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
         # create evaluation json file for dataset
-        with open(osp.join(cfg.work_dir, EVALUATION_FILE), "w") as f:
+        with open(osp.join(cfg.work_dir, f"{dataset_name}_{EVALUATION_FILE}"), "w") as f:
             w = csv.writer(f)
             w.writerows(metrics.items())
         # run image inference for given dataset
@@ -131,7 +132,7 @@ def evaluate(cfg, args, logger):
 
 def image_inference(dataset, model, out_dir):
     """Execute Inference on images"""
-    inf_output_dir = osp.join(out_dir, INF_FOLDER)
+    inf_output_dir = osp.join(out_dir, f"{dataset.dataset_name}_{INF_FOLDER}")
     mmcv.mkdir_or_exist(osp.abspath(inf_output_dir))
     cls_mapping = dataset.pred_backward_mapping
     inf_results = inference_results(dataset, model)
@@ -144,7 +145,7 @@ def image_inference(dataset, model, out_dir):
     for each, result in inf_results.items():
         save_loc = inf_output_dir + "/" + f"{each}.png"
         save_inference_image(result, save_loc, dataset.DATASET_CLASSES, dataset.DATASET_PALETTE,
-                             class_palette_to_label_palette_ind)
+                             dataset.PALETTE, dataset.CLASSES, class_palette_to_label_palette_ind)
 
 
 def inference_results(dataset, model):
@@ -177,45 +178,67 @@ def post_processing_class_mapping(dataset_uni_cls_mapping, inf_results):
             for uni_id in uni_ids:
                 model_output_mapped += (np.all(model_output == uni_id, axis=2).astype(dtype=np.uint8)) * cls_id
 
-        result["model_output"] = model_output_mapped
+        result["processed_model_output"] = model_output_mapped
     return inf_results
 
 
-def save_inference_image(result, save_loc, classes, palette, class_palette_to_label_palette_ind):
+def save_inference_image(result, save_loc, classes, palette, universal_palette, universal_classes, class_palette_to_label_palette_ind):
     """img+ground truth+prediction and overlay image"""
     # Todo : Update with better visualization
     # Todo: update palette for ground truth
     palette = np.array(palette)
 
-    plt.figure(figsize=(24, 12))
-    grid_spec = gridspec.GridSpec(2, 3, width_ratios=[6, 6, 1])
+    plt.figure(figsize=(24, 26))
+    grid_spec = gridspec.GridSpec(3, 4, width_ratios=[1, 6, 6, 1])
 
     image = np.array(Image.open(result["image"]))
-    plt.subplot(grid_spec[0, 0])
+    plt.subplot(grid_spec[0, 1])
     plt.imshow(image)
     plt.axis("off")
     plt.title("Input: image")
 
-    plt.subplot(grid_spec[1, 0])
-    seg_image = palette[class_palette_to_label_palette_ind[result["model_output"].astype(int)]]
+    plt.subplot(grid_spec[1, 1])
+    seg_image = palette[class_palette_to_label_palette_ind[result["processed_model_output"].astype(int)]]
     plt.imshow(seg_image)
     plt.axis("off")
-    plt.title("Prediction: Segmentation map")
+    plt.title("Postprocessed Prediction: Segmentation map")
 
-    plt.subplot(grid_spec[1, 1])
+    plt.subplot(grid_spec[1, 2])
     plt.imshow(image)
     plt.imshow(seg_image, alpha=0.7)
     plt.axis("off")
-    plt.title("Prediction: Segmentation overlay")
+    plt.title("Postprocessed Prediction: Segmentation overlay")
+
+    universal_palette = np.array(universal_palette).astype(np.uint8)
+    plt.subplot(grid_spec[2, 1])
+    uni_seg_image = universal_palette[result["model_output"].astype(int)]
+    plt.imshow(uni_seg_image)
+    plt.axis("off")
+    plt.title("Universal Prediction: Segmentation map")
+
+    plt.subplot(grid_spec[2, 2])
+    plt.imshow(image)
+    plt.imshow(uni_seg_image, alpha=0.7)
+    plt.axis("off")
+    plt.title("Universal Prediction: Segmentation overlay")
 
     if result["label"] is not None:
         label = np.array(Image.open(result["label"]))
-        plt.subplot(grid_spec[0, 1])
+        plt.subplot(grid_spec[0, 2])
         plt.imshow(palette[class_palette_to_label_palette_ind[label]])
         plt.axis("off")
         plt.title("Ground truth: label")
 
-    ax = plt.subplot(grid_spec[:, 2])
+    ax = plt.subplot(grid_spec[:, 0])
+    plt.imshow(np.expand_dims(universal_palette, 1))
+
+    ax.yaxis.tick_left()
+    plt.yticks(ticks=range(len(universal_classes)), labels=universal_classes)
+    plt.xticks(ticks=[], labels=[])
+    ax.tick_params(width=0.0)
+    plt.grid("off")
+
+    ax = plt.subplot(grid_spec[:, 3])
     plt.imshow(np.expand_dims(palette, 1))
 
     ax.yaxis.tick_right()
@@ -239,7 +262,7 @@ def main():
 
     # create work_dir
     timestamp = time.strftime("%Y%m%d_%H%M%S", time.localtime())
-    cfg.work_dir = osp.join(cfg.work_dir, "evaluation", timestamp)
+    cfg.work_dir = osp.join(cfg.work_dir, "evaluation")
     mmcv.mkdir_or_exist(osp.abspath(cfg.work_dir))
 
     # logger for evaluation

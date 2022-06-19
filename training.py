@@ -16,6 +16,7 @@ from mmseg.utils import get_root_logger
 from mmcv import Config
 import src.transforms
 import src.datasets
+import src.models
 
 
 def train(config_file_path: str):
@@ -59,10 +60,12 @@ def train(config_file_path: str):
 
     # Build the dataset
     datasets = [build_dataset(cfg.data.train)]
+    # Not using 2 workflow as of now
     if len(cfg.workflow) == 2:
-        val_dataset = copy.deepcopy(cfg.data.val)
-        val_dataset.pipeline = cfg.data.train.pipeline
-        datasets.append(build_dataset(val_dataset))
+        raise NotImplemented
+        # val_dataset = copy.deepcopy(cfg.data.val)
+        # val_dataset.pipeline = cfg.data.train.pipeline
+        # datasets.append(build_dataset(val_dataset))
 
     # Build the segmentor
     model = build_segmentor(cfg.model)

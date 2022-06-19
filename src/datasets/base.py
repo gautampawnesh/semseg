@@ -14,6 +14,7 @@ from mmcv.utils import print_log
 from collections import Counter
 from prettytable import PrettyTable
 from mmseg.core import pre_eval_to_metrics, intersect_and_union
+import colorcet as cc
 
 logger = logging.getLogger(__name__)
 
@@ -155,7 +156,7 @@ class BaseDataset(CustomDataset):
         self.CLASSES = universal_color_df["class_name"][universal_color_df["class_name"].notnull()].tolist()
         logger.info(f"Universal classes list: {self.CLASSES}")
 
-        self.PALETTE = ((np.array(seaborn.color_palette("Set1", len(self.CLASSES)))*255).astype(np.uint8).tolist())
+        self.PALETTE = ((np.array(seaborn.color_palette(cc.glasbey, len(self.CLASSES)))*255).astype(np.uint8).tolist())
         self.num_classes = len(self.CLASSES)
 
     def dataset_colors_to_universal_label_mapping(self):
