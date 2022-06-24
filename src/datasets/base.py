@@ -62,7 +62,8 @@ class BaseDataset(CustomDataset):
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
                  dataset_name="base",
-                 is_color_to_uni_class_mapping=True):
+                 is_color_to_uni_class_mapping=True,
+                 num_samples=None):
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
         self.img_suffix = img_suffix
@@ -76,6 +77,7 @@ class BaseDataset(CustomDataset):
         self.label_map = {}
         self.dataset_name = dataset_name
         self.is_color_to_uni_class_mapping = is_color_to_uni_class_mapping
+        self.num_samples = num_samples
         # join paths if data_root is specified
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
@@ -204,7 +206,11 @@ class BaseDataset(CustomDataset):
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        return data_df.sort_values("image")
+        data_df = data_df.sort_values("image")
+        if self.num_samples is None:
+            return data_df
+        else:
+            return data_df.sample(n=self.num_samples)
 
     def pre_pipeline(self, ind):
         """returns sample wo processing"""
