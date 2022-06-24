@@ -308,14 +308,13 @@ common_decode_head = dict(
     type="DepthwiseSeparableASPPHead",
     in_channels=2048,
     in_index=3,
-    channels=256,
+    channels=512,
     dilations=(1, 12, 24, 36),
     c1_in_channels=256,
     c1_channels=48,
     dropout_ratio=0.1,
     norm_cfg=norm_cfg,
     align_corners=False,
-    ignore_index=0,
     loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0, avg_non_ignore=True),
 )
 
@@ -329,54 +328,53 @@ common_auxiliary_head = dict(
     dropout_ratio=0.1,
     norm_cfg=norm_cfg,
     align_corners=False,
-    ignore_index=0,
     loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=0.4, avg_non_ignore=True),
 )
 
 hierarchical_decode_heads_config = dict(
-    level_1_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"])+1, "channels":512}),
+    level_1_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"])+1, "ignore_index":0}), #0
     # Vehicle head
-    level_2_vehicle_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vehicle_head"])+1}),
-    level_3_small_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_small_vehicles_head"])+1}),
-    level_3_large_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_large_vehicles_head"])+1}),
-    level_3_two_wheelers_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_two_wheelers_head"])+1}),
-    level_3_other_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_vehicles_head"])+1}),
+    level_2_vehicle_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vehicle_head"])+1}),  #1
+    level_3_small_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_small_vehicles_head"])+1}), #2
+    level_3_large_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_large_vehicles_head"])+1}), #3
+    level_3_two_wheelers_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_two_wheelers_head"])+1}),  #4
+    level_3_other_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_vehicles_head"])+1}), #5
     # Road head
-    level_2_flat_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_flat_head"])+1}),
-    level_3_normal_road_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_normal_road_head"])+1}),
-    level_3_road_marking_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_road_marking_head"])+1}),
+    level_2_flat_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_flat_head"])+1}),  #6
+    level_3_normal_road_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_normal_road_head"])+1}), #7
+    level_3_road_marking_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_road_marking_head"])+1}), #8
     # construction
-    level_2_construction_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_construction_head"])+1}),
-    level_3_building_infra_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_building_infra_head"])+1}),
-    level_3_other_infra_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_infra_head"])+1}),
+    level_2_construction_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_construction_head"])+1}), #9
+    level_3_building_infra_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_building_infra_head"])+1}), #10
+    level_3_other_infra_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_infra_head"])+1}), #11
 
     # Road objects
-    level_2_traffic_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_traffic_objects_head"])+1}),
-    level_3_pole_all_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_pole_all_head"])+1}),
-    level_3_sign_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_sign_head"])+1}),
-    level_3_light_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_light_head"])+1}),
-    level_3_other_road_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_road_objects_head"])+1}),
+    level_2_traffic_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_traffic_objects_head"])+1}), #12
+    level_3_pole_all_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_pole_all_head"])+1}),  #13
+    level_3_sign_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_sign_head"])+1}), #14
+    level_3_light_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_light_head"])+1}), #15
+    level_3_other_road_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_road_objects_head"])+1}), #16
     # Nature objects
-    level_2_nature_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_nature_objects_head"])+1}),
-    level_3_sky_vegetation_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_sky_vegetation_head"])+1}),
-    level_3_ground_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_ground_head"])+1}),
-    level_3_other_nature_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_nature_objects_head"])+1}),
+    level_2_nature_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_nature_objects_head"])+1}), #17
+    level_3_sky_vegetation_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_sky_vegetation_head"])+1}), #18
+    level_3_ground_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_ground_head"])+1}), #19
+    level_3_other_nature_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_nature_objects_head"])+1}), #20
     # VRU
-    level_2_vru_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vru_head"])+1}),
-    level_3_animal_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_animal_head"])+1}),
-    level_3_rider_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_rider_head"])+1}),
+    level_2_vru_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vru_head"])+1}), #21
+    level_3_animal_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_animal_head"])+1}), #22
+    level_3_rider_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_rider_head"])+1}), #23
     # Indoor objects
-    level_2_indoor_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_indoor_objects_head"])+1, "channels":512}),
-    level_3_furniture_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_furniture_head"])+1}),
-    level_3_bedroom_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_bedroom_objects_head"])+1}),
-    level_3_bathroom_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_bathroom_objects_head"])+1}),
-    level_3_other_indoor_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_indoor_objects_head"])+1}),
-    level_3_electronics_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_electronics_head"])+1}),
-    level_3_kitchen_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_kitchen_objects_head"])+1}),
+    level_2_indoor_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_indoor_objects_head"])+1, "channels":512}), #24
+    level_3_furniture_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_furniture_head"])+1}), #25
+    level_3_bedroom_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_bedroom_objects_head"])+1}), #26
+    level_3_bathroom_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_bathroom_objects_head"])+1}), #27
+    level_3_other_indoor_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_indoor_objects_head"])+1}), #28
+    level_3_electronics_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_electronics_head"])+1}), #029
+    level_3_kitchen_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_kitchen_objects_head"])+1}), #30
 )
 
 hierarchical_aux_heads_config = dict(
-    level_1_head=dict(common_auxiliary_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"]) + 1}),
+    level_1_head=dict(common_auxiliary_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"]) + 1, "ignore_index":0}),
     # Vehicle head
     level_2_vehicle_head=dict(common_auxiliary_head,
                               **{"num_classes": len(class_hierarchy_heads["level_2_vehicle_head"]) + 1}),
