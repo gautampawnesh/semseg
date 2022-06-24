@@ -8,7 +8,6 @@ else:
 
 model = dict(
     type='EncoderDecoder',
-    #pretrained='open-mmlab://resnet50_v1c',
     backbone=dict(
         type='ResNetV1c',
         depth=101,
@@ -24,7 +23,7 @@ model = dict(
         type='DepthwiseSeparableASPPHead',
         in_channels=2048,
         in_index=3,
-        channels=512,
+        channels=768,
         dilations=(1, 12, 24, 36),
         c1_in_channels=256,
         c1_channels=48,
@@ -33,7 +32,7 @@ model = dict(
         align_corners=False,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0, avg_non_ignore=True),
-        sampler=dict(type='OHEMPixelSampler', thresh=0.7, min_kept=200000),
+        sampler=dict(type='OHEMPixelSampler', thresh=0.6, min_kept=600000),
         ),
     auxiliary_head=dict(
         type='FCNHead',
