@@ -29,7 +29,7 @@ class UniversalWilddashDataset(BaseDataset):
                  dataset_name="wilddash",
                  is_color_to_uni_class_mapping=False,
                  num_samples=None):
-        self.num_samples = num_samples
+
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [2, 3, 4, 5, 6, 9, 10, 15, 16, 29, 30, 31]
         super(UniversalWilddashDataset, self).__init__(
@@ -51,7 +51,9 @@ class UniversalWilddashDataset(BaseDataset):
             universal_class_colors_path=universal_class_colors_path,
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
-            is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
+            is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
+            num_samples=num_samples
+        )
 
     def data_df(self):
         """fetch data from the disk"""
@@ -62,6 +64,10 @@ class UniversalWilddashDataset(BaseDataset):
             images = images[3556:]
         else:
             images = images[:3556]
+            if self.num_samples:
+                import random
+                random.seed(1)
+                images = random.sample(images, self.num_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
         return data_df.sort_values("image")

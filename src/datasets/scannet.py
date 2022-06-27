@@ -33,7 +33,7 @@ class UniversalScannetDataset(BaseDataset):
                  dataset_name="scannet",
                  is_color_to_uni_class_mapping=True,
                  num_samples=None):
-        self.num_samples = num_samples
+
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = []
         super(UniversalScannetDataset, self).__init__(
@@ -55,7 +55,9 @@ class UniversalScannetDataset(BaseDataset):
             universal_class_colors_path=universal_class_colors_path,
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
-            is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
+            is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
+            num_samples=num_samples
+        )
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
