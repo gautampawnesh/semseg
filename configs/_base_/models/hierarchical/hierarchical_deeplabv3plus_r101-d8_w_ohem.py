@@ -1,9 +1,7 @@
 import torch
 
-if torch.cuda.device_count() > 1:
-    norm_cfg = dict(type="SyncBN", requires_grad=True)
-else:
-    norm_cfg = dict(type="BN", requires_grad=True)
+norm_cfg = dict(type="SyncBN", requires_grad=True)
+
 
 
 class_hierarchy_heads = dict(
@@ -309,13 +307,14 @@ common_decode_head = dict(
     in_channels=2048,
     in_index=3,
     channels=512,
-    dilations=(1, 12, 24, 36),
+    dilations=(1, 6, 12, 18),
     c1_in_channels=256,
     c1_channels=48,
     dropout_ratio=0.1,
     norm_cfg=norm_cfg,
     align_corners=False,
     loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0, avg_non_ignore=True),
+    sampler=dict(type='OHEMPixelSampler', thresh=0.6, min_kept=200000),
 )
 
 common_auxiliary_head = dict(
@@ -455,6 +454,7 @@ heads_hierarchy = [["level_1_head"],
 
 model = dict(
     type="HierarchicalSegmentor",
+    pretrained='open-mmlab://resnet101_v1c',
     backbone=dict(
         type="ResNetV1c",
         depth=101,
@@ -462,6 +462,7 @@ model = dict(
         out_indices=(0, 1, 2, 3),
         dilations=(1, 1, 2, 4),
         strides=(1, 2, 1, 1),
+        multi_grid=(1, 2, 4),
         norm_cfg=norm_cfg,
         norm_eval=False,
         style="pytorch",
