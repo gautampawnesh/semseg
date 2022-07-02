@@ -208,7 +208,28 @@ class HierarchicalSegmentor(EncoderDecoder):
         :param seg_preds:
         :return: seg_pred
         """
-
+        # from PIL import Image
+        # import numpy as np
+        # import seaborn
+        # import colorcet as cc
+        # palette = (np.array(seaborn.color_palette(cc.glasbey, 50)) * 255).astype(np.uint8)
+        #
+        # for i in range(len(seg_preds)):
+        #     try:
+        #         # org_image = org_image.squeeze().permute(1, 2, 0)
+        #         # processed_img = org_image.cpu().detach().numpy()
+        #         # img = processed_img
+        #         #img_arr = Image.fromarray(img)
+        #         #img_arr = Image.fromarray((img * 255).astype(np.uint8))
+        #         #img_arr.save(f"/netscratch/gautam/semseg/exp_results/hierarchical_deeplabv3plus_191c/evaluation/heads_output/input_image.png")
+        #         img_label = seg_preds[i].squeeze().cpu().detach().numpy()
+        #         img_label = img_label.astype(np.uint8)
+        #         img_label = palette[img_label]
+        #         img_label_arr = Image.fromarray(img_label)
+        #         img_label_arr.save(f"/netscratch/gautam/semseg/exp_results/temp/heads_output/{i}.png")
+        #     except Exception as e:
+        #         e.args+=(type(img_label), img_label.shape)
+        #         raise
         seg_pred = torch.zeros_like(seg_preds[0])
 
         l1_seg_pred = seg_preds[0]
