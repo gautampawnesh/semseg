@@ -28,7 +28,8 @@ class UniversalIddDataset(BaseDataset):
                  dataset_class_mapping=None,
                  dataset_name="idd",
                  is_color_to_uni_class_mapping=False,
-                 num_samples=None):
+                 num_samples=None,
+                 data_seed=1):
         super(UniversalIddDataset, self).__init__(
             pipeline,
             img_dir,
@@ -49,7 +50,8 @@ class UniversalIddDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
-            num_samples=num_samples
+            num_samples=num_samples,
+            data_seed=data_seed
         )
 
     def dataset_ids_to_universal_label_mapping(self):

@@ -29,7 +29,8 @@ class UniversalViperDataset(BaseDataset):
                  dataset_class_mapping=None,
                  dataset_name="viper",
                  is_color_to_uni_class_mapping=False,
-                 num_samples=None):
+                 num_samples=None,
+                 data_seed=1):
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [1, 5, 21, 22, 28, 29, 30, 31]
         super(UniversalViperDataset, self).__init__(
@@ -52,7 +53,8 @@ class UniversalViperDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
-            num_samples=num_samples
+            num_samples=num_samples,
+            data_seed=data_seed
         )
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -70,7 +72,7 @@ class UniversalViperDataset(BaseDataset):
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         if self.num_samples:
             import random
-            #random.seed(1)
+            random.seed(self.data_seed)
             images = random.sample(images, self.num_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})

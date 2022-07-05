@@ -63,7 +63,9 @@ class BaseDataset(CustomDataset):
                  dataset_class_mapping=None,
                  dataset_name="base",
                  is_color_to_uni_class_mapping=True,
-                 num_samples=None):
+                 num_samples=None,
+                 data_seed=1):
+        self.data_seed = data_seed
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
         self.img_suffix = img_suffix
@@ -210,7 +212,7 @@ class BaseDataset(CustomDataset):
         if self.num_samples is None:
             return data_df
         else:
-            return data_df.sample(n=self.num_samples)
+            return data_df.sample(n=self.num_samples, random_state=self.data_seed)
 
     def pre_pipeline(self, ind):
         """returns sample wo processing"""

@@ -28,7 +28,8 @@ class UniversalWilddashDataset(BaseDataset):
                  dataset_class_mapping=None,
                  dataset_name="wilddash",
                  is_color_to_uni_class_mapping=False,
-                 num_samples=None):
+                 num_samples=None,
+                 data_seed=1):
 
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [2, 3, 4, 5, 6, 9, 10, 15, 16, 29, 30, 31]
@@ -52,7 +53,8 @@ class UniversalWilddashDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
-            num_samples=num_samples
+            num_samples=num_samples,
+            data_seed=data_seed
         )
 
     def data_df(self):
@@ -66,7 +68,7 @@ class UniversalWilddashDataset(BaseDataset):
             images = images[:3556]
         if self.num_samples:
             import random
-            #random.seed(1)
+            random.seed(self.data_seed)
             images = random.sample(images, self.num_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})

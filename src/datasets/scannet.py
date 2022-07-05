@@ -32,7 +32,9 @@ class UniversalScannetDataset(BaseDataset):
                  dataset_class_mapping=None,
                  dataset_name="scannet",
                  is_color_to_uni_class_mapping=True,
-                 num_samples=None):
+                 num_samples=None,
+                 data_seed=1
+                 ):
 
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = []
@@ -56,7 +58,8 @@ class UniversalScannetDataset(BaseDataset):
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
-            num_samples=num_samples
+            num_samples=num_samples,
+            data_seed=data_seed
         )
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -81,7 +84,7 @@ class UniversalScannetDataset(BaseDataset):
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
             if self.num_samples:
-                data_df = data_df.sample(n=self.num_samples)
+                data_df = data_df.sample(n=self.num_samples, random_state=self.data_seed)
 
             return data_df
         else:
