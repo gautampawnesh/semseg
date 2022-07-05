@@ -311,7 +311,7 @@ common_decode_head = dict(
     in_channels=2048,
     in_index=3,
     channels=512,
-    dilations=(1, 6, 12, 18),
+    dilations=(1, 12, 24, 36),
     c1_in_channels=256,
     c1_channels=48,
     dropout_ratio=0.1,
@@ -319,7 +319,7 @@ common_decode_head = dict(
     ignore_index=0,
     align_corners=False,
     loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=0.1, avg_non_ignore=True),
-    sampler=dict(type='OHEMPixelSampler', thresh=0.6, min_kept=200000),
+    sampler=dict(type='OHEMPixelSampler', thresh=0.7, min_kept=32000),
 )
 
 common_auxiliary_head = dict(
@@ -338,7 +338,9 @@ common_auxiliary_head = dict(
 
 hierarchical_decode_heads_config = dict(
     level_1_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"])+1,
-                                             "loss_decode": dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0, avg_non_ignore=True)}), #0
+                                             "loss_decode": dict(type="CrossEntropyLoss", use_sigmoid=False,
+                                                                 loss_weight=1.0, avg_non_ignore=True,
+                                                                 class_weight=[0.0, 1., 1., 1., 1.15, 1.0, 1.25, 1.])}), #0
     # Vehicle head
     level_2_vehicle_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vehicle_head"])+1}),  #1
     level_3_small_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_small_vehicles_head"])+1}), #2
@@ -460,9 +462,10 @@ heads_hierarchy = [["level_1_head"],
                                                     "level_3_electronics_head", "level_3_kitchen_objects_head"]]
                   ]
 
+
+checkpoint_file="/netscratch/gautam/semseg/exp_results/FMD5/training/20220630_124541/epoch_40.pth"
 model = dict(
     type="HierarchicalSegmentor",
-    pretrained='open-mmlab://resnet101_v1c',
     backbone=dict(
         type="ResNetV1c",
         depth=101,
@@ -475,6 +478,9 @@ model = dict(
         norm_eval=False,
         style="pytorch",
         contract_dilation=True,
+        init_cfg=dict(
+            type='Pretrained', checkpoint=checkpoint_file,
+            prefix='backbone.')
     ),
     levels_class_mapping=class_hierarchy_heads,
     heads_hierarchy=heads_hierarchy,
