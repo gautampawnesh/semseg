@@ -41,6 +41,10 @@ test_pipeline = [
             dict(type='Collect', keys=['img']),
         ])
 ]
+
+data_seed = 1
+
+
 city_data = dict(
     train=dict(
         type="UniversalCityscapesDataset",
@@ -52,6 +56,8 @@ city_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         ignore_index=0,  # gt has Labelids
         dataset_name="cityscapes",
+        num_samples=1000,
+        data_seed=data_seed,
         pipeline=train_pipeline),
     val=dict(
         type="UniversalCityscapesDataset",
@@ -90,6 +96,8 @@ viper_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
+        num_samples=1000,
+        data_seed=data_seed,
         ignore_index=0,  # gt are Label ids
         pipeline=train_pipeline),
     val=dict(
@@ -103,7 +111,7 @@ viper_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
         ignore_index=0,  # gt are Label ids
-        num_val_samples=100,
+        num_samples=100,
         test_mode=True,
         pipeline=test_pipeline),
     test=dict(
@@ -129,6 +137,8 @@ vistas_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
+        num_samples=1000,
+        data_seed=data_seed,
         pipeline=train_pipeline),
     val=dict(
         type='VistasDataset',
@@ -139,7 +149,7 @@ vistas_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
-        num_val_samples=100,
+        num_samples=100,
         test_mode=True,
         pipeline=test_pipeline),
     test=dict(
@@ -161,6 +171,8 @@ ade_data = dict(
         img_dir='images/training',
         ann_dir='annotations/training',
         seg_map_suffix='.png',
+        num_samples=4500,
+        data_seed=data_seed,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/ade20k_class_mapping.csv",
         is_color_to_uni_class_mapping=False,
@@ -198,6 +210,8 @@ wild_data = dict(
         img_dir='images',
         ann_dir='labels',
         seg_map_suffix='.png',
+        num_samples=1000,
+        data_seed=data_seed,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/wilddash_class_mapping.csv",
         is_color_to_uni_class_mapping=False,
@@ -240,6 +254,8 @@ scannet_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
         is_color_to_uni_class_mapping=False,
         dataset_name="scannet",
+        num_samples=1500,
+        data_seed=data_seed,
         pipeline=train_pipeline),
     val=dict(
         type='UniversalScannetDataset',
@@ -275,6 +291,8 @@ idd_data = dict(
         img_dir='leftImg8bit/train',
         ann_dir='gtFine/train',
         dataset_name="idd",
+        num_samples=500,
+        data_seed=data_seed,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/idd_class_mapping.csv",
         pipeline=train_pipeline),
@@ -304,6 +322,8 @@ gta_data = dict(
         data_root='/ds-av/public_datasets/playing_for_data/raw',
         img_dir='images',
         ann_dir='labels',
+        num_samples=500,
+        data_seed=data_seed,
         dataset_name="playing_for_data",
         split="/netscratch/gautam/playing_for_data/train.txt",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
@@ -338,6 +358,8 @@ bdd_data = dict(
         img_dir='images/10k/train',
         ann_dir='labels/sem_seg/masks/train',
         dataset_name="bdd",
+        num_samples=500,
+        data_seed=data_seed,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/bdd10k_class_mapping.csv",
         pipeline=train_pipeline),
@@ -365,14 +387,13 @@ bdd_data = dict(
 data = dict(
     train=dict(
         type="CustomConcatDataset",
-        datasets=[city_data["train"], viper_data["train"], vistas_data["train"], ade_data["train"],
-                  wild_data["train"], scannet_data["train"]
+        datasets=[idd_data["train"], bdd_data["train"], city_data["train"], ade_data["train"], viper_data["train"], vistas_data["train"],
+                  wild_data["train"], scannet_data["train"], gta_data["train"]
                   ],
     ),
     val=dict(
         type="CustomConcatDataset",
-        datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"],
-                  wild_data["val"], scannet_data["train"]]
+        datasets=[city_data["val"], viper_data["val"], ade_data["val"], vistas_data["val"], wild_data["val"], scannet_data["val"]]
     ),
     test=city_data["test"]
 )
