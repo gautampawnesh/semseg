@@ -26,7 +26,8 @@ class UniversalPlayingForDataDataset(BaseDataset):
                  universal_class_colors_path=None,
                  dataset_class_mapping=None,
                  dataset_name="playing_for_data",
-                 is_color_to_uni_class_mapping=False):
+                 is_color_to_uni_class_mapping=False,
+                 num_samples=None):
         super(UniversalPlayingForDataDataset, self).__init__(
             pipeline,
             img_dir,
@@ -46,7 +47,9 @@ class UniversalPlayingForDataDataset(BaseDataset):
             universal_class_colors_path=universal_class_colors_path,
             dataset_class_mapping=dataset_class_mapping,
             dataset_name=dataset_name,
-            is_color_to_uni_class_mapping=is_color_to_uni_class_mapping)
+            is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
+            num_samples=num_samples
+        )
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")

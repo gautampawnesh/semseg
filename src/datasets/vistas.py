@@ -27,9 +27,9 @@ class VistasDataset(BaseDataset):
                  dataset_class_mapping=None,
                  dataset_name="vistas",
                  is_color_to_uni_class_mapping=False,
-                 num_val_samples=None
+                 num_samples=None
                  ):
-        self.num_val_samples = num_val_samples
+        self.num_samples = num_samples
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = []
         super(VistasDataset, self).__init__(
@@ -66,10 +66,10 @@ class VistasDataset(BaseDataset):
         if self.split:
             raise NotImplementedError
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        if self.test_mode and self.num_val_samples:
+        if self.num_samples:
             import random
-            random.seed(1)
-            images = random.sample(images, self.num_val_samples)
+            #random.seed(1)
+            images = random.sample(images, self.num_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
         return data_df.sort_values("image")

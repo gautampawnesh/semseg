@@ -66,7 +66,7 @@ class UniversalWilddashDataset(BaseDataset):
             images = images[:3556]
         if self.num_samples:
             import random
-            random.seed(1)
+            #random.seed(1)
             images = random.sample(images, self.num_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
