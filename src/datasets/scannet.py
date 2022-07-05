@@ -80,7 +80,10 @@ class UniversalScannetDataset(BaseDataset):
                 labels.append(Path(osp.join(self.ann_dir, ann_file)))
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
-            return data_df if self.num_samples is None else data_df.sample(n=self.num_samples)
+            if self.num_samples:
+                data_df = data_df.sample(n=self.num_samples)
+
+            return data_df
         else:
             raise NotImplementedError
 
