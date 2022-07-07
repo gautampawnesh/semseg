@@ -1,5 +1,9 @@
 import torch
-
+"""
+MeletisDubblemann
+Introduced Weights for l1 and l2& l3 as 1:0.1:0.1
+ignore_index=0 in loss computation.
+"""
 norm_cfg = dict(type="SyncBN", requires_grad=True)
 
 
@@ -312,8 +316,9 @@ common_decode_head = dict(
     c1_channels=48,
     dropout_ratio=0.1,
     norm_cfg=norm_cfg,
+    ignore_index=0,
     align_corners=False,
-    loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0, avg_non_ignore=True),
+    loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=0.1, avg_non_ignore=True),
     sampler=dict(type='OHEMPixelSampler', thresh=0.6, min_kept=200000),
 )
 
@@ -326,12 +331,14 @@ common_auxiliary_head = dict(
     concat_input=False,
     dropout_ratio=0.1,
     norm_cfg=norm_cfg,
+    ignore_index=0,
     align_corners=False,
-    loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=0.4, avg_non_ignore=True),
+    loss_decode=dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=0.04, avg_non_ignore=True),
 )
 
 hierarchical_decode_heads_config = dict(
-    level_1_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"])+1, "ignore_index":0}), #0
+    level_1_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"])+1,
+                                             "loss_decode": dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=1.0, avg_non_ignore=True)}), #0
     # Vehicle head
     level_2_vehicle_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vehicle_head"])+1}),  #1
     level_3_small_vehicles_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_small_vehicles_head"])+1}), #2
@@ -373,7 +380,8 @@ hierarchical_decode_heads_config = dict(
 )
 
 hierarchical_aux_heads_config = dict(
-    level_1_head=dict(common_auxiliary_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"]) + 1, "ignore_index":0}),
+    level_1_head=dict(common_auxiliary_head, **{"num_classes": len(class_hierarchy_heads["level_1_head"]) + 1,
+                                                "loss_decode": dict(type="CrossEntropyLoss", use_sigmoid=False, loss_weight=0.4, avg_non_ignore=True)}),
     # Vehicle head
     level_2_vehicle_head=dict(common_auxiliary_head,
                               **{"num_classes": len(class_hierarchy_heads["level_2_vehicle_head"]) + 1}),
