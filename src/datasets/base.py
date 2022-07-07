@@ -113,7 +113,7 @@ class BaseDataset(CustomDataset):
             assert self.extra_class_map is not None, "Missing extra class map"
             self.num_classes = len(self.extra_class_map)
             self.DATASET_CLASSES = tuple(str(i) for i in range(self.num_classes))
-            self.DATASET_PALETTE = ((np.array(seaborn.color_palette(cc.glasbey, len(self.num_classes)))*255).astype(np.uint8).tolist())
+            self.DATASET_PALETTE = ((np.array(seaborn.color_palette(cc.glasbey, self.num_classes))*255).astype(np.uint8).tolist())
             self.DATASET_LABEL_IDS = tuple(i for i in range(self.num_classes))
 
         if not self.is_extra_class_mapping:

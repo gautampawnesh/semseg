@@ -13,7 +13,7 @@ resume_from = None
 
 _base_ = [
     '../../_base_/default_runtime.py',
-    '../../_base_/models/hierarchical_levels/HIMini1_train_deeplabv3plus_r101-d8.py.py',
+    '../../_base_/models/hierarchical_levels/HIMini1_train_deeplabv3plus_r101-d8.py',
     '../../_base_/datasets/hierarchical_levels/vistas_ade_512_512.py',
 ]
 ignore_index = 0
@@ -70,7 +70,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=90)
+    max_epochs=50)
 
 # checkpoints settings
 checkpoint_config = dict(
