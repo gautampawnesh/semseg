@@ -230,7 +230,7 @@ model = dict(
             avg_non_ignore=True,
             class_weight=class_weight
         ),
-        sampler=dict(type="OHEMPixelSampler", thresh=0.7, min_kept=200000),
+        sampler=dict(type="OHEMPixelSampler", thresh=0.7, min_kept=32000), # batch_size * 512 * 512 //16
     ),
     auxiliary_head=dict(
         type="FCNHead",

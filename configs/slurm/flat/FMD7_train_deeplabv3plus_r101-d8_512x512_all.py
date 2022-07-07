@@ -1,15 +1,13 @@
 experiment = dict(
-    name="Flat Deeplabv3+  All 9 Training os8",
+    name="FMD 7 Flat Deeplabv3+  All 9 Training os8",
     description=" All 9 dataset classes mapped to universal classes with flat deeplabv3+ model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/FMD5"
+work_dir = "/netscratch/gautam/semseg/exp_results/FMD7"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-# FMD1 pretrained
-#load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220612_074736/best_mIoU_epoch_50.pth"
-load_from = "/netscratch/gautam/semseg/exp_results/FMD5/training/20220630_124541/epoch_40.pth"
+load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220704_064718/epoch_10.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -37,14 +35,26 @@ model = dict(
         norm_eval=False,
         style='pytorch',
         contract_dilation=True),
-    decode_head=dict(ignore_index=ignore_index, num_classes=191),
-    auxiliary_head=dict(ignore_index=ignore_index, num_classes=191),
+    decode_head=dict(ignore_index=ignore_index, num_classes=191, loss_decode=dict(
+            _delete_=True,
+            type="CrossEntropyLoss",
+            use_sigmoid=False,
+            loss_weight=1.0,
+            avg_non_ignore=True
+        )),
+    auxiliary_head=dict(ignore_index=ignore_index, num_classes=191, loss_decode=dict(
+            _delete_=True,
+            type="CrossEntropyLoss",
+            use_sigmoid=False,
+            loss_weight=0.4,
+            avg_non_ignore=True
+        )),
 )
 
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=2.627e-04,
+    lr=0.001,
     momentum=0.9,
     weight_decay=0.0005,
     # paramwise_cfg=dict(
@@ -58,13 +68,13 @@ optimizer_config = dict()
 lr_config = dict(
     policy='poly',
     power=0.9,
-    min_lr=1e-5,
+    min_lr=1e-4,
     by_epoch=True)
 
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=40)
+    max_epochs=90)
 
 # checkpoints settings
 checkpoint_config = dict(
