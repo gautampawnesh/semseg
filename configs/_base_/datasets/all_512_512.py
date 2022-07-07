@@ -3,13 +3,21 @@ img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 crop_size = (512, 512)
 
-
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(type='MapAnnotations'),
-    dict(type='Resize', img_scale=[(1920, 1208), (768, 768), (1024, 1024), (512, 1024), (2400, 1510),
-                                   (960, 604), (2880, 1812), (3360, 2114)],
+    # dict(type='Resize', img_scale=[(1920, 1208), (768, 768), (1024, 1024), (512, 1024), (2400, 1510),
+    #                                (960, 604), (2880, 1812), (3360, 2114)],
+    #      ratio_range=None, multiscale_mode="value"),
+    dict(type='Resize', img_scale=[
+        (1920, 1208),
+        (1024, 1024),
+        (2400, 1510),
+        (1680, 1057),
+        (2400, 1510),
+        (2880, 1812),
+        (3360, 2114)],
          ratio_range=None, multiscale_mode="value"),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
@@ -24,8 +32,8 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(2048, 1024),
-        # img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
-        flip=False,
+        img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        flip=True,
         transforms=[
             dict(type='Resize', keep_ratio=True),
             dict(type='RandomFlip'),
@@ -108,7 +116,6 @@ viper_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
         ignore_index=0,  # gt are Label ids
-        num_val_samples=1000,
         pipeline=test_pipeline))
 
 vistas_data = dict(
@@ -168,6 +175,7 @@ ade_data = dict(
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="ade",
+        num_samples=1000,
         test_mode=True,
         pipeline=test_pipeline),
     test=dict(

@@ -1,16 +1,14 @@
 experiment = dict(
     name="All 9 Training",
-    description=" All 9 dataset classes mapped to universal classes with flat model  \ "
-                "training 1: 1-10 : 2.31 \ "
-                " training : 10-50 : 3.12",
+    description="Debugging All 9 dataset classes mapped to universal classes with flat model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/test_all_nine_deeplabv3plus_189c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
 #load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220610_201643/epoch_10.pth"
-load_from="/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220612_074736/best_mIoU_epoch_50.pth"
+load_from=None
 # checkpoint file to resume from
 resume_from = None
 

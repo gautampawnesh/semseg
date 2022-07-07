@@ -8,7 +8,9 @@ work_dir = "/netscratch/gautam/semseg/exp_results/FMD5"
 seed = 1
 # checkpoint file to load weights from
 # FMD1 pretrained
-load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220612_074736/best_mIoU_epoch_50.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220612_074736/best_mIoU_epoch_50.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/FMD5/training/20220630_124541/epoch_40.pth"
+load_from = "/netscratch/gautam/semseg/exp_results/FMD5/training/20220703_130916/epoch_38.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -43,7 +45,7 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.007,
+    lr=2.705e-05,
     momentum=0.9,
     weight_decay=0.0005,
     # paramwise_cfg=dict(

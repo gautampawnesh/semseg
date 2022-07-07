@@ -13,7 +13,7 @@ resume_from = None
 
 _base_ = [
     '../_base_/default_runtime.py',
-    '../_base_/models/hierarchical_deeplabv3plus_r101-d8_w_ohem.py',
+    '../_base_/models/hierarchical/hierarchicalv1_deeplabv3plus_r101-d8_w_ohem_w_loss_weight.py',
     '../_base_/datasets/cityscapes_512_512.py',
 ]
 ignore_index = 0

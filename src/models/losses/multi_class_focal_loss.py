@@ -131,6 +131,7 @@ class MultiClassFocalLoss(nn.Module):
                 mask = label != self.ignore_index
                 mask = mask.to(torch.int8).to(torch.float)
                 focal_loss *= mask
+                focal_loss *= self.loss_weight
                 avg_loss = torch.mean(focal_loss) / (torch.mean(mask) + self.EPS)
             except Exception as e:
                 e.args+=(logit.shape, type(target), target.shape, ignore_index)

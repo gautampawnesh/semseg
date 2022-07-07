@@ -49,7 +49,7 @@ model = dict(
             use_sigmoid=False,
             gamma=2.0,
             alpha=1.0,
-            loss_weight=1.0,
+            loss_weight=0.4,
         ))
 
 )

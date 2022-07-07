@@ -11,6 +11,8 @@ load_from = None
 # checkpoint file to resume from
 resume_from = None
 
+
+
 _base_ = [
     '../_base_/default_runtime.py',
     '../_base_/models/hierarchical_deeplabv3plus_r101-d8.py',

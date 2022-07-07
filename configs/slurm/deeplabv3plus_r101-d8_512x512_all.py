@@ -2,14 +2,15 @@ experiment = dict(
     name="All 9 Training",
     description=" All 9 dataset classes mapped to universal classes with flat model  \ "
                 "training 1: 1-10 : 2.31 \ "
-                " training : 10-50 : ",
+                " training : 10-50 : 3.12",
 )
 # directory to save logs and models
 work_dir = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220610_201643/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220610_201643/epoch_10.pth"
+load_from="/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_189c/training/20220612_074736/best_mIoU_epoch_50.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -31,7 +32,7 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=1.259e-03,
+    lr=3.724e-05,
     momentum=0.9,
     weight_decay=0.0005)
 optimizer_config = dict()
@@ -40,13 +41,13 @@ optimizer_config = dict()
 lr_config = dict(
     policy='poly',
     power=0.9,
-    min_lr=0.0,
+    min_lr=1e-6,
     by_epoch=True)
 
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=50)
+    max_epochs=70)
 
 # checkpoints settings
 checkpoint_config = dict(

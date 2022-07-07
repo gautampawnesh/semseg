@@ -1,9 +1,9 @@
 experiment = dict(
     name="Cityscapes Training",
-    description="Sample Iter based training: Cityscapes classes mapped to universal classes with flat model /",
+    description="Sample  Iter based training: Cityscapes classes mapped to universal classes with flat model /",
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/h_deeplab_city_80K_191c/"
+work_dir = "/netscratch/gautam/semseg/exp_results/h_deeplab_city_80K_191c_fp16_v1/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -18,7 +18,7 @@ _base_ = [
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=1,
+data = dict(samples_per_gpu=2,
             workers_per_gpu=6,
             test=dict(ignore_index=ignore_index),
             train=dict(ignore_index=ignore_index),
@@ -31,7 +31,7 @@ optimizer = dict(
     lr=0.001,
     momentum=0.9,
     weight_decay=0.0004)
-optimizer_config = dict()
+optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
 # learning policy
 lr_config = dict(
     policy='poly',

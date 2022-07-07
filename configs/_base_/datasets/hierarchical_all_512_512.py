@@ -7,9 +7,6 @@ train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
     dict(type='MapAnnotations'),
-    # dict(type='Resize', img_scale=[(1920, 1208), (768, 768), (1024, 1024), (512, 1024), (2400, 1510),
-    #                                (960, 604), (2880, 1812), (3360, 2114)],
-    #      ratio_range=None, multiscale_mode="value"),
     dict(type='Resize', img_scale=[
         (1920, 1208),
         (1024, 1024),
@@ -33,7 +30,8 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(2048, 1024),
-        # img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        #img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        #flip=True,
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -66,6 +64,7 @@ city_data = dict(
         ignore_index=0,  # gt has Labelids
         dataset_name="cityscapes",
         test_mode=True,
+        num_samples=100,
         pipeline=test_pipeline),
     test=dict(
         type="UniversalCityscapesDataset",
@@ -76,6 +75,7 @@ city_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         seg_map_suffix='_gtFine_labelIds.png',
         ignore_index=0,  # gt has Labelids
+        num_samples=1,
         dataset_name="cityscapes",
         pipeline=test_pipeline))
 
@@ -103,7 +103,7 @@ viper_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
         ignore_index=0,  # gt are Label ids
-        num_val_samples=1000,
+        num_val_samples=100,
         test_mode=True,
         pipeline=test_pipeline),
     test=dict(
@@ -139,7 +139,7 @@ vistas_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
-        num_val_samples=1000,
+        num_val_samples=100,
         test_mode=True,
         pipeline=test_pipeline),
     test=dict(
@@ -176,6 +176,7 @@ ade_data = dict(
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="ade",
+        num_samples=100,
         test_mode=True,
         pipeline=test_pipeline),
     test=dict(
@@ -212,6 +213,7 @@ wild_data = dict(
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         test_mode=True,
+        num_samples=100,
         dataset_name="wilddash",
         pipeline=test_pipeline),
     test=dict(
@@ -248,7 +250,7 @@ scannet_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
         seg_map_suffix='_labelId.png',
-        num_samples=1000,
+        num_samples=100,
         test_mode=True,
         is_color_to_uni_class_mapping=False,
         dataset_name="scannet",
@@ -363,13 +365,14 @@ bdd_data = dict(
 data = dict(
     train=dict(
         type="CustomConcatDataset",
-        datasets=[idd_data["train"], gta_data["train"], bdd_data["train"], city_data["train"], viper_data["train"], vistas_data["train"], ade_data["train"],
-                  wild_data["train"], scannet_data["train"], city_data["train"], vistas_data["train"], ade_data["train"]],
+        datasets=[city_data["train"], viper_data["train"], vistas_data["train"], ade_data["train"],
+                  wild_data["train"], scannet_data["train"]
+                  ],
     ),
     val=dict(
         type="CustomConcatDataset",
         datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"],
-                  wild_data["val"], scannet_data["val"]]
+                  wild_data["val"], scannet_data["train"]]
     ),
     test=city_data["test"]
 )

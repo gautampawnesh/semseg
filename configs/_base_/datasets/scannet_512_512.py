@@ -55,6 +55,7 @@ data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
         is_color_to_uni_class_mapping=False,
         dataset_name="scannet",
+        num_samples=2500,
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
