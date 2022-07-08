@@ -1,15 +1,15 @@
 experiment = dict(
-    name="HIMini-1 Flat Deeplabv3+  on Mini (vistas+ade)",
+    name="HIMini-2 Flat Deeplabv3+  on Mini (vistas+ade)",
     description=" universal level 1 classes with flat deeplabv3+ model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/HIMini1"
+work_dir = "/netscratch/gautam/semseg/exp_results/HIMini2"
 # random seed
 seed = 1
 # checkpoint file to load weights from
 load_from = None
 # checkpoint file to resume from
-resume_from = "/netscratch/gautam/semseg/exp_results/HIMini1/training/20220707_231353/epoch_13.pth"
+resume_from = "/netscratch/gautam/semseg/exp_results/HIMini2/training/20220707_231353/epoch_8.pth"
 
 _base_ = [
     '../../_base_/default_runtime.py',
@@ -19,7 +19,7 @@ _base_ = [
 ignore_index = 0
 
 data = dict(samples_per_gpu=4,
-            workers_per_gpu=6)
+            workers_per_gpu=4)
 
 model = dict(
     pretrained=None,
@@ -35,13 +35,16 @@ model = dict(
         norm_eval=False,
         style='pytorch',
         contract_dilation=True),
-    decode_head=dict(ignore_index=ignore_index, num_classes=8, loss_decode=dict(
-            _delete_=True,
-            type="CrossEntropyLoss",
-            use_sigmoid=False,
-            loss_weight=1.0,
-            avg_non_ignore=True
-        )),
+    decode_head=dict(ignore_index=ignore_index, num_classes=8,
+                     loss_decode=dict(
+                            _delete_=True,
+                            type="CrossEntropyLoss",
+                            use_sigmoid=False,
+                            loss_weight=1.0,
+                            avg_non_ignore=True
+                        ),
+                     sampler=dict(type="OHEMPixelSampler", thresh=0.7, min_kept=32000)
+                     ),
     auxiliary_head=dict(ignore_index=ignore_index, num_classes=8, loss_decode=dict(
             _delete_=True,
             type="CrossEntropyLoss",

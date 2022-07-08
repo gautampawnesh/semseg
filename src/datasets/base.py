@@ -245,6 +245,8 @@ class BaseDataset(CustomDataset):
         results = self.load_annotations(results)
         if not self.test_mode:
             results = self.map_annotations(results)
+        if self.is_extra_class_mapping:
+            results = self.map_annotations(results)
         return results["gt_semantic_seg"]
 
     def get_gt_seg_maps(self, efficient_test=None):
