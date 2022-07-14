@@ -64,7 +64,9 @@ class BaseDataset(CustomDataset):
                  dataset_name="base",
                  is_color_to_uni_class_mapping=True,
                  num_samples=None,
-                 data_seed=1):
+                 data_seed=1,
+                 is_extra_class_mapping=False,
+                 extra_class_map=None):
         self.data_seed = data_seed
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
@@ -80,6 +82,8 @@ class BaseDataset(CustomDataset):
         self.dataset_name = dataset_name
         self.is_color_to_uni_class_mapping = is_color_to_uni_class_mapping
         self.num_samples = num_samples
+        self.is_extra_class_mapping = is_extra_class_mapping
+        self.extra_class_map = extra_class_map
         # join paths if data_root is specified
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
@@ -105,7 +109,15 @@ class BaseDataset(CustomDataset):
         else:
             self.cls_mapping = self.dataset_ids_to_universal_label_mapping()
 
-        self.pred_backward_mapping = self.set_pred_backward_class_mapping()
+        if self.is_extra_class_mapping:
+            assert self.extra_class_map is not None, "Missing extra class map"
+            self.num_classes = len(self.extra_class_map)
+            self.DATASET_CLASSES = tuple(str(i) for i in range(self.num_classes))
+            self.DATASET_PALETTE = ((np.array(seaborn.color_palette(cc.glasbey, self.num_classes))*255).astype(np.uint8).tolist())
+            self.DATASET_LABEL_IDS = tuple(i for i in range(self.num_classes))
+
+        if not self.is_extra_class_mapping:
+            self.pred_backward_mapping = self.set_pred_backward_class_mapping()
         self.data = self.data_df()
 
     def set_dataset_classes_and_palette(self):
@@ -219,6 +231,8 @@ class BaseDataset(CustomDataset):
         data = self.data.iloc[ind]
         results = {
             "mapping": self.cls_mapping,
+            "is_extra_class_mapping": self.is_extra_class_mapping,
+            "extra_class_map": self.extra_class_map,
             "num_classes": self.num_classes,
             "img_info": {"filename": data["image"]},
             "ann_info": {"seg_map": data["label"]},
@@ -230,6 +244,8 @@ class BaseDataset(CustomDataset):
         results = self.pre_pipeline(index)
         results = self.load_annotations(results)
         if not self.test_mode:
+            results = self.map_annotations(results)
+        if self.is_extra_class_mapping:
             results = self.map_annotations(results)
         return results["gt_semantic_seg"]
 
@@ -312,16 +328,21 @@ class BaseDataset(CustomDataset):
             indices = [indices]
         if not isinstance(preds, list):
             preds = [preds]
-        # universal classes to dataset classes mapping
-        preds = self.pred_backward_class_mapping(preds)
+
+        if not self.is_extra_class_mapping:
+            # universal classes to dataset classes mapping
+            preds = self.pred_backward_class_mapping(preds)
 
         pre_eval_results = []
 
         for pred, index in zip(preds, indices):
             # In test mode, seg_map will receive dataset specific labels
             seg_map = self.get_gt_seg_map_by_idx(index)
-            # maps the non eval classes to zero
-            seg_map = self.gt_backward_class_mapping(seg_map)
+
+            if not self.is_extra_class_mapping:
+                # maps the non eval classes to zero
+                seg_map = self.gt_backward_class_mapping(seg_map)
+
             pre_eval_results.append(
                 intersect_and_union(
                     pred,
