@@ -10,7 +10,9 @@ seed = 1
 load_from = None #"/netscratch/gautam/semseg/exp_results/HA1/training/20220704_082517/epoch_1.pth"
 # checkpoint file to resume from
 #resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_19.pth"
-resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_42.pth"
+#resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_42.pth"
+resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_65.pth" # changed total epochs to 100
+
 _base_ = [
     '../../_base_/default_runtime.py',
     '../../_base_/models/hierarchical/HA1_hierarchicalv1_deeplabv3plus_r101-d8_w_ohem_w_loss_weight.py',
@@ -41,7 +43,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=200)
+    max_epochs=100)
 
 # checkpoints settings
 checkpoint_config = dict(

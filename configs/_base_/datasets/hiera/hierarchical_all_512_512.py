@@ -42,7 +42,7 @@ test_pipeline = [
         ])
 ]
 
-data_seed = 3
+data_seed = 4
 
 
 city_data = dict(
@@ -94,7 +94,7 @@ viper_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
-        num_samples=3000,
+        num_samples=30000,
         data_seed=data_seed,
         ignore_index=0,  # gt are Label ids
         pipeline=train_pipeline),
@@ -246,7 +246,7 @@ scannet_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
         is_color_to_uni_class_mapping=False,
         dataset_name="scannet",
-        num_samples=7500,
+        num_samples=30000,
         data_seed=data_seed,
         pipeline=train_pipeline),
     val=dict(
@@ -350,7 +350,7 @@ bdd_data = dict(
         img_dir='images/10k/train',
         ann_dir='labels/sem_seg/masks/train',
         dataset_name="bdd",
-        num_samples=100,
+        num_samples=500,
         data_seed=data_seed,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/bdd10k_class_mapping.csv",

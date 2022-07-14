@@ -68,7 +68,7 @@ def evaluate(cfg, args, logger):
 
     # build the dataloader
     dataset_name = cfg.data.test["dataset_name"]
-    dataset = build_dataset(cfg.data.val)
+    dataset = build_dataset(cfg.data.test)
     data_loader = build_dataloader(
         dataset,
         samples_per_gpu=1,
