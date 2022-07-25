@@ -224,7 +224,10 @@ class BaseDataset(CustomDataset):
         if self.num_samples is None:
             return data_df
         else:
-            return data_df.sample(n=self.num_samples, random_state=self.data_seed)
+            try:
+                return data_df.sample(n=self.num_samples, random_state=self.data_seed)
+            except Exception as e:
+                return data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
 
     def pre_pipeline(self, ind):
         """returns sample wo processing"""

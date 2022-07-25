@@ -84,7 +84,10 @@ class UniversalScannetDataset(BaseDataset):
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
             if self.num_samples:
-                data_df = data_df.sample(n=self.num_samples, random_state=self.data_seed)
+                try:
+                    data_df = data_df.sample(n=self.num_samples, random_state=self.data_seed)
+                except:
+                    data_df = data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
 
             return data_df
         else:

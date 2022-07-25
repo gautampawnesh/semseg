@@ -66,14 +66,20 @@ class UniversalWilddashDataset(BaseDataset):
             images = images[3556:]
         else:
             images = images[:3556]
-        if self.num_samples:
-            import random
-            random.seed(self.data_seed)
-            images = random.sample(images, self.num_samples)
+        # if self.num_samples:
+        #     import random
+        #     random.seed(self.data_seed)
+        #     images = random.sample(images, self.num_samples)
         images, labels = self.images_labels_validation(images)
         data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
         data_df = data_df.sort_values("image")
-        return data_df
+        if self.num_samples is None:
+            return data_df
+        else:
+            try:
+                return data_df.sample(n=self.num_samples, random_state=self.data_seed)
+            except Exception as e:
+                return data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
