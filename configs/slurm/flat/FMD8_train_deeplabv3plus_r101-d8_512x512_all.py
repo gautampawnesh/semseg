@@ -18,8 +18,12 @@ _base_ = [
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=4,
+data = dict(samples_per_gpu=8,
             workers_per_gpu=6)
+
+model = dict(
+    decode_head=dict(ignore_index=ignore_index, num_classes=191)
+)
 
 # optimizer
 optimizer = dict(
@@ -40,7 +44,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=20)
+    max_epochs=10)
 
 # checkpoints settings
 checkpoint_config = dict(
