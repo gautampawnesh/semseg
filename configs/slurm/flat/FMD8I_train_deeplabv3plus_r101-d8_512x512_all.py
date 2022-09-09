@@ -1,9 +1,9 @@
 experiment = dict(
-    name="FMD 8 Flat Deeplabv3+  All 9 Training os8 1L:1L:1L:1L:1L:1L:1K:1K:1K",
+    name="FMD 8 I Flat Deeplabv3+  All 9 Training os8 1L:1L:1L:1L:1L:1L:1K:1K:1K",
     description=" All 9 dataset classes mapped to universal classes with flat deeplabv3+ model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/final_weights/FMD8/"
+work_dir = "/netscratch/gautam/semseg/final_weights/FMD8I/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -39,21 +39,21 @@ lr_config = dict(
     policy='poly',
     power=0.9,
     min_lr=1e-5,
-    by_epoch=True)
+    by_epoch=False)
 
 # runtime settings
 runner = dict(
-    type='EpochBasedRunner',
-    max_epochs=10)
+    type='IterBasedRunner',
+    max_iters=160000)
 
 # checkpoints settings
 checkpoint_config = dict(
-    by_epoch=True,
-    interval=1,
+    by_epoch=False,
+    interval=16000,
     max_keep_ckpts=15,
     create_symlink=False
 )
 
-evaluation = dict(_delete_=True, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
+evaluation = dict(_delete_=True, interval=16000, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
 
 log_level = 'INFO'

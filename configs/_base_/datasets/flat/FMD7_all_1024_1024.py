@@ -1,7 +1,7 @@
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (512, 1024)
+crop_size = (1024, 1024)
 data_seed = 1
 
 train_pipeline = [
@@ -44,8 +44,8 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(2048, 1024),
-        img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
-        flip=True,
+        #img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
             dict(type='RandomFlip'),
@@ -83,13 +83,13 @@ city_data = dict(
     test=dict(
         type="UniversalCityscapesDataset",
         data_root='/ds-av/public_datasets/cityscapes/raw',
-        img_dir='leftImg8bit/val',
-        ann_dir='gtFine/val',
+        img_dir='leftImg8bit/test',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
         seg_map_suffix='_gtFine_labelIds.png',
         ignore_index=0,  # gt has Labelids
         dataset_name="cityscapes",
+        benchmark=True,
         pipeline=test_pipeline))
 
 viper_data = dict(
@@ -124,14 +124,14 @@ viper_data = dict(
     test=dict(
         type="UniversalViperDataset",
         data_root='/ds-av/public_datasets/viper/raw',
-        img_dir='val/img',
-        ann_dir='val/cls',
+        img_dir='test/img',
         seg_map_suffix='.png',
         img_suffix=".jpg",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
         ignore_index=0,  # gt are Label ids
+        benchmark=True,
         pipeline=test_pipeline))
 
 vistas_data = dict(
@@ -151,24 +151,25 @@ vistas_data = dict(
         type='VistasDataset',
         data_root='/ds-av/public_datasets/mapillary_vistas_v2.0/raw/',
         img_dir='validation/images',
-        ann_dir='validation/v1.2/labels',
+        #ann_dir='validation/v1.2/labels',
         seg_map_suffix='.png',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
-        num_samples=500,
+        #num_samples=500,
         test_mode=True,
-        pipeline=val_pipeline),
+        benchmark=True,
+        pipeline=test_pipeline),
     test=dict(
         type='VistasDataset',
         data_root='/ds-av/public_datasets/mapillary_vistas_v2.0/raw/',
-        img_dir='validation/images',
-        ann_dir='validation/v1.2/labels',
+        img_dir='testing/images',
         seg_map_suffix='.png',
         class_color_mode="RGB",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
+        benchmark=True,
         pipeline=test_pipeline))
 
 ade_data = dict(
@@ -200,14 +201,14 @@ ade_data = dict(
         pipeline=val_pipeline),
     test=dict(
         type='UniversalAdeDataset',
-        data_root='/ds-av/public_datasets/ade_20k/raw',
-        img_dir='images/validation',
-        ann_dir='annotations/validation',
+        data_root='/netscratch/gautam/ade_test',
+        img_dir='release_test/testing',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/ade20k_class_mapping.csv",
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="ade",
+        benchmark=True,
         pipeline=test_pipeline))
 
 wild_data = dict(
@@ -238,14 +239,14 @@ wild_data = dict(
         pipeline=val_pipeline),
     test=dict(
         type='UniversalWilddashDataset',
-        data_root='/ds-av/public_datasets/wilddash2/raw/public',
+        data_root='/ds-av/public_datasets/wilddash2/raw/benchmark',
         img_dir='images',
-        ann_dir='labels',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/wilddash_class_mapping.csv",
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="wilddash",
+        benchmark=True,
         pipeline=test_pipeline))
 
 scannet_data = dict(
@@ -398,5 +399,5 @@ data = dict(
         datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"],
                   wild_data["val"], scannet_data["val"]]
     ),
-    test=city_data["test"]
+    test=vistas_data["val"]
 )

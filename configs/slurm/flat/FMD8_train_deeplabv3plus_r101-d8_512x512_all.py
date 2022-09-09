@@ -4,12 +4,14 @@ experiment = dict(
 )
 # directory to save logs and models
 work_dir = "/netscratch/gautam/semseg/final_weights/FMD8/"
-# random seed
+# random seed das
 seed = 1
 # checkpoint file to load weights from
-load_from = None
+#load_from = "/netscratch/gautam/semseg/final_weights/FMD8/training/20220801_000333/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/final_weights/FMD8/training/20220824_110833/epoch_6.pth"
+load_from = None  #"/netscratch/gautam/semseg/final_weights/FMD8/training/20220829_140628/epoch_6.pth"
 # checkpoint file to resume from
-resume_from = None
+resume_from = "/netscratch/gautam/semseg/final_weights/FMD8/training/20220831_073718/epoch_9.pth"
 
 _base_ = [
     '../../_base_/default_runtime.py',
@@ -18,7 +20,7 @@ _base_ = [
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=8,
+data = dict(samples_per_gpu=8,   ### TODO: Should be similar to HA
             workers_per_gpu=6)
 
 model = dict(
@@ -28,7 +30,10 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.007,
+    #lr=0.007,
+    #lr=0.0007,
+    #lr=0.0004,
+    lr=1.810e-04,
     momentum=0.9,
     weight_decay=0.0005
 )

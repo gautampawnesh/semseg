@@ -2,6 +2,9 @@ from src.models.segmentor.hierarchical_segmentor import HierarchicalSegmentor
 import pytest
 import torch
 import numpy as np
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.svm import SVC
 
 CLASS_MAPPING = dict(
     level_1_head=dict(

@@ -342,22 +342,22 @@ hierarchical_decode_heads_config = dict(
     level_3_building_infra_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_building_infra_head"])+1}), #10
     level_3_other_infra_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_infra_head"])+1}), #11
 
-    # Road objects
+    # Road objects: 11
     level_2_traffic_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_traffic_objects_head"])+1}), #12
     level_3_pole_all_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_pole_all_head"])+1}),  #13
     level_3_sign_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_sign_head"])+1}), #14
     level_3_light_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_light_head"])+1}), #15
     level_3_other_road_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_road_objects_head"])+1}), #16
-    # Nature objects
+    # Nature objects: 16
     level_2_nature_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_nature_objects_head"])+1}), #17
     level_3_sky_vegetation_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_sky_vegetation_head"])+1}), #18
     level_3_ground_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_ground_head"])+1}), #19
     level_3_other_nature_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_other_nature_objects_head"])+1}), #20
-    # VRU
+    # VRU:20
     level_2_vru_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_vru_head"])+1}), #21
     level_3_animal_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_animal_head"])+1}), #22
     level_3_rider_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_rider_head"])+1}), #23
-    # Indoor objects
+    # Indoor objects 23
     level_2_indoor_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_2_indoor_objects_head"])+1, "channels":512}), #24
     level_3_furniture_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_furniture_head"])+1}), #25
     level_3_bedroom_objects_head=dict(common_decode_head, **{"num_classes": len(class_hierarchy_heads["level_3_bedroom_objects_head"])+1}), #26
@@ -396,7 +396,7 @@ model = dict(
         norm_eval=False,
         style="pytorch",
         contract_dilation=True,
-        frozen_stages=4,        #### NEW:::::::::::Freezing backbone
+        #frozen_stages=4,        #### NEW:::::::::::Freezing backbone
         init_cfg=dict(
             type='Pretrained', checkpoint=checkpoint_file,
             prefix='backbone.')

@@ -29,7 +29,8 @@ class UniversalWilddashDataset(BaseDataset):
                  dataset_name="wilddash",
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
-                 data_seed=1):
+                 data_seed=1,
+                 benchmark=False):
 
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [2, 3, 4, 5, 6, 9, 10, 15, 16, 29, 30, 31]
@@ -54,7 +55,8 @@ class UniversalWilddashDataset(BaseDataset):
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
-            data_seed=data_seed
+            data_seed=data_seed,
+            benchmark=benchmark
         )
 
     def data_df(self):
@@ -62,6 +64,15 @@ class UniversalWilddashDataset(BaseDataset):
         if self.split:
             raise NotImplementedError
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        if self.benchmark:
+            data_df = pd.DataFrame.from_dict({"image": images})
+            if self.num_samples is None:
+                return data_df
+            else:
+                try:
+                    return data_df.sample(n=self.num_samples, random_state=self.data_seed)
+                except Exception as e:
+                    return data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
         if self.test_mode:
             images = images[3556:]
         else:

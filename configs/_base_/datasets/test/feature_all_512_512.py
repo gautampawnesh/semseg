@@ -3,6 +3,8 @@ img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 crop_size = (512, 512)
 
+
+
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
@@ -24,19 +26,17 @@ train_pipeline = [
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_semantic_seg']),
 ]
-val_pipeline = [
+val_pipeline = [  # feature extraction pipeline
     dict(type='LoadImageFromFile'),
-    dict(
-        type='MultiScaleFlipAug',
-        img_scale=(2048, 1024),
-        flip=False,
-        transforms=[
-            dict(type='Resize', keep_ratio=True),
-            dict(type='RandomFlip'),
-            dict(type='Normalize', **img_norm_cfg),
-            dict(type='ImageToTensor', keys=['img']),
-            dict(type='Collect', keys=['img']),
-        ])
+    dict(type='LoadAnnotations'),
+    dict(type='MapAnnotations'),
+    dict(type='Resize', img_scale=(512, 512), ratio_range=(0.5, 2.0)),
+    dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
+    dict(type='RandomFlip', prob=0.0),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size=crop_size, pad_val=0, seg_pad_val=0),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_semantic_seg'])
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile'),
@@ -76,7 +76,8 @@ city_data = dict(
         ignore_index=0,  # gt has Labelids
         dataset_name="cityscapes",
         test_mode=True,
-        num_samples=1,
+        num_samples=50,
+        data_seed=data_seed,
         pipeline=val_pipeline),
     test=dict(
         type="UniversalCityscapesDataset",
@@ -115,7 +116,8 @@ viper_data = dict(
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",
         ignore_index=0,  # gt are Label ids
-        num_samples=500,
+        num_samples=50,
+        data_seed=data_seed,
         test_mode=True,
         pipeline=val_pipeline),
     test=dict(
@@ -151,7 +153,8 @@ vistas_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
         dataset_name="vistas",
-        num_samples=500,
+        num_samples=50,
+        data_seed=data_seed,
         test_mode=True,
         pipeline=val_pipeline),
     test=dict(
@@ -188,7 +191,8 @@ ade_data = dict(
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="ade",
-        num_samples=500,
+        num_samples=50,
+        data_seed=data_seed,
         test_mode=True,
         pipeline=val_pipeline),
     test=dict(
@@ -225,7 +229,8 @@ wild_data = dict(
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         test_mode=True,
-        num_samples=1,
+        num_samples=50,
+        data_seed=data_seed,
         dataset_name="wilddash",
         pipeline=val_pipeline),
     test=dict(
@@ -263,7 +268,8 @@ scannet_data = dict(
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
         seg_map_suffix='_labelId.png',
-        num_samples=500,
+        num_samples=50,
+        data_seed=data_seed,
         test_mode=True,
         is_color_to_uni_class_mapping=False,
         dataset_name="scannet",
@@ -288,7 +294,7 @@ idd_data = dict(
         img_dir='leftImg8bit/train',
         ann_dir='gtFine/train',
         dataset_name="idd",
-        num_samples=100,
+        num_samples=50,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/idd_class_mapping.csv",
         pipeline=train_pipeline),
@@ -319,7 +325,7 @@ gta_data = dict(
         img_dir='images',
         ann_dir='labels',
         dataset_name="playing_for_data",
-        num_samples=100,
+        num_samples=50,
         split="/netscratch/gautam/playing_for_data/train.txt",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/playing_for_data_class_mapping.csv",
@@ -353,7 +359,7 @@ bdd_data = dict(
         img_dir='images/10k/train',
         ann_dir='labels/sem_seg/masks/train',
         dataset_name="bdd",
-        num_samples=100,
+        num_samples=50,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/bdd10k_class_mapping.csv",
         pipeline=train_pipeline),
@@ -389,6 +395,6 @@ data = dict(
     #     datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"],
     #               wild_data["val"], scannet_data["val"]]
     # ),
-    val=dict(type="CustomConcatDataset", datasets=[city_data["val"], wild_data["val"]]),
+    val=dict(type="CustomConcatDataset", datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"], wild_data["val"], scannet_data["val"]]),
     test=city_data["test"]
 )

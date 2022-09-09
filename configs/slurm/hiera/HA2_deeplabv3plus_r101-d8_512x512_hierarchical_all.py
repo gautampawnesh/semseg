@@ -9,7 +9,8 @@ seed = 1
 # checkpoint file to load weights from
 load_from = None
 # checkpoint file to resume from
-resume_from = "/netscratch/gautam/semseg/exp_results/HA2/training/20220709_171511/epoch_12.pth"
+#resume_from = "/netscratch/gautam/semseg/exp_results/HA2/training/20220709_171511/epoch_12.pth"
+resume_from = "/netscratch/gautam/semseg/exp_results/HA2/training/20220709_171511/epoch_24.pth"
 
 _base_ = [
     '../../_base_/default_runtime.py',
@@ -18,7 +19,7 @@ _base_ = [
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=2,
+data = dict(samples_per_gpu=1,
             workers_per_gpu=6)
 
 

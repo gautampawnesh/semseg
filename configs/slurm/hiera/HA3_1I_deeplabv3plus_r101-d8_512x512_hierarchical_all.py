@@ -3,7 +3,7 @@ experiment = dict(
     description=" All 9 dataset classes mapped to universal classes with flat model   "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/final_weights/HA3_1/"
+work_dir = "/netscratch/gautam/semseg/final_weights/HA3_1I/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -29,7 +29,7 @@ data = dict(samples_per_gpu=2,
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.007,
+    lr=0.005,
     momentum=0.9,
     weight_decay=0.0005)
 
@@ -47,17 +47,17 @@ lr_config = dict(
 
 # runtime settings
 runner = dict(
-    type='EpochBasedRunner',
-    max_epochs=10)
+    type='IterBasedRunner',
+    max_iters=320000)
 
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
-    interval=1,
-    max_keep_ckpts=15,
+    interval=4000,
+    max_keep_ckpts=35,
     create_symlink=False
 )
 
-evaluation = dict(_delete_=True, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
+evaluation = dict(_delete_=True, interval=8000, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
 
 log_level = 'INFO'

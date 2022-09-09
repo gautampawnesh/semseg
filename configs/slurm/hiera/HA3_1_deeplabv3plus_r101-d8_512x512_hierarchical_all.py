@@ -3,11 +3,13 @@ experiment = dict(
     description=" All 9 dataset classes mapped to universal classes with flat model   "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/final_weights/HA3/"
+work_dir = "/netscratch/gautam/semseg/final_weights/HA3_1/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-load_from = None
+#load_from = "/netscratch/gautam/semseg/final_weights/HA3_1/training/20220804_044105/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/final_weights/HA3_1/training/20220814_010056/epoch_6.pth"
+load_from = "/netscratch/gautam/semseg/final_weights/HA3_1/training/20220817_080744/epoch_6.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -15,7 +17,7 @@ resume_from = None
 
 _base_ = [
     '../../_base_/default_runtime.py',
-    '../../_base_/models/hierarchical/HA3_hierarchicalv1_deeplabv3plus_r101-d8_w_ohem_w_loss_weight.py',
+    '../../_base_/models/hierarchical/HA3_1_hierarchicalv1_deeplabv3plus_r101-d8_w_ohem_w_loss_weight.py',
     '../../_base_/datasets/hiera/HA3_hierarchical_all_512_512.py',
 ]
 ignore_index = 0
@@ -29,7 +31,10 @@ data = dict(samples_per_gpu=2,
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.007,
+    #lr=0.007,
+    #lr=0.0007,*?
+    #lr=0.0004,
+    lr=1.810e-04,
     momentum=0.9,
     weight_decay=0.0005)
 
@@ -42,6 +47,8 @@ optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
 lr_config = dict(
     policy='poly',
     power=0.9,
+    #min_lr=1e-5,
+    #min_lr=1e-6,
     min_lr=1e-5,
     by_epoch=True)
 

@@ -59,7 +59,9 @@ def train(config_file_path: str):
         set_random_seed(cfg.get("seed"), deterministic=False)
 
     # Build the dataset
+    logger.info(f'Building dataset ...')
     datasets = [build_dataset(cfg.data.train)]
+    logger.info(f'Building dataset ...Done')
     # Not using 2 workflow as of now
     if len(cfg.workflow) == 2:
         raise NotImplemented

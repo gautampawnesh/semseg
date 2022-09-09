@@ -1,0 +1,15 @@
+hard,features_out/all_3000_l2_0.csv,4,forgy,true,1,42,0.0005,4.76531e+06,0.000316349
+hard,features_out/all_3000_l2_0.csv,2,forgy,true,1,42,0.0005,5.13189e+06,0.000136519
+hard,features_out/all_3000_l2_0.csv,2,forgy,true,1,42,0.0005,5.1319e+06,0.000128767
+hard,features_out/all_3000_l2_0.csv,4,forgy,true,1,42,0.0005,4.76533e+06,0.000275454
+hard,features_out/all_3000_l2_0.csv,3,forgy,true,1,42,0.0005,4.9418e+06,0.00021341
+hard,features_out/all_3000_l2_0.csv,2,forgy,true,1,42,0.0005,5.16246e+06,0.000157825
+hard,features_out/all_3000_l2_0.csv,6,forgy,true,1,42,0.0005,4.16965e+06,0.000465838
+hard,features_out/all_3000_l2_0.csv,4,forgy,true,1,42,0.0005,4.76531e+06,0.000768244
+hard,features_out/all_3000_l2_0.csv,4,forgy,true,1,42,0.0005,4.76531e+06,0.000511482
+hard,features_out/all_3000_l2_0.csv,2,forgy,true,1,42,0.0005,5.13189e+06,0.000137591
+hard,features_out/all_3000_l2_0.csv,2,forgy,true,1,42,0.0005,5.1319e+06,0.000129294
+hard,features_out/all_3000_l2_0.csv,4,forgy,true,1,42,0.0005,4.76533e+06,0.000304907
+hard,features_out/all_3000_l2_0.csv,3,forgy,true,1,42,0.0005,4.9418e+06,0.000200269
+hard,features_out/all_3000_l2_0.csv,2,forgy,true,1,42,0.0005,5.16246e+06,0.000142301
+hard,features_out/all_3000_l2_0.csv,6,forgy,true,1,42,0.0005,4.16965e+06,0.000443406

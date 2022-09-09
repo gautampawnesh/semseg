@@ -1,12 +1,4 @@
-import multiprocessing
-from pathlib import Path
-from mmcv.utils.config import Config
-from mmseg.datasets import build_dataset
-from torch.utils.data import DataLoader
-import src.datasets
-import src.transforms
-import numpy as np
-from tqdm import tqdm
+
 import mmcv
 from mmcv.parallel import MMDistributedDataParallel, MMDataParallel
 from mmcv.runner import (get_dist_info, init_dist, load_checkpoint)
@@ -27,7 +19,7 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 
 NUM_DATASETS=6
-NUM_SAMPLES_PER_DATASET=10
+NUM_SAMPLES_PER_DATASET=50
 checkpoint_path = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220705_062238/epoch_90.pth"
 NUM_CLASSES = 191
 config_file_path = "./configs/inference/test_FMD7_r101-d8_512x512_all.py"
@@ -56,9 +48,13 @@ cfg = mmcv.Config.fromfile(config_file_path)
 cfg.model.pretrained = None
 cfg.data.test.test_mode = True
 cfg.model.train_cfg = None
-distributed = False if cfg.launcher is None else True
-if distributed is True:
-    init_dist(cfg.launcher, **cfg.get("dist_params", {}))
+distributed = False #if cfg.launcher is None else True
+try:
+    if distributed is True:
+        init_dist(cfg.launcher, **cfg.get("dist_params", {}))
+except Exception as e:
+    print(e)
+    pass
 
 dataset = build_dataset(cfg.data.val)
 data_loader = build_dataloader(
@@ -87,6 +83,7 @@ if distributed:
     results = multi_gpu_test(dist_model, data_loader, pre_eval=False, gpu_collect=False, feature=True)
 
 if not distributed:
+    print("started extracting ...")
     mmdata_model = MMDataParallel(model, device_ids=cfg.gpu_ids)
     results = single_gpu_test(mmdata_model, data_loader, pre_eval=False, feature=True)
 

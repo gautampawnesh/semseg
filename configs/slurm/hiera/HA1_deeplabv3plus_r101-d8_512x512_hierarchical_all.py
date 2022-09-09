@@ -7,11 +7,15 @@ work_dir = "/netscratch/gautam/semseg/exp_results/HA1/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-load_from = None #"/netscratch/gautam/semseg/exp_results/HA1/training/20220704_082517/epoch_1.pth"
+#load_from = None #"/netscratch/gautam/semseg/exp_results/HA1/training/20220704_082517/epoch_1.pth"
+load_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_100.pth"
+
 # checkpoint file to resume from
+resume_from = None
 #resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_19.pth"
 #resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_42.pth"
-resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_65.pth" # changed total epochs to 100
+#resume_from = "/netscratch/gautam/semseg/exp_results/HA1/training/20220705_192151/epoch_65.pth" # changed total epochs to 100
+
 
 _base_ = [
     '../../_base_/default_runtime.py',
@@ -27,7 +31,7 @@ data = dict(samples_per_gpu=2,
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.007,
+    lr=0.0007,
     momentum=0.9,
     weight_decay=0.0005)
 optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
@@ -43,7 +47,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=100)
+    max_epochs=10)
 
 # checkpoints settings
 checkpoint_config = dict(

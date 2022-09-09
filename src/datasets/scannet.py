@@ -33,7 +33,8 @@ class UniversalScannetDataset(BaseDataset):
                  dataset_name="scannet",
                  is_color_to_uni_class_mapping=True,
                  num_samples=None,
-                 data_seed=1
+                 data_seed=1,
+                 benchmark=False
                  ):
 
         # mark all non eval classes to 0 based on gt label id
@@ -59,7 +60,8 @@ class UniversalScannetDataset(BaseDataset):
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
-            data_seed=data_seed
+            data_seed=data_seed,
+            benchmark=benchmark
         )
 
     def dataset_ids_to_universal_label_mapping(self):

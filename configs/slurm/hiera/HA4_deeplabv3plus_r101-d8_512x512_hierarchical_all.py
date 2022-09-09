@@ -1,23 +1,24 @@
 experiment = dict(
-    name="HA3 Hierarchical All 9 Training 1L:1L:1L:1L:1L:1L:1K:1K:1K",
+    name="HA4 Hierarchical All 9 Training 1L:1L:1L:1L:1L:1L:1K:1K:1K",
     description=" All 9 dataset classes mapped to universal classes with flat model   "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/final_weights/HA3_1/"
+work_dir = "/netscratch/gautam/semseg/final_weights/HA4_test/"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-#load_from = "/netscratch/gautam/semseg/final_weights/HA3_1/training/20220804_044105/epoch_10.pth"
-load_from = "/netscratch/gautam/semseg/final_weights/HA3_1/training/20220814_010056/epoch_6.pth"
+#load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_10.pth"
+load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220901_120108/epoch_6.pth"
 # checkpoint file to resume from
+#resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_6.pth"
+#resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_8.pth"
 resume_from = None
-
 # Todo: update backbone pretrained checkpoint in model file
 
 _base_ = [
     '../../_base_/default_runtime.py',
-    '../../_base_/models/hierarchical/HA3_1_hierarchicalv1_deeplabv3plus_r101-d8_w_ohem_w_loss_weight.py',
-    '../../_base_/datasets/hiera/HA3_hierarchical_all_512_512.py',
+    '../../_base_/models/hierarchical/HA4_hierarchicalv1_deeplabv3plus_r101-d8_w_ohem_w_loss_weight.py',
+    '../../_base_/datasets/hiera/HA4_hierarchical_all_512_512.py',
 ]
 ignore_index = 0
 
@@ -45,8 +46,6 @@ optimizer_config = dict(type="Fp16OptimizerHook", loss_scale=512.0)
 lr_config = dict(
     policy='poly',
     power=0.9,
-    #min_lr=1e-5,
-    #min_lr=1e-6,
     min_lr=1e-5,
     by_epoch=True)
 

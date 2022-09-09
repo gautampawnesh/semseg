@@ -30,7 +30,8 @@ class VistasDataset(BaseDataset):
                  num_samples=None,
                  data_seed=1,
                  is_extra_class_mapping=False,
-                 extra_class_map=None
+                 extra_class_map=None,
+                 benchmark=False
                  ):
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = []
@@ -57,7 +58,8 @@ class VistasDataset(BaseDataset):
             num_samples=num_samples,
             data_seed=data_seed,
             is_extra_class_mapping=is_extra_class_mapping,
-            extra_class_map=extra_class_map
+            extra_class_map=extra_class_map,
+            benchmark=benchmark
         )
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -73,13 +75,12 @@ class VistasDataset(BaseDataset):
         if self.split:
             raise NotImplementedError
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        # if self.num_samples:
-        #     import random
-        #     random.seed(self.data_seed)
-        #     images = random.sample(images, self.num_samples)
-        images, labels = self.images_labels_validation(images)
-        data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        data_df = data_df.sort_values("image")
+        if not self.benchmark:
+            images, labels = self.images_labels_validation(images)
+            data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
+            data_df = data_df.sort_values("image")
+        else:
+            data_df = pd.DataFrame.from_dict({"image": images})
         if self.num_samples is None:
             return data_df
         else:

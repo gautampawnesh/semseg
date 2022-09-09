@@ -1,7 +1,7 @@
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (512, 1024)
+crop_size = (512, 512)
 data_seed = 1
 
 train_pipeline = [
@@ -44,8 +44,8 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(2048, 1024),
-        img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
-        flip=True,
+        #img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
             dict(type='RandomFlip'),
@@ -83,11 +83,9 @@ city_data = dict(
     test=dict(
         type="UniversalCityscapesDataset",
         data_root='/ds-av/public_datasets/cityscapes/raw',
-        img_dir='leftImg8bit/val',
-        ann_dir='gtFine/val',
+        img_dir='leftImg8bit/test',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
-        seg_map_suffix='_gtFine_labelIds.png',
         ignore_index=0,  # gt has Labelids
         dataset_name="cityscapes",
         pipeline=test_pipeline))

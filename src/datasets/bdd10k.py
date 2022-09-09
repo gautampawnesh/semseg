@@ -29,7 +29,8 @@ class UniversalBdd10kDataset(BaseDataset):
                  dataset_name="bdd10k",
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
-                 data_seed=1
+                 data_seed=1,
+                 benchmark=False
                 ):
         super(UniversalBdd10kDataset, self).__init__(
             pipeline,
@@ -52,7 +53,8 @@ class UniversalBdd10kDataset(BaseDataset):
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
-            data_seed=data_seed
+            data_seed=data_seed,
+            benchmark=benchmark
         )
 
     def dataset_ids_to_universal_label_mapping(self):

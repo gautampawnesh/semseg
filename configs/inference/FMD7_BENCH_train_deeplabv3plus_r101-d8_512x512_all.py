@@ -15,9 +15,9 @@ load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220725_103634
 resume_from = None
 
 _base_ = [
-    '../../_base_/default_runtime.py',
-    '../../_base_/models/flat/flat_train_deeplabv3plus_r101-d8.py',
-    '../../_base_/datasets/flat/FMD7_all_1024_1024.py',
+    '../_base_/default_runtime.py',
+    '../_base_/models/flat/flat_train_deeplabv3plus_r101-d8.py',
+    '../_base_/datasets/flat/FMD7_test_all_512_1024.py',
 ]
 ignore_index = 0
 

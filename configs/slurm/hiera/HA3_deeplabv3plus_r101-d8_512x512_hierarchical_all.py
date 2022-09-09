@@ -48,7 +48,7 @@ lr_config = dict(
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=20)
+    max_epochs=10)
 
 # checkpoints settings
 checkpoint_config = dict(

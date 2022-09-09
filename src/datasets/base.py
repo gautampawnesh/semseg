@@ -66,7 +66,9 @@ class BaseDataset(CustomDataset):
                  num_samples=None,
                  data_seed=1,
                  is_extra_class_mapping=False,
-                 extra_class_map=None):
+                 extra_class_map=None,
+                 benchmark=False):
+        self.benchmark = benchmark
         self.data_seed = data_seed
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
@@ -218,9 +220,12 @@ class BaseDataset(CustomDataset):
     def data_df(self):
         """data df with image path and annotations"""
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        images, labels = self.images_labels_validation(images)
-        data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        data_df = data_df.sort_values("image")
+        if not self.benchmark:
+            images, labels = self.images_labels_validation(images)
+            data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
+            data_df = data_df.sort_values("image")
+        else:
+            data_df = pd.DataFrame.from_dict({"image": images})
         if self.num_samples is None:
             return data_df
         else:

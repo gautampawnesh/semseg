@@ -7,14 +7,18 @@ work_dir = "/netscratch/gautam/semseg/exp_results/FMD7"
 # random seed
 seed = 1
 # checkpoint file to load weights from
-load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220704_064718/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220704_064718/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220705_062238/epoch_90.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220724_155407/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220725_103634/epoch_9.pth"
+load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220726_235911/epoch_10.pth"
 # checkpoint file to resume from
 resume_from = None
 
 _base_ = [
     '../../_base_/default_runtime.py',
     '../../_base_/models/flat/flat_train_deeplabv3plus_r101-d8.py',
-    '../../_base_/datasets/flat/all_512_512.py',
+    '../../_base_/datasets/flat/FMD7_all_512_512.py',
 ]
 ignore_index = 0
 
@@ -54,7 +58,8 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.001,
+    #lr=0.00001,
+    lr=0.000007,
     momentum=0.9,
     weight_decay=0.0005,
     # paramwise_cfg=dict(
@@ -68,19 +73,19 @@ optimizer_config = dict()
 lr_config = dict(
     policy='poly',
     power=0.9,
-    min_lr=1e-4,
+    min_lr=1e-7,
     by_epoch=True)
 
 # runtime settings
 runner = dict(
     type='EpochBasedRunner',
-    max_epochs=90)
+    max_epochs=2)
 
 # checkpoints settings
 checkpoint_config = dict(
     by_epoch=True,
     interval=1,
-    max_keep_ckpts=5,
+    max_keep_ckpts=15,
     create_symlink=False
 )
 
