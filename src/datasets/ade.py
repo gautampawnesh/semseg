@@ -30,7 +30,10 @@ class UniversalAdeDataset(BaseDataset):
                  data_seed=1,
                  is_extra_class_mapping=False,
                  extra_class_map=None,
-                 benchmark=False):
+                 benchmark=False,
+                 extra_img_dir=None,
+                 extra_ann_dir=None
+                 ):
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = []
         super(UniversalAdeDataset, self).__init__(
@@ -57,7 +60,9 @@ class UniversalAdeDataset(BaseDataset):
             data_seed=data_seed,
             is_extra_class_mapping=is_extra_class_mapping,
             extra_class_map=extra_class_map,
-            benchmark=benchmark
+            benchmark=benchmark,
+            extra_img_dir=extra_img_dir,
+            extra_ann_dir=extra_ann_dir
         )
 
     def dataset_ids_to_universal_label_mapping(self):

@@ -67,13 +67,17 @@ class BaseDataset(CustomDataset):
                  data_seed=1,
                  is_extra_class_mapping=False,
                  extra_class_map=None,
-                 benchmark=False):
+                 benchmark=False,
+                 extra_img_dir=None,
+                 extra_ann_dir=None):
         self.benchmark = benchmark
         self.data_seed = data_seed
         self.pipeline = Compose(pipeline)
         self.img_dir = img_dir
+        self.extra_img_dir = extra_img_dir
         self.img_suffix = img_suffix
         self.ann_dir = ann_dir
+        self.extra_ann_dir = extra_ann_dir
         self.seg_map_suffix = seg_map_suffix
         self.split = split
         self.data_root = data_root
@@ -90,9 +94,13 @@ class BaseDataset(CustomDataset):
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
                 self.img_dir = osp.join(self.data_root, self.img_dir)
+            if not osp.isabs(self.extra_img_dir):
+                self.extra_img_dir = osp.join(self.data_root, self.extra_img_dir)
             if not (self.ann_dir is None or osp.isabs(self.ann_dir)):
                 self.ann_dir = osp.join(self.data_root, self.ann_dir)
-            if not (self.split is None or osp.isabs(self.split)):
+            if not (self.extra_ann_dir is None or osp.isabs(self.extra_ann_dir)):
+                self.extra_ann_dir = osp.join(self.data_root, self.extra_ann_dir)
+            if not (self.split is None):
                 # self.split = osp.join(self.data_root, self.split)
                 # Todo: playing for data doesnt have split folder. and split files are at diff location
                 self.split = self.split
@@ -193,7 +201,7 @@ class BaseDataset(CustomDataset):
         mapping = dict(zip(color_tuples, uni_cls_ids))
         return mapping
 
-    def images_labels_validation(self, images):
+    def images_labels_validation(self, images, img_dir, ann_dir):
         """
         Args:
              images: list of images
@@ -208,7 +216,7 @@ class BaseDataset(CustomDataset):
             if img_path in pre_defined_invalid_images:
                 continue
             label_path = Path(str(img_path).replace(
-                self.img_dir, self.ann_dir).replace(self.img_suffix, self.seg_map_suffix))
+                img_dir, ann_dir).replace(self.img_suffix, self.seg_map_suffix))
             # VIPER dataset has some empty images
             if img_path.stat().st_size != 0 and label_path.stat().st_size != 0:
                 # Todo: playing for data has white images
@@ -219,13 +227,31 @@ class BaseDataset(CustomDataset):
 
     def data_df(self):
         """data df with image path and annotations"""
+        extra_images, all_extra_images = [], []
         images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        if self.extra_img_dir:
+            # validation dataset
+            all_extra_images = list(Path(self.extra_img_dir).glob(f"**/*{self.img_suffix}"))
+            # keeping away test dataset from validation dataset
+            extra_images = all_extra_images[:-200]
         if not self.benchmark:
-            images, labels = self.images_labels_validation(images)
+            # get only unseen data for test
+            if self.extra_img_dir and self.test_mode:
+                images = all_extra_images[-200:]
+                images, labels = self.images_labels_validation(images, self.extra_img_dir, self.extra_ann_dir)
+            else:
+                images, labels = self.images_labels_validation(images, self.img_dir, self.ann_dir)
+                if self.extra_img_dir:
+                    extra_images, extra_labels = self.images_labels_validation(extra_images, self.extra_img_dir, self.extra_ann_dir)
+                    images.extend(extra_images)
+                    labels.extend(extra_labels)
+
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
         else:
             data_df = pd.DataFrame.from_dict({"image": images})
+
+
         if self.num_samples is None:
             return data_df
         else:

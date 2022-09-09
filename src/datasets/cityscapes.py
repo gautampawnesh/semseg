@@ -30,7 +30,10 @@ class UniversalCityscapesDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
                  data_seed=1,
-                 benchmark=False):
+                 benchmark=False,
+                 extra_img_dir=None,
+                 extra_ann_dir=None
+                 ):
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]
         super(UniversalCityscapesDataset, self).__init__(
@@ -55,7 +58,9 @@ class UniversalCityscapesDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             data_seed=data_seed,
-            benchmark=benchmark
+            benchmark=benchmark,
+            extra_img_dir=extra_img_dir,
+            extra_ann_dir=extra_ann_dir
         )
 
     def dataset_ids_to_universal_label_mapping(self):

@@ -34,7 +34,9 @@ class UniversalScannetDataset(BaseDataset):
                  is_color_to_uni_class_mapping=True,
                  num_samples=None,
                  data_seed=1,
-                 benchmark=False
+                 benchmark=False,
+                 extra_img_dir=None,
+                 extra_ann_dir=None
                  ):
 
         # mark all non eval classes to 0 based on gt label id
@@ -61,7 +63,9 @@ class UniversalScannetDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             data_seed=data_seed,
-            benchmark=benchmark
+            benchmark=benchmark,
+            extra_img_dir=extra_img_dir,
+            extra_ann_dir=extra_ann_dir
         )
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -72,17 +76,33 @@ class UniversalScannetDataset(BaseDataset):
         mapping = dict(zip(label_ids, uni_cls_ids))
         return mapping
 
+    def fetch_files(self, split_file):
+        images, labels = [], []
+        with open(split_file, "r") as fp:
+            data = json.load(fp)
+        for each_img, each_ann in zip(data["images"], data["annotations"]):
+            ann_file = each_img['file_name'].replace("frame/color", "annotation/segmentation")
+            ann_file = ann_file.replace(self.img_suffix, self.seg_map_suffix)
+            images.append(Path(osp.join(self.img_dir, each_img['file_name'])))
+            labels.append(Path(osp.join(self.ann_dir, ann_file)))
+        return images, labels
+
     def data_df(self):
         """fetch data from the disk"""
-        if self.split:
-            images, labels = [], []
-            with open(self.split, "r") as fp:
-                data = json.load(fp)
-            for each_img, each_ann in zip(data["images"], data["annotations"]):
-                ann_file = each_img['file_name'].replace("frame/color", "annotation/segmentation")
-                ann_file = ann_file.replace(self.img_suffix, self.seg_map_suffix)
-                images.append(Path(osp.join(self.img_dir, each_img['file_name'])))
-                labels.append(Path(osp.join(self.ann_dir, ann_file)))
+        if self.split and isinstance(self.split, list):
+            if self.test_mode:
+                val_images, val_labels = self.fetch_files(self.split[0])
+                images, labels = val_images[-200:], val_labels[-200:]
+            else:
+                # training data
+                images, labels = self.fetch_files(self.split[0])
+                if len(self.split) == 2:
+                    # validation data
+                    val_images, val_labels = self.fetch_files(self.split[1])
+                    val_images, val_labels = val_images[:-200], val_labels[:-200]
+                    images.extend(val_images)
+                    labels.extend(val_labels)
+
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
             if self.num_samples:
