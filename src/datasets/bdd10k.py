@@ -30,6 +30,7 @@ class UniversalBdd10kDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
                  data_seed=1,
+                 img_meta_data=None,
                  benchmark=False
                 ):
         super(UniversalBdd10kDataset, self).__init__(
@@ -54,6 +55,7 @@ class UniversalBdd10kDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             data_seed=data_seed,
+            img_meta_data=img_meta_data,
             benchmark=benchmark
         )
 

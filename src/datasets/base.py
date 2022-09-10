@@ -67,10 +67,12 @@ class BaseDataset(CustomDataset):
                  data_seed=1,
                  is_extra_class_mapping=False,
                  extra_class_map=None,
+                 img_meta_data=None,
                  benchmark=False):
         self.benchmark = benchmark
         self.data_seed = data_seed
         self.pipeline = Compose(pipeline)
+        self.img_meta_data = img_meta_data
         self.img_dir = img_dir
         self.img_suffix = img_suffix
         self.ann_dir = ann_dir
@@ -219,13 +221,20 @@ class BaseDataset(CustomDataset):
 
     def data_df(self):
         """data df with image path and annotations"""
-        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+
         if not self.benchmark:
-            images, labels = self.images_labels_validation(images)
-            data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-            data_df = data_df.sort_values("image")
+            if self.img_meta_data:
+                data_df = pd.read_csv(self.img_meta_data)
+                data_df = data_df.sort_values("image")
+            else:
+                images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+                images, labels = self.images_labels_validation(images)
+                data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
+                data_df = data_df.sort_values("image")
         else:
+            images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
             data_df = pd.DataFrame.from_dict({"image": images})
+
         if self.num_samples is None:
             return data_df
         else:

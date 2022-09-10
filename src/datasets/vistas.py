@@ -31,6 +31,7 @@ class VistasDataset(BaseDataset):
                  data_seed=1,
                  is_extra_class_mapping=False,
                  extra_class_map=None,
+                 img_meta_data=None,
                  benchmark=False
                  ):
         # mark all non eval classes to 0 based on gt label id
@@ -59,6 +60,7 @@ class VistasDataset(BaseDataset):
             data_seed=data_seed,
             is_extra_class_mapping=is_extra_class_mapping,
             extra_class_map=extra_class_map,
+            img_meta_data=img_meta_data,
             benchmark=benchmark
         )
 
@@ -74,13 +76,19 @@ class VistasDataset(BaseDataset):
         """fetch data from the disk"""
         if self.split:
             raise NotImplementedError
-        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-        if not self.benchmark:
+
+        if self.benchmark:
+            images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+            data_df = pd.DataFrame.from_dict({"image": images})
+        elif self.img_meta_data:
+            data_df = pd.read_csv(self.img_meta_data)
+            data_df = data_df.sort_values("image")
+        else:
+            images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
             images, labels = self.images_labels_validation(images)
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
-        else:
-            data_df = pd.DataFrame.from_dict({"image": images})
+
         if self.num_samples is None:
             return data_df
         else:

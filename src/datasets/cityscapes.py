@@ -30,6 +30,7 @@ class UniversalCityscapesDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
                  data_seed=1,
+                 img_meta_data=None,
                  benchmark=False):
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]
@@ -55,6 +56,7 @@ class UniversalCityscapesDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             data_seed=data_seed,
+            img_meta_data=img_meta_data,
             benchmark=benchmark
         )
 

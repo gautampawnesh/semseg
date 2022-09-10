@@ -28,6 +28,7 @@ class UniversalPlayingForDataDataset(BaseDataset):
                  dataset_name="playing_for_data",
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
+                 img_meta_data=None,
                  data_seed=1
                 ):
         super(UniversalPlayingForDataDataset, self).__init__(
@@ -51,6 +52,7 @@ class UniversalPlayingForDataDataset(BaseDataset):
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
+            img_meta_data=img_meta_data,
             data_seed=data_seed
         )
 

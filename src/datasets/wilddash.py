@@ -30,6 +30,7 @@ class UniversalWilddashDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
                  data_seed=1,
+                 img_meta_data=None,
                  benchmark=False):
 
         # mark all non eval classes to 0 based on gt label id
@@ -55,6 +56,7 @@ class UniversalWilddashDataset(BaseDataset):
             dataset_name=dataset_name,
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
+            img_meta_data=img_meta_data,
             data_seed=data_seed,
             benchmark=benchmark
         )
@@ -63,27 +65,27 @@ class UniversalWilddashDataset(BaseDataset):
         """fetch data from the disk"""
         if self.split:
             raise NotImplementedError
-        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+
         if self.benchmark:
+            images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
             data_df = pd.DataFrame.from_dict({"image": images})
-            if self.num_samples is None:
-                return data_df
+        elif self.img_meta_data:
+            data_df = pd.read_csv(self.img_meta_data)
+            if self.test_mode:
+                data_df = data_df[3556:]
             else:
-                try:
-                    return data_df.sample(n=self.num_samples, random_state=self.data_seed)
-                except Exception as e:
-                    return data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
-        if self.test_mode:
-            images = images[3556:]
+                data_df = data_df[:3556]
         else:
-            images = images[:3556]
-        # if self.num_samples:
-        #     import random
-        #     random.seed(self.data_seed)
-        #     images = random.sample(images, self.num_samples)
-        images, labels = self.images_labels_validation(images)
-        data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
-        data_df = data_df.sort_values("image")
+            images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+            if self.test_mode:
+                images = images[3556:]
+            else:
+                images = images[:3556]
+            images, labels = self.images_labels_validation(images)
+            data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
+            data_df = data_df.sort_values("image")
+
+
         if self.num_samples is None:
             return data_df
         else:
