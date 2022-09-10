@@ -89,6 +89,7 @@ class UniversalScannetDataset(BaseDataset):
 
     def data_df(self):
         """fetch data from the disk"""
+        print(f"{self.dataset_name} Loading ...")
         if self.split and isinstance(self.split, list):
             if self.test_mode:
                 val_images, val_labels = self.fetch_files(self.split[0])

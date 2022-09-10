@@ -18,11 +18,11 @@ resume_from = None
 _base_ = [
     '../../_base_/default_runtime.py',
     '../../_base_/models/flat/flat_train_deeplabv3plus_r101-d8.py',
-    '../../_base_/datasets/flat/FMD7_all_512_512.py',
+    '../../_base_/datasets/flat/FMD7_all_512_512_val_train.py',
 ]
 ignore_index = 0
 
-data = dict(samples_per_gpu=4,
+data = dict(samples_per_gpu=8,
             workers_per_gpu=6)
 
 model = dict(
@@ -78,8 +78,8 @@ lr_config = dict(
 
 # runtime settings
 runner = dict(
-    type='EpochBasedRunner',
-    max_epochs=2)
+    type='IterBasedRunner',
+    max_iters=500)
 
 # checkpoints settings
 checkpoint_config = dict(
@@ -89,6 +89,6 @@ checkpoint_config = dict(
     create_symlink=False
 )
 
-evaluation = dict(_delete_=True, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
+evaluation = dict(_delete_=True, interval=100, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
 
 log_level = 'INFO'

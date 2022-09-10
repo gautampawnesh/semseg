@@ -15,6 +15,7 @@ from collections import Counter
 from prettytable import PrettyTable
 from mmseg.core import pre_eval_to_metrics, intersect_and_union
 import colorcet as cc
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +95,7 @@ class BaseDataset(CustomDataset):
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
                 self.img_dir = osp.join(self.data_root, self.img_dir)
-            if not osp.isabs(self.extra_img_dir):
+            if not (self.extra_img_dir is None or osp.isabs(self.extra_img_dir)):
                 self.extra_img_dir = osp.join(self.data_root, self.extra_img_dir)
             if not (self.ann_dir is None or osp.isabs(self.ann_dir)):
                 self.ann_dir = osp.join(self.data_root, self.ann_dir)
@@ -104,7 +105,7 @@ class BaseDataset(CustomDataset):
                 # self.split = osp.join(self.data_root, self.split)
                 # Todo: playing for data doesnt have split folder. and split files are at diff location
                 self.split = self.split
-
+        self.file_client = mmcv.FileClient.infer_client(dict(backend="disk"))
         self.universal_class_colors_path = Path(universal_class_colors_path) if universal_class_colors_path else None
         self.dataset_class_mapping_path = Path(dataset_class_mapping) if dataset_class_mapping else None
         assert self.universal_class_colors_path is not None, "Universal class colors path is missing"
@@ -227,11 +228,17 @@ class BaseDataset(CustomDataset):
 
     def data_df(self):
         """data df with image path and annotations"""
-        extra_images, all_extra_images = [], []
-        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        extra_images, all_extra_images, images = [], [], []
+
+        images = self.file_client.list_dir_or_file(dir_path=self.img_dir, list_dir=False, suffix=self.img_suffix, recursive=True)
+        images = [Path(self.img_dir + "/" + img) for img in images]
+
+        print(f"{self.dataset_name} Loading ...")
+        #images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
         if self.extra_img_dir:
             # validation dataset
-            all_extra_images = list(Path(self.extra_img_dir).glob(f"**/*{self.img_suffix}"))
+            all_extra_images = self.file_client.list_dir_or_file(dir_path=self.extra_img_dir, list_dir=False, suffix=self.img_suffix, recursive=True)
+            all_extra_images = [Path(img) for img in all_extra_images]
             # keeping away test dataset from validation dataset
             extra_images = all_extra_images[:-200]
         if not self.benchmark:

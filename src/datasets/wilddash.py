@@ -2,6 +2,7 @@ from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
 import pandas as pd
 from pathlib import Path
+from tqdm import tqdm
 import json
 import os.path as osp
 
@@ -67,8 +68,10 @@ class UniversalWilddashDataset(BaseDataset):
         """fetch data from the disk"""
         if self.split:
             raise NotImplementedError
-        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
-
+        print(f"{self.dataset_name} Loading ...")
+        images = self.file_client.list_dir_or_file(dir_path=self.img_dir, list_dir=False, suffix=self.img_suffix,
+                                                   recursive=True)
+        images = [Path(self.img_dir + "/" + img) for img in tqdm(images)]
         if self.benchmark:
             data_df = pd.DataFrame.from_dict({"image": images})
         else:

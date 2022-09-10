@@ -1,7 +1,7 @@
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (512, 512)
+crop_size = (768, 768)
 data_seed = 1
 
 train_pipeline = [
@@ -396,8 +396,9 @@ bdd_data = dict(
 data = dict(
     train=dict(
         type="CustomConcatDataset",
-        datasets=[idd_data["train"], gta_data["train"], bdd_data["train"], city_data["train"], viper_data["train"], vistas_data["train"], ade_data["train"],
-                  wild_data["train"], scannet_data["train"]],
+        # datasets=[idd_data["train"], gta_data["train"], bdd_data["train"], city_data["train"], viper_data["train"], vistas_data["train"], ade_data["train"],
+        #           wild_data["train"], scannet_data["train"]],
+        datasets=[vistas_data["train"]],
     ),
     val=dict(
         type="CustomConcatDataset",

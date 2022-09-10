@@ -4,6 +4,7 @@ from mmseg.datasets.builder import DATASETS
 from src.datasets.base import BaseDataset
 import pandas as pd
 from pathlib import Path
+from tqdm import tqdm
 
 
 @DATASETS.register_module()
@@ -74,14 +75,19 @@ class UniversalViperDataset(BaseDataset):
 
     def data_df(self):
         """fetch data from the disk"""
+        print(f"{self.dataset_name} Loading ...")
         extra_images, all_extra_images = [], []
         if self.split:
             raise NotImplementedError
-        images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
+        images = self.file_client.list_dir_or_file(dir_path=self.img_dir, list_dir=False, suffix=self.img_suffix,
+                                                   recursive=True)
+        images = [Path(self.img_dir + "/" + img) for img in images]
 
         if self.extra_img_dir:
             # validation dataset
-            all_extra_images = list(Path(self.extra_img_dir).glob(f"**/*{self.img_suffix}"))
+            all_extra_images = self.file_client.list_dir_or_file(dir_path=self.extra_img_dir, list_dir=False,
+                                                                 suffix=self.img_suffix, recursive=True)
+            all_extra_images = [Path(img) for img in all_extra_images]
             # keeping away test dataset from validation dataset
             extra_images = all_extra_images[:-200]
 
