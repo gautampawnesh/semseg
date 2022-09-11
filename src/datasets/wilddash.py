@@ -71,10 +71,7 @@ class UniversalWilddashDataset(BaseDataset):
             data_df = pd.DataFrame.from_dict({"image": images})
         elif self.img_meta_data:
             data_df = pd.read_csv(self.img_meta_data)
-            if self.test_mode:
-                data_df = data_df[3556:]
-            else:
-                data_df = data_df[:3556]
+            data_df = data_df.sort_values("image")
         else:
             images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
             if self.test_mode:
