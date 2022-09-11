@@ -34,6 +34,7 @@ class UniversalScannetDataset(BaseDataset):
                  is_color_to_uni_class_mapping=True,
                  num_samples=None,
                  data_seed=1,
+                 img_meta_data=None,
                  benchmark=False
                  ):
 
@@ -61,6 +62,7 @@ class UniversalScannetDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             data_seed=data_seed,
+            img_meta_data=img_meta_data,
             benchmark=benchmark)
 
     def dataset_ids_to_universal_label_mapping(self):
@@ -73,7 +75,10 @@ class UniversalScannetDataset(BaseDataset):
 
     def data_df(self):
         """fetch data from the disk"""
-        if self.split:
+        if self.img_meta_data:
+            data_df = pd.read_csv(self.img_meta_data)
+            data_df = data_df.sort_values("image")
+        elif self.split:
             images, labels = [], []
             with open(self.split, "r") as fp:
                 data = json.load(fp)
@@ -84,15 +89,17 @@ class UniversalScannetDataset(BaseDataset):
                 labels.append(Path(osp.join(self.ann_dir, ann_file)))
             data_df = pd.DataFrame.from_dict({"image": images, "label": labels})
             data_df = data_df.sort_values("image")
-            if self.num_samples:
-                try:
-                    data_df = data_df.sample(n=self.num_samples, random_state=self.data_seed)
-                except:
-                    data_df = data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
-
-            return data_df
         else:
             raise NotImplementedError
+
+        if self.num_samples:
+            try:
+                data_df = data_df.sample(n=self.num_samples, random_state=self.data_seed)
+            except:
+                data_df = data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
+
+        return data_df
+
 
     def pre_eval(self, preds, indices):
         """
