@@ -29,8 +29,7 @@ class UniversalPlayingForDataDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
                  img_meta_data=None,
-                 data_seed=1
-                ):
+                 data_seed=1):
         super(UniversalPlayingForDataDataset, self).__init__(
             pipeline,
             img_dir,

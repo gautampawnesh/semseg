@@ -61,8 +61,7 @@ class UniversalScannetDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             data_seed=data_seed,
-            benchmark=benchmark
-        )
+            benchmark=benchmark)
 
     def dataset_ids_to_universal_label_mapping(self):
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
