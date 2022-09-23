@@ -3,7 +3,7 @@ experiment = dict(
     description=" All 9 dataset classes mapped to universal classes with flat deeplabv3+ model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/FMD7"
+work_dir = "/netscratch/gautam/semseg/exp_results/test_FMD7"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -11,8 +11,8 @@ seed = 1
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220705_062238/epoch_90.pth"
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220724_155407/epoch_10.pth"
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220725_103634/epoch_9.pth"
-#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220726_235911/epoch_10.pth"
-load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220920_090341/epoch_1.pth"
+load_from = None #"/netscratch/gautam/semseg/exp_results/FMD7/training/20220726_235911/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220920_090341/epoch_1.pth"
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220914_072206/epoch_10.pth" delete
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220917_090039/epoch_2.pth" delete
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220917_200349/epoch_8.pth" delete
@@ -76,27 +76,7 @@ optimizer = dict(
 )
 optimizer_config = dict()
 
-# learning policy
-lr_config = dict(
-    policy='poly',
-    #power=0.9,
-    power=1.2,
-    min_lr=1e-8,
-    by_epoch=False)
 
-# runtime settings
-runner = dict(
-    type='IterBasedRunner',
-    max_iters=80000)
-
-# checkpoints settings
-checkpoint_config = dict(
-    by_epoch=False,
-    interval=8000,
-    max_keep_ckpts=15,
-    create_symlink=False
-)
-
-evaluation = dict(_delete_=True, interval=8000, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
+evaluation = dict(_delete_=True, interval=1, metric="mIoU", gpu_collect=True, pre_eval=True, save_best="mIoU")
 
 log_level = 'INFO'

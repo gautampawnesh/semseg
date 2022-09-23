@@ -34,7 +34,7 @@ import pandas as pd
 
 CFG_DICT = None
 IMG_INFERENCE_SEED = 3  # random seed to select test images for inference
-IMG_INFERENCE_NUMBER = 1  # number of images used for inference
+IMG_INFERENCE_NUMBER = 200  # number of images used for inference
 EVALUATION_FILE = "evaluation.csv"
 INF_FOLDER = "pred_labels"
 

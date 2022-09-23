@@ -44,7 +44,7 @@ test_pipeline = [
     dict(
         type='MultiScaleFlipAug',
         img_scale=(2048, 1024),
-        #img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
+        #img_ratios=[0.75, 1.0, 1.25],
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -154,7 +154,7 @@ vistas_data = dict(
         #ann_dir='validation/v1.2/labels',
         seg_map_suffix='.png',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
-        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
+        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/FMD7_vistas_class_mapping.csv",
         dataset_name="vistas",
         #num_samples=500,
         test_mode=True,
@@ -167,7 +167,7 @@ vistas_data = dict(
         seg_map_suffix='.png',
         class_color_mode="RGB",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
-        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas_class_mapping.csv",
+        dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/FMD7_vistas_class_mapping.csv",
         dataset_name="vistas",
         benchmark=True,
         pipeline=test_pipeline))
@@ -230,6 +230,7 @@ wild_data = dict(
         data_root='/ds-av/public_datasets/wilddash2/raw/public',
         img_dir='images',
         ann_dir='labels',
+        img_meta_data="/netscratch/gautam/semseg/FMD7_data_metadata/wilddash_raw_val_dataset.csv",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/wilddash_class_mapping.csv",
         seg_map_suffix='.png',
@@ -399,5 +400,5 @@ data = dict(
         datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"],
                   wild_data["val"], scannet_data["val"]]
     ),
-    test=vistas_data["val"]
+    test=wild_data["val"]
 )

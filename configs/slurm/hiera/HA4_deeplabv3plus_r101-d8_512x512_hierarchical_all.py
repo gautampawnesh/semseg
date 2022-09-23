@@ -8,7 +8,8 @@ work_dir = "/netscratch/gautam/semseg/final_weights/HA4_test/"
 seed = 1
 # checkpoint file to load weights from
 #load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_10.pth"
-load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220901_120108/epoch_6.pth"
+#load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220901_120108/epoch_6.pth"
+load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220919_141441/epoch_6.pth"
 # checkpoint file to resume from
 #resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_6.pth"
 #resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_8.pth"
@@ -33,7 +34,8 @@ optimizer = dict(
     type='SGD',
     #lr=0.007,
     #lr=0.0007,
-    lr=0.0004,
+    #lr=0.0004,
+    lr=1.810e-04,
     momentum=0.9,
     weight_decay=0.0005)
 
