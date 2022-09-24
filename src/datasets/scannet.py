@@ -78,7 +78,7 @@ class UniversalScannetDataset(BaseDataset):
         if self.img_meta_data:
             data_df = pd.read_csv(self.img_meta_data)
             data_df = data_df.sort_values("image")
-        if self.benchmark:
+        elif self.benchmark:
             images = list(Path(self.img_dir).glob(f"**/*{self.img_suffix}"))
             data_df = pd.DataFrame.from_dict({"image": images})
         elif self.split:
