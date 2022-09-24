@@ -153,12 +153,13 @@ vistas_data = dict(
         img_dir='validation/images',
         #ann_dir='validation/v1.2/labels',
         seg_map_suffix='.png',
+        img_meta_data="/netscratch/gautam/semseg/FMD7_data_metadata/vistas_raw_val_dataset.csv",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/FMD7_vistas_class_mapping.csv",
         dataset_name="vistas",
         #num_samples=500,
         test_mode=True,
-        benchmark=True,
+        #benchmark=True,
         pipeline=test_pipeline),
     test=dict(
         type='VistasDataset',
@@ -281,15 +282,14 @@ scannet_data = dict(
         pipeline=val_pipeline),
     test=dict(
         type='UniversalScannetDataset',
-        data_root='/netscratch/gautam/scannet/',
-        img_dir='scans',
-        ann_dir='scans',
-        split="/netscratch/gautam/scannet/scannet_val.json",
+        data_root='/ds-av/public_datasets/scannet/raw/tasks/',
+        img_dir='scannet_frames_test',
+        img_suffix=".jpg",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
-        seg_map_suffix='_labelId.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="scannet",
+        benchmark=True,
         pipeline=test_pipeline))
 
 idd_data = dict(
@@ -400,5 +400,5 @@ data = dict(
         datasets=[city_data["val"], viper_data["val"], vistas_data["val"], ade_data["val"],
                   wild_data["val"], scannet_data["val"]]
     ),
-    test=wild_data["val"]
+    test=scannet_data["test"]
 )
