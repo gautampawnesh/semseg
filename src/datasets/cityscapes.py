@@ -33,6 +33,7 @@ class UniversalCityscapesDataset(BaseDataset):
                  img_meta_data=None,
                  benchmark=False):
         # mark all non eval classes to 0 based on gt label id
+        # following are the non-evaluation labels for cityscapes.
         self.gt_non_eval_classes = [1, 2, 3, 4, 5, 6, 9, 10, 14, 15, 16, 18, 29, 30, -1]
         super(UniversalCityscapesDataset, self).__init__(
             pipeline,
@@ -61,6 +62,11 @@ class UniversalCityscapesDataset(BaseDataset):
         )
 
     def dataset_ids_to_universal_label_mapping(self):
+        """
+        Forward mapping
+        Example: Label ids to universal ids
+        :returns: (dict) source to destination ids map.
+        """
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
         label_ids = [(id,) for id in label_ids]
