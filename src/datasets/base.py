@@ -39,6 +39,7 @@ class BaseDataset(CustomDataset):
             generated.
         gt_seg_map_loader_cfg: build LoadAnnotations to load gt for evaluation, load from disk by default.
         file_client_args: arguments to instatiate a FileClient.
+        universal_class_colors_path: Unified class list for universal models
     """
     CLASSES = None
     PALETTE = None
@@ -113,6 +114,7 @@ class BaseDataset(CustomDataset):
         else:
             self.cls_mapping = self.dataset_ids_to_universal_label_mapping()
 
+        # Todo: Add description
         if self.is_extra_class_mapping:
             assert self.extra_class_map is not None, "Missing extra class map"
             self.num_classes = len(self.extra_class_map)
@@ -141,6 +143,9 @@ class BaseDataset(CustomDataset):
     def set_pred_backward_class_mapping(self):
         """
         set mapping for predictions from Unified (universal) classes to dataset specific classes.
+        - Required for universal models
+        - example: To map universal classes (1-191) to dataset specific label ids.
+        - example: universal id for car is "1" to cityscape id "26"
         :return:
         """
         pred_class_mapping = {(0,): 0}
@@ -197,6 +202,7 @@ class BaseDataset(CustomDataset):
 
     def images_labels_validation(self, images):
         """
+        Validation and add annotation path for samples based on argument ann_dir and img_dir
         Args:
              images: list of images
         """
@@ -220,7 +226,13 @@ class BaseDataset(CustomDataset):
         return valid_images, valid_labels
 
     def data_df(self):
-        """data df with image path and annotations"""
+        """
+        Selection of samples for training, benchmarking and evaluation.
+        - case 1: Training: if img_meta_data argument available, fetches the samples path from this file
+        - case 2: Training: if not img_meta_data argument available, scan the samples and load paths.
+        - case 3: Benchmarking: GroundTruth are not loaded, only scans the input samples and load paths.
+        :returns: Based on num_samples argument, returns the desired samples based on data_seed argument.
+        """
 
         if not self.benchmark:
             if self.img_meta_data:
