@@ -142,11 +142,13 @@ class BaseDataset(CustomDataset):
 
     def set_pred_backward_class_mapping(self):
         """
+        Backward Map
+
         set mapping for predictions from Unified (universal) classes to dataset specific classes.
         - Required for universal models
         - example: To map universal classes (1-191) to dataset specific label ids.
         - example: universal id for car is "1" to cityscape id "26"
-        :return:
+        :return: (dict) source to destination id map.
         """
         pred_class_mapping = {(0,): 0}
         class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
@@ -290,6 +292,9 @@ class BaseDataset(CustomDataset):
 
     def pred_backward_class_mapping(self, preds):
         """
+        Execute backward mapping:
+        Maps the input ids to destination ids based on 'self.pred_backward_mapping'
+
         Args:
             preds (list[torch.Tensor] | torch.Tensor): the segmentation logit
                 after argmax, shape (N, H, W).
@@ -322,6 +327,7 @@ class BaseDataset(CustomDataset):
 
     def gt_backward_class_mapping(self, gt):
         """
+        Maps non-evaluation ids to 0
         mark non evaluation ground truth classes to 0
         :return: list of np. array
         """
@@ -365,7 +371,7 @@ class BaseDataset(CustomDataset):
         pre_eval_results = []
 
         for pred, index in zip(preds, indices):
-            # In test mode, seg_map will receive dataset specific labels
+            # In evaluation mode, seg_map will receive dataset specific labels
             seg_map = self.get_gt_seg_map_by_idx(index)
 
             if not self.is_extra_class_mapping:
