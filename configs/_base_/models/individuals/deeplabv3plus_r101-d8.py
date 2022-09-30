@@ -1,10 +1,10 @@
 # model settings
 norm_cfg = dict(type="SyncBN", requires_grad=True)
 
-checkpoint_file="/netscratch/gautam/semseg/exp_results/FMD7/training/20220726_235911/epoch_10.pth" ###NEW::
 
 model = dict(
     type="EncoderDecoder",
+    pretrained='open-mmlab://resnet101_v1c',
     backbone=dict(
         type="ResNetV1c",
         depth=101,
@@ -16,10 +16,7 @@ model = dict(
         norm_cfg=norm_cfg,
         norm_eval=False,
         style="pytorch",
-        contract_dilation=True,
-        init_cfg=dict(
-            type='Pretrained', checkpoint=checkpoint_file,
-            prefix='backbone.')
+        contract_dilation=True
     ),
     decode_head=dict(
         type="DepthwiseSeparableASPPHead",
