@@ -39,7 +39,10 @@ class BaseDataset(CustomDataset):
             generated.
         gt_seg_map_loader_cfg: build LoadAnnotations to load gt for evaluation, load from disk by default.
         file_client_args: arguments to instatiate a FileClient.
+        is_extra_class_mapping: To compute IoU's of each heads [debugging purpose]
+        img_meta_data: samples absolute path information
         universal_class_colors_path: Unified class list for universal models
+        benchmark: to perform benchmarking, means no evaluation : only model outputs.
     """
     CLASSES = None
     PALETTE = None
@@ -69,10 +72,12 @@ class BaseDataset(CustomDataset):
                  is_extra_class_mapping=False,
                  extra_class_map=None,
                  img_meta_data=None,
-                 benchmark=False):
+                 benchmark=False,
+                 is_universal_network=True):
+
+        self.pipeline = Compose(pipeline)
         self.benchmark = benchmark
         self.data_seed = data_seed
-        self.pipeline = Compose(pipeline)
         self.img_meta_data = img_meta_data
         self.img_dir = img_dir
         self.img_suffix = img_suffix
@@ -84,11 +89,19 @@ class BaseDataset(CustomDataset):
         self.ignore_index = ignore_index
         self.reduce_zero_label = reduce_zero_label
         self.label_map = {}
+        self.is_universal_network = is_universal_network
         self.dataset_name = dataset_name
         self.is_color_to_uni_class_mapping = is_color_to_uni_class_mapping
         self.num_samples = num_samples
         self.is_extra_class_mapping = is_extra_class_mapping
         self.extra_class_map = extra_class_map
+        self.universal_class_colors_path = Path(universal_class_colors_path) if universal_class_colors_path else None
+        self.dataset_class_mapping_path = Path(dataset_class_mapping) if dataset_class_mapping else None
+        assert self.universal_class_colors_path is not None, "Universal class colors path is missing"
+        assert self.dataset_class_mapping_path is not None, "Dataset class colors path is missing"
+        self.load_annotations = LoadAnnotations()
+        self.map_annotations = MapAnnotations()
+
         # join paths if data_root is specified
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
@@ -100,12 +113,6 @@ class BaseDataset(CustomDataset):
                 # Todo: playing for data doesnt have split folder. and split files are at diff location
                 self.split = self.split
 
-        self.universal_class_colors_path = Path(universal_class_colors_path) if universal_class_colors_path else None
-        self.dataset_class_mapping_path = Path(dataset_class_mapping) if dataset_class_mapping else None
-        assert self.universal_class_colors_path is not None, "Universal class colors path is missing"
-        assert self.dataset_class_mapping_path is not None, "Dataset class colors path is missing"
-        self.load_annotations = LoadAnnotations()
-        self.map_annotations = MapAnnotations()
         # define cls.CLASSES and cls.PALETTE
         self.set_universal_classes_and_palette()
         self.DATASET_CLASSES, self.DATASET_PALETTE, self.DATASET_LABEL_IDS = self.set_dataset_classes_and_palette()
@@ -114,7 +121,7 @@ class BaseDataset(CustomDataset):
         else:
             self.cls_mapping = self.dataset_ids_to_universal_label_mapping()
 
-        # Todo: Add description
+        # Used for debugging purpose : Ignore
         if self.is_extra_class_mapping:
             assert self.extra_class_map is not None, "Missing extra class map"
             self.num_classes = len(self.extra_class_map)
@@ -122,8 +129,10 @@ class BaseDataset(CustomDataset):
             self.DATASET_PALETTE = ((np.array(seaborn.color_palette(cc.glasbey, self.num_classes))*255).astype(np.uint8).tolist())
             self.DATASET_LABEL_IDS = tuple(i for i in range(self.num_classes))
 
+        # sample ids- backward hashmap
         if not self.is_extra_class_mapping:
             self.pred_backward_mapping = self.set_pred_backward_class_mapping()
+        # samples
         self.data = self.data_df()
 
     def set_dataset_classes_and_palette(self):
@@ -142,12 +151,17 @@ class BaseDataset(CustomDataset):
 
     def set_pred_backward_class_mapping(self):
         """
-        Backward Map
-
+        Backward Map + Merge Map
+        Backward Map:
         set mapping for predictions from Unified (universal) classes to dataset specific classes.
         - Required for universal models
         - example: To map universal classes (1-191) to dataset specific label ids.
         - example: universal id for car is "1" to cityscape id "26"
+        Merge Map:
+        example: for cityscapes, [Road,crosswalk_plain,bike_lane,service_lane,general_marking,zebra..] are assigned to \
+        [Road] class.
+        - merging works based on the "universal_to_dataset" column in dataset file. If empty cell, this class is merged \
+        ignore category.
         :return: (dict) source to destination id map.
         """
         pred_class_mapping = {(0,): 0}
@@ -258,7 +272,16 @@ class BaseDataset(CustomDataset):
                 return data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
 
     def pre_pipeline(self, ind):
-        """returns sample wo processing"""
+        """
+        Metadata for a sample
+        examples: its mapping: from label ids to networks ids
+                num_classes: Number of classes
+                img_info: image files path
+                ann_info: ground truth file path
+                seg_fields: placeholder
+        :param ind:
+        :return: metadata of a sample
+        """
         data = self.data.iloc[ind]
         results = {
             "mapping": self.cls_mapping,
@@ -272,15 +295,31 @@ class BaseDataset(CustomDataset):
         return results
 
     def get_gt_seg_map_by_idx(self, index):
+        """
+        Fetches the samples
+        - Training: load samples based on "results" argument
+        - Evaluation: Test mode = True,
+        :param index:
+        :return: ground truth mask with universal/networks ids
+        """
+        # fetch the metadata for a sample
         results = self.pre_pipeline(index)
+        # load sample
         results = self.load_annotations(results)
+        # maps the sample ids. In training mode
         if not self.test_mode:
             results = self.map_annotations(results)
+        # for debugging purpose
         if self.is_extra_class_mapping:
             results = self.map_annotations(results)
         return results["gt_semantic_seg"]
 
     def get_gt_seg_maps(self, efficient_test=None):
+        """
+        Generator to fetches ground truths
+        :param efficient_test:
+        :return:
+        """
         if efficient_test is not None:
             logger.warning(
                 "DeprecationWarning: ``efficient_test`` has been deprecated "
@@ -292,7 +331,7 @@ class BaseDataset(CustomDataset):
 
     def pred_backward_class_mapping(self, preds):
         """
-        Execute backward mapping:
+        Execute backward+Merge mapping:
         Maps the input ids to destination ids based on 'self.pred_backward_mapping'
 
         Args:
@@ -301,7 +340,7 @@ class BaseDataset(CustomDataset):
         :param preds:
         :return: list of np. array
         """
-        # Todo: convert to tensor
+        # Todo: convert to tensor: FutureWork
         preds_mapped = []
 
         for pred in preds:
