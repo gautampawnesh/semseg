@@ -9,11 +9,13 @@ seed = 1
 # checkpoint file to load weights from
 #load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_10.pth"
 #load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220901_120108/epoch_6.pth"
-load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220919_141441/epoch_6.pth"
+#load_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220919_141441/epoch_6.pth"
+load_from = None
+
 # checkpoint file to resume from
 #resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_6.pth"
 #resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220823_072805/epoch_8.pth"
-resume_from = None
+resume_from = "/netscratch/gautam/semseg/final_weights/HA4_test/training/20220923_015504/epoch_5.pth"
 # Todo: update backbone pretrained checkpoint in model file
 
 _base_ = [

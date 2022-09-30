@@ -94,12 +94,9 @@ def image_inference(dataset, model, out_dir):
         # Ade+wilddash
         out_name = result["image"].stem
         if dataset.dataset_name == "scannet":
-            folder_name = result["image"].parent.name
-            folder_dir = osp.join(inf_output_dir, folder_name)
-            mmcv.mkdir_or_exist(osp.abspath(folder_dir))
-            save_loc = inf_output_dir + "/" + folder_dir + "/" + f"{out_name}.png"
-        else:
-            save_loc = inf_output_dir + "/" + f"{out_name}.png"
+            folder_name = result["image"].parent.parent.name
+            out_name = f"{folder_name}_{out_name}"
+        save_loc = inf_output_dir + "/" + f"{out_name}.png"
 
         save_inference_image(result, save_loc, dataset.DATASET_CLASSES, dataset.DATASET_PALETTE,
                              dataset.PALETTE, dataset.CLASSES, class_palette_to_label_palette_ind)

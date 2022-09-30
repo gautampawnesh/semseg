@@ -1,0 +1,190 @@
+Level 1;Level 2;Level 3;Id;Weight
+Vehicles;Small vehicles;Car;;1
+Vehicles;Small vehicles;Van;;1
+Vehicles;Small vehicles;Pickup truck;;1
+Vehicles;Small vehicles;ego_vehicles;;1
+Vehicles;Large Vehicles;Truck;;1
+Vehicles;Large Vehicles;Bus;;1
+Vehicles;Large Vehicles;Train;;1
+Vehicles;two_wheelers;Motorcycle ;;1
+Vehicles;two_wheelers;Bicycle;;1
+Vehicles;other_vehicels;Caravan;;1
+Vehicles;other_vehicels;wheeled_slow;;1
+Vehicles;other_vehicels;trailer;;1
+Vehicles;other_vehicels;other_vehicles;;1
+Vehicles;other_vehicels;Boat;;1
+Vehicles;other_vehicels;Plane;;1
+Flat;normal_road;road;;1
+Flat;normal_road;sidewalk;;1
+Flat;normal_road;Dirt track;;1
+Flat;normal_road;Bikelane;;1
+Flat;normal_road;Curb cut;;1
+Flat;normal_road;parking;;1
+Flat;normal_road;curb;;1
+Flat;normal_road;runway;;1
+Flat;normal_road;Service lane;;1
+Flat;normal_road;rail_track;;1
+Flat;normal_road;Pedestrian area;;1
+Flat;normal_road;Crosswalk plain;;1
+Flat;normal_road;Path;;1
+Flat;road_marking;General marking;;1
+Flat;road_marking;catch basin;;1
+Flat;road_marking;Zebra marking;;1
+Flat;road_marking;Pothole;;1
+Flat;road_marking;manhole;;1
+Flat;road_marking;all_road_marking;;1
+Construction;building_infra;Building;;1
+Construction;building_infra;house;;1
+Construction;building_infra;stairway;;1
+Construction;building_infra;Wall;;1
+Construction;building_infra;fence;;1
+Construction;building_infra;Grandstand;;1
+Construction;building_infra;step_stair;;1
+Construction;building_infra;Skyscraper;;1
+Construction;building_infra;Bridge;;1
+Construction;building_infra;guard_rail;;1
+Construction;building_infra;Stairs;;1
+Construction;building_infra;stage;;1
+Construction;building_infra;Column;;1
+Construction;building_infra;tunnel;;1
+Construction;other_infra;Pier-dock;;1
+Construction;other_infra;Bannister;;1
+Construction;other_infra;Hovel-hut;;1
+Construction;other_infra;Canopy;;1
+Construction;other_infra;Barrier;;1
+Construction;other_infra;Fountain;;1
+Construction;other_infra;awning-sunshade;;1
+Traffic_objects;pole_all;Pole;;1
+Traffic_objects;pole_all;Utility pole;;1
+Traffic_objects;pole_all;tower;;1
+Traffic_objects;Sign;traffic_sign;;1
+Traffic_objects;Sign;traffic_sign_frame;;1
+Traffic_objects;Sign;picture;;1
+Traffic_objects;Sign;Billboard;;1
+Traffic_objects;Sign;traffic_sign back;;1
+Traffic_objects;Sign;Poster;;1
+Traffic_objects;Sign;banner;;1
+Traffic_objects;Sign;trade-brand;;1
+Traffic_objects;glowing_obj;street_light;;1
+Traffic_objects;glowing_obj;Traffic light;;1
+Traffic_objects;glowing_obj;Light-source;;1
+Traffic_objects;Other_obj;trashcan;;1
+Traffic_objects;Other_obj;junction_box;;1
+Traffic_objects;Other_obj;bikerack;;1
+Traffic_objects;Other_obj;phone_booth;;1
+Traffic_objects;Other_obj;fyre_hydrant;;1
+Traffic_objects;Other_obj;cctv_camera;;1
+Traffic_objects;Other_obj;mailbox;;1
+Nature Objects;sky_ Vegetation;Tree;;1
+Nature Objects;sky_ Vegetation;plant;;1
+Nature Objects;sky_ Vegetation;palm_tree;;1
+Nature Objects;sky_ Vegetation;Vegetation;;1
+Nature Objects;sky_ Vegetation;Sky;;1
+Nature Objects;ground;terrain;;1
+Nature Objects;ground;soil-ground;;1
+Nature Objects;ground;Rock;;1
+Nature Objects;ground;Mountain;;1
+Nature Objects;ground;hill;;1
+Nature Objects;ground; earth-ground;;1
+Nature Objects;ground;Field;;1
+Nature Objects;other_entities;Water;;1
+Nature Objects;other_entities;river;;1
+Nature Objects;other_entities;Water-fall;;1
+Nature Objects;other_entities;Snow;;1
+Nature Objects;other_entities;Lake;;1
+Nature Objects;other_entities;Swimming-pool;;1
+Nature Objects;other_entities;sand;;1
+Nature Objects;other_entities;sea;;1
+Vulnerable_road_user VRU;Animal;ground_animal;;1
+Vulnerable_road_user VRU;Animal;Bird;;1
+Vulnerable_road_user VRU;Human;Motorcyclist;;1
+Vulnerable_road_user VRU;Human;Person;;1
+Vulnerable_road_user VRU;Human;Bicyclist;;1
+Vulnerable_road_user VRU;Human;other_rider;;1
+Indoor_obj;furniture;Bed;;1
+Indoor_obj;furniture;Table;;1
+Indoor_obj;furniture;Shelf;;1
+Indoor_obj;furniture;drawers;;1
+Indoor_obj;furniture;Coffee table;;1
+Indoor_obj;furniture;other_furniture;;1
+Indoor_obj;furniture;Swivel-chair;;1
+Indoor_obj;furniture;Seat;;1
+Indoor_obj;furniture;cabinet;;1
+Indoor_obj;furniture;Chair;;1
+Indoor_obj;furniture;Armchair;;1
+Indoor_obj;furniture;Counter;;1
+Indoor_obj;furniture;Ottoman;;1
+Indoor_obj;furniture;Book-case;;1
+Indoor_obj;furniture;cradle;;1
+Indoor_obj;furniture;Bench;;1
+Indoor_obj;furniture;door;;1
+Indoor_obj;furniture;sofa;;1
+Indoor_obj;furniture;desk;;1
+Indoor_obj;furniture;Ward robe;;1
+Indoor_obj;furniture;stool;;1
+Indoor_obj;furniture;box;;1
+Indoor_obj;furniture;Case-showcase;;1
+Indoor_obj;furniture;Window;;1
+Indoor_obj;Bedroom obj;Cushion;;1
+Indoor_obj;Bedroom obj;rug;;1
+Indoor_obj;Bedroom obj;Flower;;1
+Indoor_obj;Bedroom obj;Blanket-cover;;1
+Indoor_obj;Bedroom obj;Floor;;1
+Indoor_obj;Bedroom obj;Pillow;;1
+Indoor_obj;Bedroom obj;Mirror;;1
+Indoor_obj;Bedroom obj;Blind;;1
+Indoor_obj;Bedroom obj;Apparel;;1
+Indoor_obj;Bedroom obj;Sconce;;1
+Indoor_obj;Bedroom obj;lamp;;1
+Indoor_obj;Bedroom obj;curtain;;1
+Indoor_obj;Bedroom obj;Fireplace;;1
+Indoor_obj;Bedroom obj;Ceiling;;1
+Indoor_obj;Bathroom obj;Bathtub;;1
+Indoor_obj;Bathroom obj;Shower;;1
+Indoor_obj;Bathroom obj;toilet;;1
+Indoor_obj;Bathroom obj;shower_curtain;;1
+Indoor_obj;Bathroom obj;Towel;;1
+Indoor_obj;other_obj;Escalator;;1
+Indoor_obj;other_obj;Radiator;;1
+Indoor_obj;other_obj;Fan;;1
+Indoor_obj;other_obj;pot;;1
+Indoor_obj;other_obj;Basket;;1
+Indoor_obj;other_obj;Conveyerbelt;;1
+Indoor_obj;other_obj;pool-billlard;;1
+Indoor_obj;other_obj;Sculpture;;1
+Indoor_obj;other_obj;Flag;;1
+Indoor_obj;other_obj;Glass-drinking;;1
+Indoor_obj;other_obj;tray;;1
+Indoor_obj;other_obj;Bag;;1
+Indoor_obj;other_obj;barrel;;1
+Indoor_obj;other_obj;Chandelier;;1
+Indoor_obj;other_obj;ball;;1
+Indoor_obj;other_obj;base;;1
+Indoor_obj;other_obj;Clock;;1
+Indoor_obj;other_obj;plate;;1
+Indoor_obj;other_obj;Vase;;1
+Indoor_obj;other_obj;Tent;;1
+Indoor_obj;other_obj;Playing-toy;;1
+Indoor_obj;other_obj;Book;;1
+Indoor_obj;other_obj;Tank;;1
+Indoor_obj;Electronic;Monitor;;1
+Indoor_obj;Electronic;Television;;1
+Indoor_obj;Electronic;Screen;;1
+Indoor_obj;Electronic;CRT-screen;;1
+Indoor_obj;Electronic;Arcade machine;;1
+Indoor_obj;Electronic;screen-projector;;1
+Indoor_obj;Electronic;computer;;1
+Indoor_obj;Kitchen_obj;hood_exhaust;;1
+Indoor_obj;Kitchen_obj;microwave;;1
+Indoor_obj;Kitchen_obj;Washer;;1
+Indoor_obj;Kitchen_obj;Bar;;1
+Indoor_obj;Kitchen_obj;counter-top;;1
+Indoor_obj;Kitchen_obj;Dishwasher;;1
+Indoor_obj;Kitchen_obj;Food;;1
+Indoor_obj;Kitchen_obj;Buffet;;1
+Indoor_obj;Kitchen_obj;Kitchen-island;;1
+Indoor_obj;Kitchen_obj;Refrigerator;;1
+Indoor_obj;Kitchen_obj;Oven;;1
+Indoor_obj;Kitchen_obj;Bottle;;1
+Indoor_obj;Kitchen_obj;Stove;;1
+Indoor_obj;Kitchen_obj;Sink;;1

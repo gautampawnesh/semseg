@@ -3,7 +3,7 @@ experiment = dict(
     description=" All 9 dataset classes mapped to universal classes with flat deeplabv3+ model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/exp_results/FMD7"
+work_dir = "/netscratch/gautam/semseg/exp_results/FMD7_2"
 # random seed
 seed = 1
 # checkpoint file to load weights from
@@ -13,9 +13,6 @@ seed = 1
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220725_103634/epoch_9.pth"
 #load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220726_235911/epoch_10.pth"
 load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220920_090341/epoch_1.pth"
-#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220914_072206/epoch_10.pth" delete
-#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220917_090039/epoch_2.pth" delete
-#load_from = "/netscratch/gautam/semseg/exp_results/FMD7/training/20220917_200349/epoch_8.pth" delete
 # checkpoint file to resume from
 resume_from = None
 
@@ -45,17 +42,15 @@ model = dict(
         contract_dilation=True),
     decode_head=dict(ignore_index=ignore_index, num_classes=191, loss_decode=dict(
             _delete_=True,
-            type="CrossEntropyLoss",
-            use_sigmoid=False,
-            loss_weight=1.0,
-            avg_non_ignore=True
+            type="LovaszLoss",
+            reduction="none",
+            loss_weight=1.0
         )),
     auxiliary_head=dict(ignore_index=ignore_index, num_classes=191, loss_decode=dict(
             _delete_=True,
-            type="CrossEntropyLoss",
-            use_sigmoid=False,
-            loss_weight=0.4,
-            avg_non_ignore=True
+            type="LovaszLoss",
+            reduction="none",
+            loss_weight=0.4
         )),
 )
 
@@ -64,15 +59,11 @@ optimizer = dict(
     type='SGD',
     #lr=0.00001,
     #lr=0.000004,
-    lr=1.652e-04,
+    lr=2.652e-04,
     #lr=1.043e-05,
     #lr=7.982e-06,
     momentum=0.9,
     weight_decay=0.0005,
-    # paramwise_cfg=dict(
-    #     custom_keys={
-    #         ".backbone": dict(lr_mult=0.01)
-    #     })
 )
 optimizer_config = dict()
 

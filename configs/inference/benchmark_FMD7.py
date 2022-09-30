@@ -3,7 +3,7 @@ experiment = dict(
     description=" All 9 dataset classes mapped to universal classes with flat deeplabv3+ model  \ "
 )
 # directory to save logs and models
-work_dir = "/netscratch/gautam/semseg/benchmark/FMD7_eval"
+work_dir = "/netscratch/gautam/semseg/benchmark/FMD7_test"
 # random seed
 seed = 1
 load_from = None
