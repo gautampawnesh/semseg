@@ -9,9 +9,14 @@ logger = logging.getLogger(__name__)
 
 @PIPELINES.register_module()
 class MapAnnotations(object):
-    """Map annotations to integer class ID."""
+    """
+    Map annotations to integer class ID.
+    Forward mapping
+        Example: Ground truth's label ids to universal ids
+    """
 
     def __call__(self, results):
+        # ground truth label ids to universal ids.
         dataset_uni_cls_mapping = results.get("mapping")
         gt_semantic_seg = results.get("gt_semantic_seg")
         gt_semantic_seg_mapped = np.zeros(gt_semantic_seg.shape[0:2], dtype=np.uint8)
@@ -20,6 +25,7 @@ class MapAnnotations(object):
         for label_id, universal_ind in dataset_uni_cls_mapping.items():
             gt_semantic_seg_mapped += (np.all(gt_semantic_seg == label_id, axis=2).astype(dtype=np.uint8)) * universal_ind
 
+        # for debugging purpose:
         if results.get("is_extra_class_mapping") is True:
             extra_class_mapping = results.get("extra_class_map")
             if extra_class_mapping:
