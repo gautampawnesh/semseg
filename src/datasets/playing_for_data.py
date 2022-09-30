@@ -29,7 +29,8 @@ class UniversalPlayingForDataDataset(BaseDataset):
                  is_color_to_uni_class_mapping=False,
                  num_samples=None,
                  img_meta_data=None,
-                 data_seed=1):
+                 data_seed=1,
+                 is_universal_network=True):
         super(UniversalPlayingForDataDataset, self).__init__(
             pipeline,
             img_dir,
@@ -52,14 +53,16 @@ class UniversalPlayingForDataDataset(BaseDataset):
             is_color_to_uni_class_mapping=is_color_to_uni_class_mapping,
             num_samples=num_samples,
             img_meta_data=img_meta_data,
-            data_seed=data_seed
+            data_seed=data_seed,
+            is_universal_network=is_universal_network
         )
 
     def dataset_ids_to_universal_label_mapping(self):
+        """Forward Mapping"""
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
         label_ids = [(id,) for id in label_ids]
-        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        uni_cls_ids = dataset_cls_mapping_df[self.forward_mapping_column].tolist()
         mapping = dict(zip(label_ids, uni_cls_ids))
         return mapping
 

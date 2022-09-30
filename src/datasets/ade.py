@@ -31,7 +31,8 @@ class UniversalAdeDataset(BaseDataset):
                  is_extra_class_mapping=False,
                  extra_class_map=None,
                  img_meta_data=None,
-                 benchmark=False):
+                 benchmark=False,
+                 is_universal_network=True):
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = []
         super(UniversalAdeDataset, self).__init__(
@@ -59,13 +60,15 @@ class UniversalAdeDataset(BaseDataset):
             is_extra_class_mapping=is_extra_class_mapping,
             extra_class_map=extra_class_map,
             img_meta_data=img_meta_data,
-            benchmark=benchmark
+            benchmark=benchmark,
+            is_universal_network=is_universal_network
         )
 
     def dataset_ids_to_universal_label_mapping(self):
+        """Forward Mapping"""
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
         label_ids = [(id,) for id in label_ids]
-        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        uni_cls_ids = dataset_cls_mapping_df[self.forward_mapping_column].tolist()
         mapping = dict(zip(label_ids, uni_cls_ids))
         return mapping

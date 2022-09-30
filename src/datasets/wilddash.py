@@ -31,7 +31,8 @@ class UniversalWilddashDataset(BaseDataset):
                  num_samples=None,
                  data_seed=1,
                  img_meta_data=None,
-                 benchmark=False):
+                 benchmark=False,
+                 is_universal_network=True):
 
         # mark all non eval classes to 0 based on gt label id
         self.gt_non_eval_classes = [2, 3, 4, 5, 6, 9, 10, 15, 16, 29, 30, 31]
@@ -58,7 +59,8 @@ class UniversalWilddashDataset(BaseDataset):
             num_samples=num_samples,
             img_meta_data=img_meta_data,
             data_seed=data_seed,
-            benchmark=benchmark
+            benchmark=benchmark,
+            is_universal_network=is_universal_network
         )
 
     def data_df(self):
@@ -92,9 +94,10 @@ class UniversalWilddashDataset(BaseDataset):
                 return data_df.sample(n=self.num_samples, replace=True, random_state=self.data_seed)
 
     def dataset_ids_to_universal_label_mapping(self):
+        """Forward mapping"""
         dataset_cls_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         label_ids = dataset_cls_mapping_df["dataset_label_id"].tolist()
         label_ids = [(id,) for id in label_ids]
-        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        uni_cls_ids = dataset_cls_mapping_df[self.forward_mapping_column].tolist()
         mapping = dict(zip(label_ids, uni_cls_ids))
         return mapping

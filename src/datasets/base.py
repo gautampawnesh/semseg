@@ -102,6 +102,14 @@ class BaseDataset(CustomDataset):
         self.load_annotations = LoadAnnotations()
         self.map_annotations = MapAnnotations()
 
+        # Column name for backward mapping.
+        if self.is_universal_network:
+            self.backward_mapping_column = "universal_to_dataset"
+            self.forward_mapping_column = "universal_class_id"
+        else:
+            self.backward_mapping_column = "individual_to_dataset"
+            self.forward_mapping_column = "individual_class_id"
+
         # join paths if data_root is specified
         if self.data_root is not None:
             if not osp.isabs(self.img_dir):
@@ -167,12 +175,16 @@ class BaseDataset(CustomDataset):
         pred_class_mapping = {(0,): 0}
         class_mapping_df = pd.read_csv(self.dataset_class_mapping_path, delimiter=";")
         dataset_label_ids = class_mapping_df["dataset_label_id"].tolist()
-        universal_data_ids = class_mapping_df["universal_to_dataset"].tolist()
+        universal_data_ids = class_mapping_df[self.backward_mapping_column].tolist()
         assert len(dataset_label_ids) == len(universal_data_ids)
         for uni_ids, cls_id in zip(universal_data_ids, dataset_label_ids):
             if pd.isna(uni_ids):
                 continue
-            pred_class_mapping[tuple(map(int, uni_ids.split(",")))] = int(cls_id)
+            # universal network: support merging of multiple classes to one class.
+            if self.is_universal_network:
+                pred_class_mapping[tuple(map(int, uni_ids.split(",")))] = int(cls_id)
+            else:
+                pred_class_mapping[(int(uni_ids),)] = int(cls_id)
         # verify universal to dataset mapping
         map_keys = list(pred_class_mapping.keys())
         map_keys_counter = dict(Counter([each_key for key in map_keys for each_key in key]))
@@ -212,7 +224,7 @@ class BaseDataset(CustomDataset):
         color_tuples = [tuple(color) for color in color_tuples]
         if not len(set(color_tuples)) == len(color_tuples):
             raise ValueError("Duplicate class mapping: ")
-        uni_cls_ids = dataset_cls_mapping_df["universal_class_id"].tolist()
+        uni_cls_ids = dataset_cls_mapping_df[self.forward_mapping_column].tolist()
         mapping = dict(zip(color_tuples, uni_cls_ids))
         return mapping
 
