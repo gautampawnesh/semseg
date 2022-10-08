@@ -12,9 +12,9 @@ load_from = "/netscratch/gautam/semseg/exp_results/cityscapes_iter_deeplabv3plus
 resume_from = None
 
 _base_ = [
-    '../_base_/default_runtime.py',
-    '../_base_/models/deeplabv3plus_r101-d8.py',
-    '../_base_/datasets/cityscapes_512_512.py',
+    '../../_base_/default_runtime.py',
+    '../../_base_/models/deeplabv3plus_r101-d8.py',
+    '../../_base_/datasets/cityscapes_512_512.py',
 ]
 ignore_index = 0
 

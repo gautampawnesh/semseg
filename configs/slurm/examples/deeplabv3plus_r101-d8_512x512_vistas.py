@@ -13,9 +13,9 @@ load_from = "/netscratch/gautam/semseg/baseline_flat/vistas_train_deeplabv3plus_
 resume_from = None
 
 _base_ = [
-    '../_base_/default_runtime.py',
-    '../_base_/models/deeplabv3plus_r101-d8.py',
-    '../_base_/datasets/vistas_512_512.py',
+    '../../_base_/default_runtime.py',
+    '../../_base_/models/deeplabv3plus_r101-d8.py',
+    '../../_base_/datasets/vistas_512_512.py',
 ]
 ignore_index = 0
 data = dict(samples_per_gpu=4,

@@ -12,9 +12,9 @@ load_from = "/netscratch/gautam/semseg/baseline_flat/viper_deeplabv3plus_187c/tr
 resume_from = None
 
 _base_ = [
-    '../_base_/default_runtime.py',
-    '../_base_/models/deeplabv3plus_r101-d8.py',
-    '../_base_/datasets/viper_512_512.py',
+    '../../_base_/default_runtime.py',
+    '../../_base_/models/deeplabv3plus_r101-d8.py',
+    '../../_base_/datasets/viper_512_512.py',
 ]
 ignore_index = 0
 

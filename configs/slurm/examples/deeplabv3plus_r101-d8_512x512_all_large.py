@@ -14,9 +14,9 @@ load_from = "/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_191c_2
 resume_from = None #"/netscratch/gautam/semseg/exp_results/all_nine_deeplabv3plus_191c_2/training/20220620_230200/epoch_30.pth"
 
 _base_ = [
-    '../_base_/default_runtime.py',
-    '../_base_/models/deeplabv3plus_r101-d8_large_features.py',
-    '../_base_/datasets/all_512_512.py',
+    '../../_base_/default_runtime.py',
+    '../../_base_/models/deeplabv3plus_r101-d8_large_features.py',
+    '../../_base_/datasets/all_512_512.py',
 ]
 ignore_index = 0
 

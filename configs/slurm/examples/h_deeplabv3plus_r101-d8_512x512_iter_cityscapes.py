@@ -12,9 +12,9 @@ load_from = None
 resume_from = None
 
 _base_ = [
-    '../_base_/default_runtime.py',
-    '../_base_/models/hierarchical_deeplabv3plus_r101-d8_w_ohem.py',
-    '../_base_/datasets/cityscapes_512_512.py',
+    '../../_base_/default_runtime.py',
+    '../../_base_/models/hierarchical_deeplabv3plus_r101-d8_w_ohem.py',
+    '../../_base_/datasets/cityscapes_512_512.py',
 ]
 ignore_index = 0
 

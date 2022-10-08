@@ -12,9 +12,9 @@ load_from = "/netscratch/gautam/semseg/exp_results/hierarchical_deeplabv3plus_19
 resume_from = None #"/netscratch/gautam/semseg/exp_results/hierarchical_deeplabv3plus_191c/training/20220622_100800/epoch_2.pth"
 
 _base_ = [
-    '../_base_/default_runtime.py',
-    '../_base_/models/hierarchical_deeplabv3plus_r101-d8.py',
-    '../_base_/datasets/hierarchical_all_512_512.py',
+    '../../_base_/default_runtime.py',
+    '../../_base_/models/hierarchical_deeplabv3plus_r101-d8.py',
+    '../../_base_/datasets/hierarchical_all_512_512.py',
 ]
 ignore_index = 0
 
