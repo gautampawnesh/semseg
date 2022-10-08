@@ -7,7 +7,9 @@ work_dir = "/netscratch/gautam/semseg/final_weights/ade"
 # random seed das
 seed = 1
 # checkpoint file to load weights from
-load_from = None
+#load_from = "/netscratch/gautam/semseg/final_weights/ade/training/20221001_033941/epoch_10.pth"
+#load_from = "/netscratch/gautam/semseg/final_weights/ade/training/20221002_012503/epoch_6.pth"
+load_from = "/netscratch/gautam/semseg/final_weights/ade/training/20221007_115552/epoch_6.pth"
 # checkpoint file to resume from
 resume_from = None
 
@@ -28,10 +30,10 @@ model = dict(
 # optimizer
 optimizer = dict(
     type='SGD',
-    lr=0.007,
+    #lr=0.007,
     #lr=0.0007,
     #lr=0.0004,
-    #lr=1.810e-04,
+    lr=1.810e-04,
     momentum=0.9,
     weight_decay=0.0005
 )
