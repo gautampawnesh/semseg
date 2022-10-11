@@ -385,7 +385,10 @@ class BaseDataset(CustomDataset):
         try:
             gt_map = gt.copy()
             for label_id in self.gt_non_eval_classes:
-                gt_map = np.where(gt_map == label_id, 0, gt_map)
+                if self.dataset_name == "vistas2":
+                    gt_map = np.where(gt_map == label_id, 123, gt_map)
+                else:
+                    gt_map = np.where(gt_map == label_id, 0, gt_map)
 
         except Exception as e:
             e.args += (np.unique(gt_map), gt_map.shape, np.unique(gt), gt.shape, self.dataset_name, self.gt_non_eval_classes)
