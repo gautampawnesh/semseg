@@ -34,7 +34,7 @@ import pandas as pd
 
 CFG_DICT = None
 IMG_INFERENCE_SEED = 3  # random seed to select test images for inference
-IMG_INFERENCE_NUMBER = 200  # number of images used for inference
+IMG_INFERENCE_NUMBER = 20  # number of images used for inference
 EVALUATION_FILE = "evaluation.csv"
 INF_FOLDER = "pred_labels"
 
@@ -69,6 +69,7 @@ def evaluate(cfg, args, logger):
     # build the dataloader
     dataset_name = cfg.data.test["dataset_name"]
     dataset = build_dataset(cfg.data.test)
+    logger.info("Loading dataset ...")
     data_loader = build_dataloader(
         dataset,
         samples_per_gpu=1,
@@ -79,6 +80,7 @@ def evaluate(cfg, args, logger):
         seed=1,
         persistent_workers=False,
     )
+    logger.info("Loaded dataset")
     # build the model and load checkpoint
     cfg.model.train_cfg = None
     model = build_segmentor(cfg.model, test_cfg=cfg.get('test_cfg'))
