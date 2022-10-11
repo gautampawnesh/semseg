@@ -1,0 +1,125 @@
+;dataset_class_id;dataset_class_name;dataset_label_id;dataset_color_code;individual_class_id;individual_to_dataset
+0;0;Bird;0;165,42,42;0;0
+1;1;Ground Animal;1;0,192,0;1;1
+2;2;Ambiguous Barrier;2;250,170,31;2;2
+3;3;Concrete Block;3;250,170,32;3;3
+4;4;Curb;4;196,196,196;4;4
+5;5;Fence;5;190,153,153;5;5
+6;6;Guard Rail;6;180,165,180;6;6
+7;7;Barrier;7;90,120,150;7;7
+8;8;Road Median;8;250,170,33;8;8
+9;9;Road Side;9;250,170,34;9;9
+10;10;Lane Separator;10;128,128,128;10;10
+11;11;Temporary Barrier;11;250,170,35;11;11
+12;12;Wall;12;102,102,156;12;12
+13;13;Bike Lane;13;128,64,255;13;13
+14;14;Crosswalk - Plain;14;140,140,200;14;14
+15;15;Curb Cut;15;170,170,170;15;15
+16;16;Driveway;16;250,170,36;16;16
+17;17;Parking;17;250,170,160;17;17
+18;18;Parking Aisle;18;250,170,37;18;18
+19;19;Pedestrian Area;19;96,96,96;19;19
+20;20;Rail Track;20;230,150,140;20;20
+21;21;Road;21;128,64,128;21;21
+22;22;Road Shoulder;22;110,110,110;22;22
+23;23;Service Lane;23;110,110,110;23;23
+24;24;Sidewalk;24;244,35,232;24;24
+25;25;Traffic Island;25;128,196,128;25;25
+26;26;Bridge;26;150,100,100;26;26
+27;27;Building;27;70,70,70;27;27
+28;28;Garage;28;150,150,150;28;28
+29;29;Tunnel;29;150,120,90;29;29
+30;30;Person;30;220,20,60;30;30
+31;31;Person Group;31;220,20,60;31;31
+32;32;Bicyclist;32;255,0,0;32;32
+33;33;Motorcyclist;33;255,0,100;33;33
+34;34;Other Rider;34;255,0,200;34;34
+35;35;Lane Marking - Dashed Line;35;255,255,255;35;35
+36;36;Lane Marking - Straight Line;36;255,255,255;36;36
+37;37;Lane Marking - Zigzag Line;37;250,170,29;37;37
+38;38;Lane Marking - Ambiguous;38;250,170,28;38;38
+39;39;Lane Marking - Arrow (Left);39;250,170,26;39;39
+40;40;Lane Marking - Arrow (Other);40;250,170,25;40;40
+41;41;Lane Marking - Arrow (Right);41;250,170,24;41;41
+42;42;Lane Marking - Arrow (Split Left or Straight);42;250,170,22;42;42
+43;43;Lane Marking - Arrow (Split Right or Straight);43;250,170,21;43;43
+44;44;Lane Marking - Arrow (Straight);44;250,170,20;44;44
+45;45;Lane Marking - Crosswalk;45;255,255,255;45;45
+46;46;Lane Marking - Give Way (Row);46;250,170,19;46;46
+47;47;Lane Marking - Give Way (Single);47;250,170,18;47;47
+48;48;Lane Marking - Hatched (Chevron);48;250,170,12;48;48
+49;49;Lane Marking - Hatched (Diagonal);49;250,170,11;49;49
+50;50;Lane Marking - Other;50;255,255,255;50;50
+51;51;Lane Marking - Stop Line;51;255,255,255;51;51
+52;52;Lane Marking - Symbol (Bicycle);52;250,170,16;52;52
+53;53;Lane Marking - Symbol (Other);53;250,170,15;53;53
+54;54;Lane Marking - Text;54;250,170,15;54;54
+55;55;Lane Marking (only) - Dashed Line;55;255,255,255;55;55
+56;56;Lane Marking (only) - Crosswalk;56;255,255,255;56;56
+57;57;Lane Marking (only) - Other;57;255,255,255;57;57
+58;58;Lane Marking (only) - Test;58;255,255,255;58;58
+59;59;Mountain;59;64,170,64;59;59
+60;60;Sand;60;230,160,50;60;60
+61;61;Sky;61;70,130,180;61;61
+62;62;Snow;62;190,255,255;62;62
+63;63;Terrain;63;152,251,152;63;63
+64;64;Vegetation;64;107,142,35;64;64
+65;65;Water;65;0,170,30;65;65
+66;66;Banner;66;255,255,128;66;66
+67;67;Bench;67;250,0,30;67;67
+68;68;Bike Rack;68;100,140,180;68;68
+69;69;Catch Basin;69;220,128,128;69;69
+70;70;CCTV Camera;70;222,40,40;70;70
+71;71;Fire Hydrant;71;100,170,30;71;71
+72;72;Junction Box;72;40,40,40;72;72
+73;73;Mailbox;73;33,33,33;73;73
+74;74;Manhole;74;100,128,160;74;74
+75;75;Parking Meter;75;20,20,255;75;75
+76;76;Phone Booth;76;142,0,0;76;76
+77;77;Pothole;77;70,100,150;77;77
+78;78;Signage - Advertisement;78;250,171,30;78;78
+79;79;Signage - Ambiguous;79;250,172,30;79;79
+80;80;Signage - Back;80;250,173,30;80;80
+81;81;Signage - Information;81;250,174,30;81;81
+82;82;Signage - Other;82;250,175,30;82;82
+83;83;Signage - Store;83;250,176,30;83;83
+84;84;Street Light;84;210,170,100;84;84
+85;85;Pole;85;153,153,153;85;85
+86;86;Pole Group;86;153,153,153;86;86
+87;87;Traffic Sign Frame;87;128,128,128;87;87
+88;88;Utility Pole;88;0,0,80;88;88
+89;89;Traffic Cone;89;210,60,60;89;89
+90;90;Traffic Light - General (Single);90;250,170,30;90;90
+91;91;Traffic Light - Pedestrians;91;250,170,30;91;91
+92;92;Traffic Light - General (Upright);92;250,170,30;92;92
+93;93;Traffic Light - General (Horizontal);93;250,170,30;93;93
+94;94;Traffic Light - Cyclists;94;250,170,30;94;94
+95;95;Traffic Light - Other;95;250,170,30;95;95
+96;96;Traffic Sign - Ambiguous;96;192,192,192;96;96
+97;97;Traffic Sign (Back);97;192,192,192;97;97
+98;98;Traffic Sign - Direction (Back);98;192,192,192;98;98
+99;99;Traffic Sign - Direction (Front);99;220,220,0;99;99
+100;100;Traffic Sign (Front);100;220,220,0;100;100
+101;101;Traffic Sign - Parking;101;0,0,196;101;101
+102;102;Traffic Sign - Temporary (Back);102;192,192,192;102;102
+103;103;Traffic Sign - Temporary (Front);103;220,220,0;103;103
+104;104;Trash Can;104;140,140,20;104;104
+105;105;Bicycle;105;119,11,32;105;105
+106;106;Boat;106;150,0,255;106;106
+107;107;Bus;107;0,60,100;107;107
+108;108;Car;108;0,0,142;108;108
+109;109;Caravan;109;0,0,90;109;109
+110;110;Motorcycle;110;0,0,230;110;110
+111;111;On Rails;111;0,80,100;111;111
+112;112;Other Vehicle;112;128,64,64;112;112
+113;113;Trailer;113;0,0,110;113;113
+114;114;Truck;114;0,0,70;114;114
+115;115;Vehicle Group;115;0,0,142;115;115
+116;116;Wheeled Slow;116;0,0,192;116;116
+117;117;Water Valve;117;170,170,170;117;117
+118;118;Car Mount;118;32,32,32;118;118
+119;119;Dynamic;119;111,74,0;119;119
+120;120;Ego Vehicle;120;120,10,10;120;120
+121;121;Ground;121;81,0,81;121;121
+122;122;Static;122;111,111,0;122;122
+123;123;Unlabeled;123;0,0,0;123;123

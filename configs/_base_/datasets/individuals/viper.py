@@ -84,6 +84,7 @@ viper_data = dict(
         seg_map_suffix='.png',
         img_suffix=".jpg",
         is_universal_network=False,
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/viper_raw_val_dataset.csv",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/viper_class_mapping.csv",
         dataset_name="viper",

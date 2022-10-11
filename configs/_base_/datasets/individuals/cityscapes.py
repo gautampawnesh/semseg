@@ -81,6 +81,7 @@ city_data = dict(
         ann_dir='gtFine/val',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/cityscapes_class_mapping.csv",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/cityscapes_raw_val_dataset.csv",
         seg_map_suffix='_gtFine_labelIds.png',
         ignore_index=0,  # gt has Labelids
         is_universal_network=False,

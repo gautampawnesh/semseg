@@ -82,6 +82,7 @@ wild_data = dict(
         ann_dir='labels',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/wilddash_class_mapping.csv",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/wilddash_raw_val_dataset.csv",
         seg_map_suffix='.png',
         is_universal_network=False,
         is_color_to_uni_class_mapping=False,

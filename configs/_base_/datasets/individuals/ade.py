@@ -82,6 +82,7 @@ ade_data = dict(
         ann_dir='annotations/validation',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/ade20k_class_mapping.csv",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/ade_raw_val_dataset.csv",
         seg_map_suffix='.png',
         is_color_to_uni_class_mapping=False,
         dataset_name="ade",

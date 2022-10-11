@@ -83,6 +83,7 @@ scannet_data = dict(
         img_dir='scans',
         ann_dir='scans',
         split="/netscratch/gautam/scannet/scannet_val.json",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/scannet_raw_val_dataset.csv",
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/scannet_class_mapping.csv",
         seg_map_suffix='_labelId.png',
