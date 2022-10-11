@@ -1,1 +1,0 @@
-hard,indoor_feature_out/indoor_1000.csv,3,forgy,true,-1,44,0.005,5.42044e+06,0.00103621
