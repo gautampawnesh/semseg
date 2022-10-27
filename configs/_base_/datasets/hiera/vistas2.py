@@ -1,7 +1,7 @@
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (512, 1024)
+crop_size = (512, 512)
 
 train_pipeline = [
     dict(type='LoadImageFromFile'),
@@ -53,7 +53,7 @@ vistas_data = dict(
         seg_map_suffix='.png',
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas2.csv",
-        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/vistas_raw_train_dataset.csv",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/vistas2_raw_train_dataset.csv",
         dataset_name="vistas2",
         ignore_index=123,
         is_universal_network=False,
@@ -68,7 +68,7 @@ vistas_data = dict(
         ignore_index=123,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas2.csv",
-        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/vistas_raw_val_dataset.csv",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/vistas2_raw_val_dataset.csv",
         dataset_name="vistas2",
         num_samples=500,
         is_universal_network=False,
@@ -85,7 +85,7 @@ vistas_data = dict(
         ignore_index=123,
         universal_class_colors_path="/netscratch/gautam/semseg/configs/_base_/class_mapping/universal_classes.csv",
         dataset_class_mapping="/netscratch/gautam/semseg/configs/_base_/class_mapping/vistas2.csv",
-        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/vistas_raw_val_dataset.csv",
+        img_meta_data="/netscratch/gautam/semseg/raw_data_metadata/vistas2_raw_val_dataset.csv",
         dataset_name="vistas2",
         pipeline=test_pipeline))
 
