@@ -12,7 +12,6 @@ from mmseg.models.segmentors.encoder_decoder import EncoderDecoder
 from mmseg.ops import resize
 
 
-
 @SEGMENTORS.register_module()
 class HierarchicalSegmentor(EncoderDecoder):
     """
@@ -51,7 +50,8 @@ class HierarchicalSegmentor(EncoderDecoder):
 
             self.heads_hierarchy_flat.append(each_head[0])
             if len(each_head) == 2:
-                self.heads_hierarchy_flat.extend(each_head[1])
+                if len(each_head[1]) > 0:
+                    self.heads_hierarchy_flat.extend(each_head[1])
                 self.level_3_heads.append(each_head[1])
             else:
                 raise NotImplementedError
@@ -238,20 +238,34 @@ class HierarchicalSegmentor(EncoderDecoder):
             final_l2_seg_pred = torch.zeros_like(seg_preds[indx_l2_h_name])
             l2_seg_pred = seg_preds[indx_l2_h_name]
 
-            for l3_h_indx, l3_h_name in enumerate(l3_h_list):
-                # index of l3 seg_pred in seg_preds
-                converted_l3_pred = None
-                indx_l3_h_name = self.heads_hierarchy_flat.index(l3_h_name)
-                mask = l2_seg_pred == l3_h_indx+1
-                org_cls = torch.tensor([[0]] + list(self.levels_class_mapping[l3_h_name].values()), device=mask.device).flatten()
+            # No level 3
+            if len(l3_h_list) == 0:
+                org_cls = torch.tensor([[0]] + list(self.levels_class_mapping[l2_h_name].values()),
+                                       device=l2_seg_pred.device).flatten()
+                converted_l2_pred = org_cls[seg_preds[indx_l2_h_name]]
+                final_l2_seg_pred = converted_l2_pred
+            else:
+                for l3_h_indx, l3_h_name in enumerate(l3_h_list):
+                    # index of l3 seg_pred in seg_preds
+                    converted_l3_pred = None
+                    indx_l3_h_name = self.heads_hierarchy_flat.index(l3_h_name)
+                    mask = l2_seg_pred == l3_h_indx+1
+                    org_cls = torch.tensor([[0]] + list(self.levels_class_mapping[l3_h_name].values()), device=mask.device).flatten()
 
-                converted_l3_pred = org_cls[seg_preds[indx_l3_h_name]]
-                final_l2_seg_pred[mask] = converted_l3_pred[mask]
-
+                    converted_l3_pred = org_cls[seg_preds[indx_l3_h_name]]
+                    final_l2_seg_pred[mask] = converted_l3_pred[mask]
 
 
             l1_mask = l1_seg_pred == l2_indx+1
             seg_pred[l1_mask] = final_l2_seg_pred[l1_mask]
+
+        #Convert level 1 flat classes to org classes
+        for ind_, (key, value) in enumerate(self.levels_class_mapping["level_1_head"].items()):
+            cls_id_ = ind_+1
+            if len(value) == 1:
+                l1_mask = l1_seg_pred == cls_id_
+                seg_pred[l1_mask] = value[0]
+
         return seg_pred
 
     def remapped_gt_semantic_seg(self, ground_truth_map):
