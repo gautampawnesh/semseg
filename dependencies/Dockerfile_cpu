@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 -y  && apt-get clean
+RUN conda update -n base conda
+ENV SHELL /bin/bash
+SHELL ["/bin/bash", "-c"]
