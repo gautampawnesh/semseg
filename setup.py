@@ -13,7 +13,7 @@ requirements = [
 ]
 
 setup(
-    name="gcsemseg",
+    name="semseg",
     version="0.1",
     description="Configs, dependencies, env files and custom functions for the multitask network.",
     packages=find_packages(exclude=["dependencies", "docs"]),
